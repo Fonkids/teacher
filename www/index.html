@@ -212,6 +212,36 @@
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P4</h1>
             <p>Galdera sorta bat editatu edo sortzeko pantaila.</p>
         
+            <form>
+                <fieldset data-role="controlgroup">
+                    <legend>Baimendutako ikasle taldeak:</legend>
+                    <label for="g1">
+                        <input type="checkbox" name="g1" id="g1" value="1">
+                        LH 1-A
+                    </label>
+                    <label for="g2">
+                        <input type="checkbox" name="g2" id="g2" value="2">
+                        LH 1-B
+                    </label>
+                    <label for="g3">
+                        <input type="checkbox" name="g3" id="g3" value="3">
+                        LH 1-D
+                    </label>
+                    <label for="g4">
+                        <input type="checkbox" name="g4" id="g4" value="4">
+                        LH 2-A
+                    </label>
+                    <label for="g5">
+                        <input type="checkbox" name="g5" id="g5" value="5">
+                        LH 2-B
+                    </label>
+                    <label for="g6">
+                        <input type="checkbox" name="g6" id="g6" value="6">
+                        LH 2-D
+                    </label>
+                </fieldset>
+            </form>
+
             <div id="question-list-block">
                     <!-- "next-4" hauek question ID-a beharko lukete. JS-ean egin beharrekoa! -->
                     <a href="#page-t-4" id="next-4"
@@ -446,11 +476,54 @@
         </div>
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P6</h1>
-            <p>P6 motako galdera-sorta erakutsiko da.</p>
+            <p>Ikasle taldeen zerrenda erakutsiko da.</p>
+        
+            <div id="Student-group-list">
+                    <a href="#page-t-6" id="next-6"
+                    class="ui-btn ui-mini ui-btn-block ui-corner-all"
+                    data-transition="fade"
+                    style="display: inline-block; text-decoration: none;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <tbody>
+                            <tr>
+                                <td>LH1-A</td>
+                                <td>Ikasle kopurua</td>
+                            </tr>
+                            <tr>
+                                <td>Galdera sorta kopurua</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </a>
+
+                    <a href="#page-t-6" id="next-6"
+                    class="ui-btn ui-mini ui-btn-block ui-corner-all"
+                    data-transition="fade"
+                    style="display: inline-block; text-decoration: none;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <tbody>
+                            <tr>
+                                <td>LH1-B</td>
+                                <td>Ikasle kopurua</td>
+                            </tr>
+                            <tr>
+                                <td>Galdera sorta kopurua</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </a>
+            </div>
+        
+        
         </div>
         <div data-role="footer" data-position="fixed">
-            <a href="#page-t-6" id="prev-5" class="ui-btn ui-icon-arrow-r ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="fade">Atzera (P7)</a>
-            <h4 style="margin-top: 0%; margin-bottom: 0%;">2026-2027</h4>
+           <table style="width: 100%; table-layout: fixed; text-align: center;">
+                <tr>
+                  <td style="width: 33%"><a href="#page-t-1" id="prev-6" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="fade">Atzera (P2)</a></td>
+                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-2027</h4></td>
+                  <td style="width: 33%"><a href="#page-t-6" id="new-class" class="ui-btn ui-icon-plus ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="fade">Talde bat sortu (P7)</a></td>
+			    </tr>
+            </table>
         </div>
     </div>
 
@@ -469,11 +542,78 @@
         </div>
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P7</h1>
-            <p>P7 motako galdera-sorta erakutsiko da.</p>
+            <p>Talde barruko ikasle-zerrenda erakutsiko da.</p>
+            <p><h2>LH-1 (Taldearen izena)</h2></p>
+
+
+        <div class="ui-field-contain" style="text-align: left;">
+            <label for="student-search-in-class">Bilatu ikaslea talde barruan:</label>
+            <input type="search" name="student-search-in-class" id="student-search-in-class"
+                value="" placeholder="Ikasle izena...">
+        </div>
+
+            <div id="Student-list">
+                    <a href="#page-t-7" id="next-7"
+                    class="ui-btn ui-mini ui-btn-block ui-corner-all"
+                    data-transition="fade"
+                    style="display: inline-block; text-decoration: none;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <tbody>
+                            <tr>
+                                <td>☺️</td>
+                                <td>Erabiltzaile Izena</td>
+                            </tr>
+                            <tr>
+                                <td>Puntuazio totala</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </a>
+
+                    <a href="#page-t-7" id="next-7"
+                    class="ui-btn ui-mini ui-btn-block ui-corner-all"
+                    data-transition="fade"
+                    style="display: inline-block; text-decoration: none;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <tbody>
+                            <tr>
+                                <td>😎</td>
+                                <td>Erabiltzaile Izena</td>
+                            </tr>
+                            <tr>
+                                <td>Puntuazio totala</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </a>
+
+                    <a href="#page-t-7" id="next-7"
+                    class="ui-btn ui-mini ui-btn-block ui-corner-all"
+                    data-transition="fade"
+                    style="display: inline-block; text-decoration: none;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <tbody>
+                            <tr>
+                                <td>🚋</td>
+                                <td>Erabiltzaile Izena</td>
+                            </tr>
+                            <tr>
+                                <td>Puntuazio totala</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </a>
+            </div>
+
         </div>
         <div data-role="footer" data-position="fixed">
-            <a href="#page-t-7" id="prev-6" class="ui-btn ui-icon-arrow-r ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="fade">Atzera (P8)</a>
-            <h4 style="margin-top: 0%; margin-bottom: 0%;">2026-2027</h4>
+           <table style="width: 100%; table-layout: fixed; text-align: center;">
+                <tr>
+                  <td style="width: 33%"><a href="#page-t-5" id="prev-7" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="fade">Atzera (P6)</a></td>
+                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-2027</h4></td>
+                  <td style="width: 33%"><a href="#page-t-8" id="add-student-to-class" class="ui-btn ui-icon-plus ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="fade">Ikasle bat gehitu (P9)</a></td>
+			    </tr>
+            </table>
         </div>
     </div>
     
@@ -492,11 +632,51 @@
         </div>
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P8</h1>
-            <p>P8 pantaila: lotu motako ariketa</p>
+            <p>Ikasle baten informazioa</p>
+
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <tbody>
+                <tr>
+                    <td>🚋</td>
+                    <td>Erabiltzaile Izena</td>
+                </tr>
+                <tr>
+                    <td>Puntuazio totala</td>
+                </tr>
+                <tr>
+                    <td>Erantzundako galdera kop:</td>
+                    <td>#</td>
+                </tr>
+                <tr>
+                    <td>Erantzun zuzenak:</td>
+                    <td>#</td>
+                </tr>
+                <tr>
+                    <td>Akatsak:</td>
+                    <td>#</td>
+                </tr>
+                <tr>
+                    <td>Erabilitako hizkuntza:</td>
+                    <td>[EUS/ES]</td>
+                </tr>
+                <tr>
+                    <td>Azkeneko erabilera:</td>
+                    <td>2026-10-11</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <a href="#page-t-6" id="remove-student-from-class" class="ui-btn ui-icon-minus ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="fade">Taldetik ezabatu (P7)</a>
+
         </div>
         <div data-role="footer" data-position="fixed">
-            <a href="#page-t-8" id="prev-7" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="fade">Atzera (P8)</a>
-            <h4 style="margin-top: 0%; margin-bottom: 0%;">2026-2027</h4>
+           <table style="width: 100%; table-layout: fixed; text-align: center;">
+                <tr>
+                  <td style="width: 33%"><a href="#page-t-6" id="prev-8" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="fade">Atzera (P7)</a></td>
+                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-2027</h4></td>
+                  <td style="width: 33%"></td>
+			    </tr>
+            </table>
         </div>
     </div>
 
@@ -515,11 +695,22 @@
         </div>
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P9</h1>
-            <p>P9 motako galdera-sorta erakutsiko da.</p>
+            <p>Erregistratutako ikasle guztien artean bilatzeko pantaila, talde/klase baten gehitzeko.</p>
+
+            <div class="ui-field-contain" style="text-align: left;">
+                <label for="student-search-full">Bilatu ikaslea taldean sartzeko:</label>
+                <input type="search" name="student-search-full" id="student-search-full"
+                    value="" placeholder="Ikasle izena...">
+            </div>
         </div>
         <div data-role="footer" data-position="fixed">
-            <a href="#page-t-7" id="prev-8" class="ui-btn ui-icon-arrow-r ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="fade">Atzera (P10)</a>
-            <h4 style="margin-top: 0%; margin-bottom: 0%;">2026-2027</h4>
+            <table style="width: 100%; table-layout: fixed; text-align: center;">
+                <tr>
+                    <td style="width: 33%"><a href="#page-t-6" id="prev-9" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="fade">Atzera (P7)</a></td>
+                    <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-2027</h4></td>
+                    <td style="width: 33%"></td>
+                </tr>
+            </table>
         </div>
     </div>
 
