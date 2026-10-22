@@ -33,6 +33,5 @@ function onDeviceReady() {
 
 	console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
 
-	for (let i in tests) //V3
-    pageT.load(i);//V3: Cargar página correspondiente al test
+	appSession.loadSessionPages();
 }
