@@ -348,6 +348,7 @@
             <select name="student-group" id="student-group-select">
                 <option value="">Aukeratu Mota</option>
                 <option value="multiple-choice-a">Entzun eta aukeratu testua</option>
+                
                 <option value="multiple-choice-b">Irakurri eta aukeratu soinua</option>
                 <option value="soup-a">Letra zopa (testua)</option>
                 <option value="soup-b">Letra zopa (audioa)</option>
@@ -358,8 +359,34 @@
 
         </div>
 
+        <!-- Audioa grabatzeko atala -->
+        <div id="audio-section" class="ui-field-contain" style="display: none;">
+            <label>Galderaren audioa:</label>
 
-            <div class="multiple-choice-a">
+            <button type="button"
+                    id="button-audio-start"
+                    onclick="startAudioRecord()">
+                Grabazioa hasi
+            </button>
+
+            <button type="button"
+                    id="button-audio-stop"
+                    onclick="stopAudioRecord()"
+                    class="ui-disabled">
+                Grabazioa gelditu
+            </button>
+
+            <p id="audio-file-name"></p>
+
+            <audio id="audio-player"
+                controls
+                style="display:none; width:100%;">
+                <source id="audio-source" src="" type="audio/aac">
+            </audio>
+        </div>
+
+
+            <div class="multiple-choice-b">
                 <hr/>
                 <h4>Hau galdera "multiple choice" motatakoa denean agertuko da.</h4>
 

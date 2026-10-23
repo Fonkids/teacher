@@ -38,6 +38,18 @@ function onDeviceReady() {
 	// Lehen orriarekin honek arazoak eman ditzake, HTML injektatzen hasten bagara hemen.
 	// Estilorik gabe kargatzen badira gauza batzuk, "enhancement" (dekorazio prozesuaren izena) egitera behartu daiteke lerro honekin:
 	// $("#page-t-0").trigger("create");
+
+    fileUtils.createStorageDirs_E(
+        cordova.file.externalDataDirectory,
+        ["audio"],
+        "path",
+        function() {
+            console.log("Audio directory ready");
+        },
+        function(error) {
+            console.error("Could not create audio directory:", error);
+        }
+    );
 }
 
 $(document).on("pagebeforecreate", "[data-role=page]", function () {

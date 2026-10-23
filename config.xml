@@ -8,4 +8,18 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+    <platform name="android">
+	  <preference name="AndroidInsecureFileModeEnabled" value="true" />
+	</platform>
+    <plugin name="cordova-plugin-file" spec="^6.0.2" />
+    <plugin name="cordova-plugin-media" spec="^7.0.0" />
+
+    <platform name="android">
+    <config-file target="AndroidManifest.xml" parent="/*"
+                 xmlns:android="http://schemas.android.com/apk/res/android">
+        <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    </config-file>
+</platform>
+
 </widget>
+

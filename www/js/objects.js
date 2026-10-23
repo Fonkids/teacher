@@ -19,6 +19,11 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+var appDirs = { //V1
+	baseStorage: function() { return cordova.file.externalDataDirectory; },
+	baseStorageAudio: function() { return this.baseStorage() + "audio/"; }//v2		
+};
+
 var tests = [//V3
 	{
 		question: "This is the first question...?",
@@ -193,5 +198,69 @@ var appSession = {
 		}
 
 		$.mobile.changePage("#page-t-"+pantailenHiztegia[0].mota+"-0");
+	}
+};
+
+var audio = {//V2
+	media: null,
+	doStartRecord: function() {
+		console.log("doStartRecord");
+
+		console.log("cordova:", typeof cordova);
+		console.log("Media:", typeof Media);
+		console.log("cordova.file:", typeof cordova.file);
+	
+		if (typeof Media === "undefined") {
+			alert("Media plugina ez dago erabilgarri");
+			return;
+		}
+	
+		if (!cordova.file) {
+			alert("Cordova File plugina ez dago erabilgarri");
+			return;
+		}
+
+		if (this.media)
+			this.media.release();
+
+		this.media = new Media(cordova.file.dataDirectory + "tmprecording.aac");
+		if (this.media)
+			this.media.startRecord();
+		else
+			alert("No media file to record");
+	},
+	doStopRecord_E: function(fileFullPath, onSuccess, onError) {
+		console.log("doStopRecord_E");
+
+		console.log("Media objektua:", this.media);
+
+		if (!this.media) {
+			console.error("Ez dago gelditzeko grabaziorik");
+			return;
+		}
+
+		this.media.stopRecord();
+		
+		var tempFullPath = cordova.file.dataDirectory + "tmprecording.aac";
+
+		if (!tempFullPath.startsWith("file://"))
+			tempFullPath = "file://" + tempFullPath;
+		if (!fileFullPath.startsWith("file://"))
+			fileFullPath = "file://" + fileFullPath;
+
+		fileUtils.move_E(
+			tempFullPath,
+			fileFullPath,
+			function() {
+				audio.media.release();
+				if (onSuccess != false)
+					onSuccess();
+			},
+			function() {
+				console.error("Audio file move error");
+				if (onError != false)
+					onError();
+			}
+		);
 	}
 };

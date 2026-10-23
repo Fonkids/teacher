@@ -52,6 +52,79 @@ function check(i) {//V1
 	//	console.log("check 2");
 }
 
+function startAudioRecord() {
+    console.log("Grabazioa hasteko botoia sakatu da");
+
+    if (typeof audio === "undefined" || typeof audio.doStartRecord !== "function") {
+        console.error("Audio objektua edo doStartRecord() funtzioa ez dago erabilgarri");
+        alert("Ezin da grabazioa hasi: audio sistema ez dago erabilgarri.");
+        return;
+    }
+
+    $("#audio-file-name").text("");
+    $("#audio-player").hide();
+
+    $("#button-audio-start").addClass("ui-disabled");
+    $("#button-audio-stop").removeClass("ui-disabled");
+
+    try {
+        audio.doStartRecord();
+    } catch (error) {
+        console.error("Grabazioa hasteko errorea:", error);
+        alert("Errorea grabazioa hastean.");
+        $("#button-audio-start").removeClass("ui-disabled");
+        $("#button-audio-stop").addClass("ui-disabled");
+    }
+}
+
+function stopAudioRecord() {
+    console.log("Grabazioa gelditzeko botoia sakatu da");
+
+    if (typeof audio === "undefined" || typeof audio.doStopRecord_E !== "function") {
+        console.error("Audio objektua edo doStopRecord_E() funtzioa ez dago erabilgarri");
+        alert("Ezin da grabazioa gelditu: audio sistema ez dago erabilgarri.");
+        return;
+    }
+
+    console.log("1. Stop botoia sakatu da");
+
+    if (!audio || !audio.doStopRecord_E) {
+        console.error("2. Audio objektua edo stop funtzioa falta da");
+        return;
+    }
+
+    console.log("3. Grabazioa gelditzeko deia egingo da");
+
+
+    var fileFullPath = appDirs.baseStorageAudio() +
+        "recording_" + Date.now() + ".aac";
+
+    audio.doStopRecord_E(
+        fileFullPath,
+        function() {
+            $("#audio-file-name").text("Grabazioa gordeta");
+
+            $("#audio-source").attr("src", fileFullPath);
+            $("#audio-player").show();
+
+            var player = document.getElementById("audio-player");
+            player.load();
+
+            $("#button-audio-stop").addClass("ui-disabled");
+            $("#button-audio-start").removeClass("ui-disabled");
+
+            alert("Audioa behar bezala gorde da");
+        },
+        function(error) {
+            console.error("Audio error:", JSON.stringify(error));
+            alert("Errorea audioa gordetzean.");
+
+            $("#button-audio-start").removeClass("ui-disabled");
+            $("#button-audio-stop").addClass("ui-disabled");
+        }
+    );
+}
+
 function buildHeader() {
     return $(
         '<div data-role="header" data-position="fixed" data-id="app-header">' +
@@ -90,3 +163,11 @@ function nextBtn(next, label, icon) {
         ? '<a href="' + next + '" class="btn-next ui-btn ui-icon-' + (icon || "plus") + ' ui-btn-icon-right ui-mini ui-corner-all" data-transition="slidefade">' + label + '</a>'
         : '';
 }
+
+$(document).on("change", "#student-group-select", function () {
+    if ($(this).val() === "multiple-choice-a") {
+        $("#audio-section").show();
+    } else {
+        $("#audio-section").hide();
+    }
+});
