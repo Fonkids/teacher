@@ -90,3 +90,38 @@ function nextBtn(next, label, icon) {
         ? '<a href="' + next + '" class="btn-next ui-btn ui-icon-' + (icon || "plus") + ' ui-btn-icon-right ui-mini ui-corner-all" data-transition="slidefade">' + label + '</a>'
         : '';
 }
+
+// cordova-ren plugin-aren dokumentazioan dioenez, WebView bidezko metodoa gomendatzen dute orain
+// https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-camera/
+
+//Kameraren ebentua entzuten
+document.addEventListener("deviceready", function() {
+    document.getElementById("selfie").addEventListener("change", async function(e) {
+        const blob = e.target.files[0];
+        if (!blob) return;
+
+        // Fitxategiak gordetzeko karpeta
+        const dirEntry = await new Promise((res, rej) =>
+            window.resolveLocalFileSystemURL(
+                cordova.file.externalDataDirectory, res, rej
+            )
+        );
+
+        // Fitxategia sortu, hemen sartuko da irudia irudia daukagunean
+        const fileEntry = await new Promise((res, rej) =>
+            dirEntry.getFile("selfie.jpg", { create: true }, res, rej)
+        );
+
+        // Itxaron irudia lortu arte, lortze denean: fitxategira idatzi
+        const writer = await new Promise((res, rej) =>
+            fileEntry.createWriter(res, rej)
+        );
+        await new Promise((res, rej) => {
+            writer.onwriteend = res;
+            writer.onerror = rej;
+            writer.write(blob);
+        });
+
+        console.log("Saved to:", fileEntry.toURL());
+    });
+});
