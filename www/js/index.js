@@ -40,16 +40,17 @@ function onDeviceReady() {
 	// $("#page-t-0").trigger("create");
 
     fileUtils.createStorageDirs_E(
-        cordova.file.externalDataDirectory,
-        ["audio"],
-        "path",
-        function() {
-            console.log("Audio directory ready");
-        },
-        function(error) {
-            console.error("Could not create audio directory:", error);
-        }
-    );
+		appDirs.baseStorage(),
+		["image", "audio"],
+		"siblings",
+		function() {
+			console.log("All dirs created");
+		},
+		function() {
+			console.error("FileSystem error: some features may not work");
+			alert("FileSystem error: some features may not work");
+		}
+	);
 }
 
 $(document).on("pagebeforecreate", "[data-role=page]", function () {
