@@ -123,5 +123,10 @@ document.addEventListener("deviceready", function() {
         });
 
         console.log("Saved to:", fileEntry.toURL());
+
+        //Irudi berria erakusten
+        const preview = document.getElementById("selfie-preview");
+        preview.src = fileEntry.toURL();
+        preview.style.display = "block";
     });
 });
