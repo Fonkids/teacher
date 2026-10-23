@@ -51,3 +51,42 @@ function check(i) {//V1
 
 	//	console.log("check 2");
 }
+
+function buildHeader() {
+    return $(
+        '<div data-role="header" data-position="fixed" data-id="app-header">' +
+        '  <table style="width:100%; table-layout:fixed;"><tbody><tr>' +
+        '    <td style="text-align:left;width:33%"><a href="#page-t-9" class="btn-info ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-corner-all">Info</a></td>' +
+        '    <td style="text-align:center;width:34%">Logo</td>' +
+        '    <td style="text-align:right;width:33%"><a href="#page-t-10" class="btn-settings ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-corner-all">Ezarpenak</a></td>' +
+        '  </tr></tbody></table>' +
+        '</div>'
+    );
+}
+
+function buildFooter(back, backLabel, next, nextLabel, nextIcon) {
+    var html =
+        '<div data-role="footer" data-position="fixed" data-id="app-footer">' +
+        '<table style="width:100%; table-layout:fixed; text-align:center;"><tr>' +
+        '<td style="text-align:left;width:33%">' + backBtn(back, backLabel) + '</td>' +
+        '<td style="width:34%"><h4 style="margin:0">2026-2027</h4></td>' +
+        '<td style="text-align:right;width:33%">' + nextBtn(next, nextLabel, nextIcon) + '</td>' +
+        '</tr></table></div>';
+    return $(html);
+}
+
+function backBtn(target, label) {
+    if (target === "exit") {
+        return '<a href="#" class="btn-exit ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-corner-all">Irten</a>';
+    }
+    if (target === "back") { // history back
+        return '<a href="#" data-rel="back" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-corner-all">' + label + '</a>';
+    }
+    return '<a href="' + target + '" class="btn-back ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-corner-all" data-transition="slidefade" data-direction="reverse">' + label + '</a>';
+}
+
+function nextBtn(next, label, icon) {
+    return next
+        ? '<a href="' + next + '" class="btn-next ui-btn ui-icon-' + (icon || "plus") + ' ui-btn-icon-right ui-mini ui-corner-all" data-transition="slidefade">' + label + '</a>'
+        : '';
+}

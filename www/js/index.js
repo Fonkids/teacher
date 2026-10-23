@@ -34,4 +34,35 @@ function onDeviceReady() {
 	console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
 
 	appSession.loadSessionPages();
+
+	// Lehen orriarekin honek arazoak eman ditzake, HTML injektatzen hasten bagara hemen.
+	// Estilorik gabe kargatzen badira gauza batzuk, "enhancement" (dekorazio prozesuaren izena) egitera behartu daiteke lerro honekin:
+	// $("#page-t-0").trigger("create");
 }
+
+$(document).on("pagebeforecreate", "[data-role=page]", function () {
+    var $page = $(this);
+
+    // 1. Build header (identical on almost every page)
+    if ($page.data("header") !== "custom") {
+        $page.prepend(buildHeader());
+    }
+
+    // 2. Build footer from per-page data-attributes
+    $page.append(buildFooter(
+        $page.data("back"),        // e.g. "#page-t-1" or "back" (history) or "exit"
+        $page.data("back-label"),  // e.g. "Atzera (P2)"
+        $page.data("next"),        // e.g. "#page-t-4" or undefined
+        $page.data("next-label"),  // e.g. "Sorta berria (P4)"
+        $page.data("next-icon")    // e.g. "plus"
+    ));
+});
+
+$(document).on("vclick", ".btn-exit", function (e) {
+    e.preventDefault();
+    if (navigator.app && navigator.app.exitApp) {
+        navigator.app.exitApp();          // native exit
+    } else {
+        $(":mobile-pagecontainer").pagecontainer("change", "#page-t-0"); // browser fallback
+    }
+});

@@ -37,192 +37,117 @@
 </head>
 <body>
     <!-- P1 -->
-	<div data-role="page" id="page-t-0">
-        <div data-role="header" data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
-            <table style="width: 100%; table-layout: fixed;">
-                <tbody>
-                    <tr>
-                        <td style="text-align: left; width: 33%;"><a href="#page-t-9" id="Info" class="ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Info (P10)</a></td>
-                        <td style="text-align: center; width: 34%;">Logo</td>
-                        <td style="text-align: right; width: 33%;"><a href="#page-t-10" id="Ezarpenak" class="ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ezarpenak (P11)</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+	<div data-role="page" id="page-t-0" data-back="exit">
         <div data-role="content">
 			<h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P1</h1>
 			<p> Hemen logeatzeko/erregistratzeko edukia egongo da. Saioa hasterakoan hurrengo pantailara (P2) joko da</p>
 			<a href="#page-t-1" id="next-0" class="ui-btn ui-icon-arrow-r ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Saioa hasi (P2)</a>
-
-		</div>
-		<div data-role="footer" data-position="fixed">
-            <table style="width: 100%; table-layout: fixed; text-align: center;">
-                <tr>
-                    <td style="text-align: left; width: 33%"><a href="#" id="prev-1" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Irten (Irten)</a></td>
-                    <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-2027</h4></td>
-                    <td style="text-align: right; width: 33%"></td>
-                </tr>
-            </table>
 		</div>
 	</div>
 
 
     <!-- P2 -->
-	<div data-role="page" id="page-t-1">
-        <div data-role="header" data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
-            <table style="width: 100%; table-layout: fixed;">
-                <tbody>
-                    <tr>
-                        <td style="text-align: left; width: 33%;"><a href="#page-t-9" id="Info" class="ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Info (P10)</a></td>
-                        <td style="text-align: center; width: 34%;">Logo</td>
-                        <td style="text-align: right; width: 33%;"><a href="#page-t-10" id="Ezarpenak" class="ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ezarpenak (P11)</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+	<div data-role="page" id="page-t-1" data-back="#page-t-0" data-back-label="Saioa itxi (P1)">
 		<div data-role="content">
 			<h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P2</h1>
-			<p> Irakaslearentzako aukerak emango dira: Galdera sortak kudeatzeko eta ikasleak kudeatzeko botoi nagusi birekin.</p>
+			<p> Irakaslearentzako aukerak emango dira: Ariketak kudeatzeko eta ikasleak kudeatzeko botoi nagusi birekin.</p>
 			<a href="#page-t-2" id="lesson-2" class="ui-btn ui-icon-arrow-r ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Galdera-Sortak kudeatu (P3)</a>
             <a href="#page-t-5" id="student-2" class="ui-btn ui-icon-arrow-r ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ikasleak kudeatu (P6)</a>
-	
-		</div>
-		<div data-role="footer" data-position="fixed">
-            <table style="width: 100%; table-layout: fixed; text-align: center;">
-                <tr>
-                  <td style="text-align: left; width: 33%"><a href="#page-t-0" id="prev-1" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade" data-direction="reverse">Saioa itxi (P1)</a></td>
-                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-202</h4></td>
-                  <td style="text-align: right; width: 33%"></td>
-			    </tr>
-            </table>
 		</div>
 	</div>
 
     <!-- P3 -->
-	<div data-role="page" id="page-t-2">
-		<div data-role="header" data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
-            <table style="width: 100%; table-layout: fixed;">
-                <tbody>
+	<div data-role="page" id="page-t-2" data-back="#page-t-1" data-back-label="Atzera (P2)" data-next="#page-t-3" data-next-label="Ariketa berria (P4)" data-next-icon="plus">
+        <div data-role="content">
+            <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P3</h1>
+            <p> Ariketen zerrenda erakutsiko da, asoziatutako ikasle talde, galdera kopuru eta sesio-datarekin batera.</p>
+            <p> Botoien barruan taulak egongo dira, informazio horrekin guztiarekin:</p>
+    
+            <div id="lesson-list-block">
+            
+                <!-- "next-3" hauek lesson ID-a beharko lukete. JS-ean egin beharrekoa! -->
+                <a href="#page-t-3" id="next-3"
+                class="ui-btn ui-mini ui-btn-block ui-corner-all"
+                data-transition="slidefade"
+                style="padding: 0; display: inline-block; text-decoration: none;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <tbody>
                     <tr>
-                        <td style="text-align: left; width: 33%;"><a href="#page-t-9" id="Info" class="ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Info (P10)</a></td>
-                        <td style="text-align: center; width: 34%;">Logo</td>
-                        <td style="text-align: right; width: 33%;"><a href="#page-t-10" id="Ezarpenak" class="ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ezarpenak (P11)</a></td>
+                        <td style="padding: 6px 10px;">A Ariketa</td>
+                        <td style="padding: 6px 10px;">a Ikasle taldea</td>
                     </tr>
-                </tbody>
-            </table>
-		</div>
-		<div data-role="content">
-			<div data-role="content">
-				<h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P3</h1>
-				<p> Galdera sorten zerrenda erakutsiko da, asoziatutako ikasle talde, galdera kopuru eta sesio-datarekin batera.</p>
-                <p> Botoien barruan taulak egongo dira, informazio horrekin guztiarekin:</p>
-		
-                <div id="lesson-list-block">
-                
-                    <!-- "next-3" hauek lesson ID-a beharko lukete. JS-ean egin beharrekoa! -->
-                    <a href="#page-t-3" id="next-3"
-                    class="ui-btn ui-mini ui-btn-block ui-corner-all"
-                    data-transition="slidefade"
-                    style="padding: 0; display: inline-block; text-decoration: none;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                        <tbody>
-                        <tr>
-                            <td style="padding: 6px 10px;">A Galdera sorta</td>
-                            <td style="padding: 6px 10px;">a Ikasle taldea</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 6px 10px;">N galdera</td>
-                            <td style="padding: 6px 10px;">2026-10-15</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    </a>
+                    <tr>
+                        <td style="padding: 6px 10px;">N galdera</td>
+                        <td style="padding: 6px 10px;">2026-10-15</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </a>
 
-                    <a href="#page-t-3" id="next-3"
-                    class="ui-btn ui-mini ui-btn-block ui-corner-all"
-                    data-transition="slidefade"
-                    style="padding: 0; display: inline-block; text-decoration: none;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                        <tbody>
-                        <tr>
-                            <td style="padding: 6px 10px;">B Galdera sorta</td>
-                            <td style="padding: 6px 10px;">b Ikasle taldea</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 6px 10px;">O galdera</td>
-                            <td style="padding: 6px 10px;">2026-10-10</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    </a>
+                <a href="#page-t-3" id="next-3"
+                class="ui-btn ui-mini ui-btn-block ui-corner-all"
+                data-transition="slidefade"
+                style="padding: 0; display: inline-block; text-decoration: none;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <tbody>
+                    <tr>
+                        <td style="padding: 6px 10px;">B Ariketa</td>
+                        <td style="padding: 6px 10px;">b Ikasle taldea</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px 10px;">O galdera</td>
+                        <td style="padding: 6px 10px;">2026-10-10</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </a>
 
-                    <a href="#page-t-3" id="next-3"
-                    class="ui-btn ui-mini ui-btn-block ui-corner-all"
-                    data-transition="slidefade"
-                    style="padding: 0; display: inline-block; text-decoration: none;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                        <tbody>
-                        <tr>
-                            <td style="padding: 6px 10px;">C Galdera sorta</td>
-                            <td style="padding: 6px 10px;">c Ikasle taldea</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 6px 10px;">P galdera</td>
-                            <td style="padding: 6px 10px;">2026-10-13</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    </a>
+                <a href="#page-t-3" id="next-3"
+                class="ui-btn ui-mini ui-btn-block ui-corner-all"
+                data-transition="slidefade"
+                style="padding: 0; display: inline-block; text-decoration: none;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <tbody>
+                    <tr>
+                        <td style="padding: 6px 10px;">C Ariketa</td>
+                        <td style="padding: 6px 10px;">c Ikasle taldea</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px 10px;">P galdera</td>
+                        <td style="padding: 6px 10px;">2026-10-13</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </a>
 
-                    <a href="#page-t-3" id="next-3"
-                    class="ui-btn ui-mini ui-btn-block ui-corner-all"
-                    data-transition="slidefade"
-                    style="padding: 0; display: inline-block; text-decoration: none;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                        <tbody>
-                        <tr>
-                            <td style="padding: 6px 10px;">D Galdera sorta</td>
-                            <td style="padding: 6px 10px;">d Ikasle taldea</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 6px 10px;">q galdera</td>
-                            <td style="padding: 6px 10px;">2026-10-17</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    </a>
+                <a href="#page-t-3" id="next-3"
+                class="ui-btn ui-mini ui-btn-block ui-corner-all"
+                data-transition="slidefade"
+                style="padding: 0; display: inline-block; text-decoration: none;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <tbody>
+                    <tr>
+                        <td style="padding: 6px 10px;">D Ariketa</td>
+                        <td style="padding: 6px 10px;">d Ikasle taldea</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px 10px;">q galdera</td>
+                        <td style="padding: 6px 10px;">2026-10-17</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </a>
 
-                </div>
+            </div>
 
-			</div>
-		</div>
-		<div data-role="footer" data-position="fixed">
-            <table style="width: 100%; table-layout: fixed; text-align: center;">
-                <tr>
-                  <td style="text-align: left; width: 33%"><a href="#page-t-1" id="prev-3" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade" data-direction="reverse">Atzera (P2)</a></td>
-                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-2027</h4></td>
-                  <td style="text-align: right; width: 33%"><a href="#page-t-3" id="new-lesson-3" class="ui-btn ui-icon-plus ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Sorta berria (P4, Hutsik)</a></td>
-			    </tr>
-            </table>
-		</div>
+        </div>
 	</div>
 
     <!-- P4 -->
-    <div data-role="page" id="page-t-3">
-        <div data-role="header" data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
-            <table style="width: 100%; table-layout: fixed;">
-                <tbody>
-                    <tr>
-                        <td style="text-align: left; width: 33%;"><a href="#page-t-9" id="Info" class="ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Info (P10)</a></td>
-                        <td style="text-align: center; width: 34%;">Logo</td>
-                        <td style="text-align: right; width: 33%;"><a href="#page-t-10" id="Ezarpenak" class="ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ezarpenak (P11)</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div data-role="page" id="page-t-3" data-back="#page-t-2" data-back-label="Atzera (P3)" data-next="#page-t-4" data-next-label="Galdera berria (P5)" data-next-icon="plus">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P4</h1>
-            <p>Galdera sorta bat editatu edo sortzeko pantaila.</p>
+            <p>Ariketa bat editatu edo sortzeko pantaila.</p>
         
             <form>
                 <fieldset data-role="controlgroup">
@@ -404,35 +329,14 @@
                         </tbody>
                     </table>
                     </a>
-            </div>
-        
+            </div>       
         
         </div>
 
-        <div data-role="footer" data-position="fixed">
-            <table style="width: 100%; table-layout: fixed; text-align: center;">
-                <tr>
-                  <td style="text-align: left; width: 33%"><a href="#page-t-2" id="prev-4" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade" data-direction="reverse">Atzera (P3)</a></td>
-                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-202</h4></td>
-                  <td style="text-align: right; width: 33%"><a href="#page-t-4" id="new-question-4" class="ui-btn ui-icon-plus ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Galdera berria (P5, Hutsik)</a></td>
-			    </tr>
-            </table>
-        </div>
     </div>
 
     <!-- P5 -->
-    <div data-role="page" id="page-t-4">
-        <div data-role="header" data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
-            <table style="width: 100%; table-layout: fixed;">
-                <tbody>
-                    <tr>
-                        <td style="text-align: left; width: 33%;"><a href="#page-t-9" id="Info" class="ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Info (P10)</a></td>
-                        <td style="text-align: center; width: 34%;">Logo</td>
-                        <td style="text-align: right; width: 33%;"><a href="#page-t-10" id="Ezarpenak" class="ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ezarpenak (P11)</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div data-role="page" id="page-t-4" data-back="#page-t-3" data-back-label="Atzera (P4)" data-next="#page-t-3" data-next-label="Gorde (P4)" data-next-icon="check">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P5</h1>
             <p>Galdera baten enuntziatua, mota eta erantzunak kudeatzeko pantaila.</p>
@@ -531,32 +435,11 @@
 
             </div>
 
-
-        </div>
-        <div data-role="footer" data-position="fixed">
-           <table style="width: 100%; table-layout: fixed; text-align: center;">
-                <tr>
-                  <td style="text-align: left; width: 33%"><a href="#page-t-3" id="prev-4" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade" data-direction="reverse">Atzera (P4)</a></td>
-                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-202</h4></td>
-                  <td style="text-align: right; width: 33%"><a href="#page-t-3" id="save-question" class="ui-btn ui-icon-plus ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Galdera gorde (P4)</a></td>
-			    </tr>
-            </table>
         </div>
     </div>
 
     <!-- P6 -->
-    <div data-role="page" id="page-t-5">
-        <div data-role="header" data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
-            <table style="width: 100%; table-layout: fixed;">
-                <tbody>
-                    <tr>
-                        <td style="text-align: left; width: 33%;"><a href="#page-t-9" id="Info" class="ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Info (P10)</a></td>
-                        <td style="text-align: center; width: 34%;">Logo</td>
-                        <td style="text-align: right; width: 33%;"><a href="#page-t-10" id="Ezarpenak" class="ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ezarpenak (P11)</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div data-role="page" id="page-t-5" data-back="#page-t-1" data-back-label="Atzera (P2)" data-next="#page-t-6" data-next-label="Talde berria (P7)" data-next-icon="plus">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P6</h1>
             <p>Ikasle taldeen zerrenda erakutsiko da.</p>
@@ -573,7 +456,7 @@
                                 <td>Ikasle kopurua</td>
                             </tr>
                             <tr>
-                                <td>Galdera sorta kopurua</td>
+                                <td>Ariketa kopurua</td>
                             </tr>
                             </tbody>
                         </table>
@@ -590,45 +473,28 @@
                                 <td>Ikasle kopurua</td>
                             </tr>
                             <tr>
-                                <td>Galdera sorta kopurua</td>
+                                <td>Ariketa kopurua</td>
                             </tr>
                             </tbody>
                         </table>
                     </a>
             </div>
-        
-        
-        </div>
-        <div data-role="footer" data-position="fixed">
-           <table style="width: 100%; table-layout: fixed; text-align: center;">
-                <tr>
-                  <td style="text-align: left; width: 33%"><a href="#page-t-1" id="prev-6" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade" data-direction="reverse">Atzera (P2)</a></td>
-                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-202</h4></td>
-                  <td style="text-align: right; width: 33%"><a href="#page-t-6" id="new-class" class="ui-btn ui-icon-plus ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Talde bat sortu (P7)</a></td>
-			    </tr>
-            </table>
         </div>
     </div>
 
     <!-- P7 -->
-    <div data-role="page" id="page-t-6">
-        <div º data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
-            <table style="width: 100%; table-layout: fixed;">
-                <tbody>
-                    <tr>
-                        <td style="text-align: left; width: 33%;"><a href="#page-t-9" id="Info" class="ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Info (P10)</a></td>
-                        <td style="text-align: center; width: 34%;">Logo</td>
-                        <td style="text-align: right; width: 33%;"><a href="#page-t-10" id="Ezarpenak" class="ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ezarpenak (P11)</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div data-role="page" id="page-t-6" data-back="#page-t-5" data-back-label="Atzera (P6)", data-next="#page-t-5", data-next-label="Gorde (P6)", data-next-icon="check">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P7</h1>
-            <p>Talde barruko ikasle-zerrenda erakutsiko da.</p>
+            <p>Talde barruko ikasle-zerrenda erakutsiko da, edo, erregistratutako ikasle guztien artean iragazteko menua.</p>
             <p><h2>LH-1 (Taldearen izena)</h2></p>
+            edo
+            <p><h2>Ikasle guztiak:</h2></p>
 
+            <p>Botoi hau sakatuta berriz kargatuko da orri hau, baina taldearen kanpoan daudenak ere erakutsiz:</p>
+            <a href="#page-t-6" id="ikasle-gehitu" class="ui-btn ui-icon-plus ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ikasle bat gehitu (P7)</a>
 
+        <div></div>
         <div class="ui-field-contain" style="text-align: left;">
             <label for="student-search-in-class">Bilatu ikaslea talde barruan:</label>
             <input type="search" name="student-search-in-class" id="student-search-in-class"
@@ -689,30 +555,10 @@
             </div>
 
         </div>
-        <div data-role="footer" data-position="fixed">
-           <table style="width: 100%; table-layout: fixed; text-align: center;">
-                <tr>
-                  <td style="text-align: left; width: 33%"><a href="#page-t-5" id="prev-7" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade" data-direction="reverse">Atzera (P6)</a></td>
-                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-202</h4></td>
-                  <td style="text-align: right; width: 33%"><a href="#page-t-8" id="add-student-to-class" class="ui-btn ui-icon-plus ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ikasle bat gehitu (P9)</a></td>
-			    </tr>
-            </table>
-        </div>
     </div>
     
     <!-- P8 -->
-    <div data-role="page" id="page-t-7">
-        <div data-role="header" data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
-            <table style="width: 100%; table-layout: fixed;">
-                <tbody>
-                    <tr>
-                        <td style="text-align: left; width: 33%;"><a href="#page-t-9" id="Info" class="ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Info (P10)</a></td>
-                        <td style="text-align: center; width: 34%;">Logo</td>
-                        <td style="text-align: right; width: 33%;"><a href="#page-t-10" id="Ezarpenak" class="ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ezarpenak (P11)</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div data-role="page" id="page-t-7" data-back="#page-t-6" data-back-label="Atzera (P7)">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P8</h1>
             <p>Ikasle baten informazioa</p>
@@ -752,30 +598,10 @@
             <a href="#page-t-6" id="remove-student-from-class" class="ui-btn ui-icon-minus ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Taldetik ezabatu (P7)</a>
 
         </div>
-        <div data-role="footer" data-position="fixed">
-           <table style="width: 100%; table-layout: fixed; text-align: center;">
-                <tr>
-                  <td style="text-align: left; width: 33%"><a href="#page-t-6" id="prev-8" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade" data-direction="reverse">Atzera (P7)</a></td>
-                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-202</h4></td>
-                  <td style="text-align: right; width: 33%"></td>
-			    </tr>
-            </table>
-        </div>
     </div>
 
     <!-- P9 -->
-    <div data-role="page" id="page-t-8">
-        <div data-role="header" data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
-            <table style="width: 100%; table-layout: fixed;">
-                <tbody>
-                    <tr>
-                        <td style="text-align: left; width: 33%;"><a href="#page-t-9" id="Info" class="ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Info (P10)</a></td>
-                        <td style="text-align: center; width: 34%;">Logo</td>
-                        <td style="text-align: right; width: 33%;"><a href="#page-t-10" id="Ezarpenak" class="ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ezarpenak (P11)</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div data-role="page" id="page-t-8" data-back="#page-t-7" data-back-label="Atzera (P8)">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P9</h1>
             <p>Erregistratutako ikasle guztien artean bilatzeko pantaila, talde/klase baten gehitzeko.</p>
@@ -786,75 +612,51 @@
                     value="" placeholder="Ikasle izena...">
             </div>
         </div>
-        <div data-role="footer" data-position="fixed">
-            <table style="width: 100%; table-layout: fixed; text-align: center;">
-                <tr>
-                    <td style="text-align: left; width: 33%"><a href="#page-t-6" id="prev-9" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade" data-direction="reverse">Atzera (P7)</a></td>
-                    <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-2027</h4></td>
-                    <td style="text-align: right; width: 33%"></td>
-                </tr>
-            </table>
-        </div>
     </div>
 
     <!-- P10 -->
-    <div data-role="page" id="page-t-9">
-        <div data-role="header" data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
-            <table style="width: 100%; table-layout: fixed;">
+    <div data-role="page" id="page-t-9" data-back="back" data-back-label="Atzera (Auto)">
+        <div data-role="content">
+            <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P10</h1>
+            <p>P10 aplikazioari eta erabiltzaileari buruzko informazio-pantaila.</p>
+            <h2>Erabiltzale izena</h2>
+            <table>
                 <tbody>
                     <tr>
-                        <td style="text-align: left; width: 33%;"></td>
-                        <td style="text-align: center; width: 34%;">Logo</td>
-                        <td style="text-align: right; width: 33%;"><a href="#page-t-10" id="Ezarpenak" class="ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Ezarpenak (P11)</a></td>
+                        <td>email:</td>
+                        <td>[email@domain.tld]</td>
+                    </tr>
+                    <tr>
+                        <td>...</td>
+                        <td>...</td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-        <div data-role="content">
-            <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P10</h1>
-            <p>P10 aplikazioari buruzko informazio-pantaila.</p>
-            <p>Idealki, hemendik itzultzean, geunden pantaila berera bueltatuko gara. B plana P2 pantailara itzultzea liteke, logeatuta egonda, edo P1 pantailara, konturik gabe egonda.</p>
-        </div>
-        <div data-role="footer" data-position="fixed">
-            <table style="width: 100%; table-layout: fixed; text-align: center;">
-                <tr>
-                  <td style="text-align: left; width: 33%"><a href="#page-t-1" id="prev-info" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade" data-direction="reverse">Atzera (P2)</a></td>
-                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-202</h4></td>
-                  <td style="text-align: right; width: 33%"></td>
-			    </tr>
-            </table>       
+            <hr/>
+            <h2>Fonkids Teacher</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Bertsioa:</td>
+                        <td>2026.10b</td>
+                    </tr>
+                    <tr>
+                        <td>Egileak</td>
+                        <td>Erlantz Alonso, Irati Zuazo</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <!-- P11 -->
-    <div data-role="page" id="page-t-10">
-        <div data-role="header" data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
-            <table style="width: 100%; table-layout: fixed;">
-                <tbody>
-                    <tr>
-                        <td style="text-align: left; width: 33%;"><a href="#page-t-9" id="Info" class="ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Info (P10)</a></td>
-                        <td style="text-align: center; width: 34%;">Logo</td>
-                        <td style="text-align: right; width: 33%;"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div data-role="page" id="page-t-10" data-back="back" data-back-label="Atzera (Auto)">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P11</h1>
             <p>Ezarpenen menua.</p>
             <p>Idealki, hemendik itzultzean, geunden pantaila berera bueltatuko gara. B plana P2 pantailara itzultzea liteke, logeatuta egonda, edo P1 pantailara, konturik gabe egonda.</p>
         </div>
-        <div data-role="footer" data-position="fixed">
-            <table style="width: 100%; table-layout: fixed; text-align: center;">
-                <tr>
-                  <td style="text-align: left; width: 33%"><a href="#page-t-1" id="prev-info" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade" data-direction="reverse">Atzera (P2)</a></td>
-                  <td style="width: 34%"><h4 style="margin-top: 0%; margin-bottom: 0%;">2026-202</h4></td>
-                  <td style="text-align: right; width: 33%"></td>
-			    </tr>
-            </table>    
-        </div>
     </div>
-
 
 	<script type="text/javascript" src="cordova.js"></script>
 	<script type="text/javascript" src="js/objects.js"></script>
