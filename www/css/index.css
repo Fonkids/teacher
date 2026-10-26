@@ -1,110 +1,399 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
+ * fonkids.css
+ * Kid-friendly skin for the Fonkids app (jQuery Mobile 1.4.5, theme "a").
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * Load it AFTER jquery.mobile-1.4.5.min.css:
+ *   <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+ *   <link rel="stylesheet" href="css/fonkids.css">
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * Idea: chunky "candy" buttons with a thick bottom edge that press down
+ * when tapped. Everything else stays soft, round and quiet around them.
+ *
+
  */
-* {
-    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+
+
+
+ :root {
+	--sky: #4cc3f5;
+	--sky-dark: #1c8fcb;
+	--sky-pale: #e8f7ff;
+	--sun: #ffd23f;
+	--sun-dark: #e0a800;
+	--coral: #ff6b6b;
+	--coral-dark: #d04646;
+	--coral-pale: #ffe3e3;
+	--grass: #5cd08a;
+	--grass-dark: #2c9d5c;
+	--grape: #7a55e8;
+	--grape-dark: #5636bf;
+	--grape-pale: #efe9ff;
+	--ink: #2d2a55;
+	--white: #ffffff;
+	--font: "Baloo 2", "Nunito", "Chalkboard SE", "Comic Sans MS", "Trebuchet MS", sans-serif;
 }
 
-body {
-    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
-    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
-    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#E4E4E4;
-    background-image:linear-gradient(to bottom, #A7A7A7 0%, #E4E4E4 51%);
-    font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
-    font-size:12px;
-    height:100vh;
-    margin:0px;
-    padding:0px;
-    /* Padding to avoid the "unsafe" areas behind notches in the screen */
-    padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
-    text-transform:uppercase;
-    width:100%;
+/* ---------- Base ---------- */
+
+.ui-page-theme-a,
+.ui-page-theme-a * {
+	font-family: var(--font) !important;
+	text-shadow: none;
 }
 
-/* Portrait layout (default) */
-.app {
-    background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
-    position:absolute;             /* position in the center of the screen */
-    left:50%;
-    top:50%;
-    height:50px;                   /* text area height */
-    width:225px;                   /* text area width */
-    text-align:center;
-    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
-    margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
-                                   /* offset horizontal: half of text area width */
+body.ui-overlay-a,
+.ui-mobile-viewport {
+	background: var(--sky-pale);
 }
 
-/* Landscape layout (with min-width) */
-@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
-    .app {
-        background-position:left center;
-        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
-        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
-                                      /* offset horizontal: half of image width and text area width */
-    }
+.ui-page-theme-a {
+	color: var(--ink);
+	font-size: 18px;
+	background-color: var(--sky-pale);
+	background-image:
+		radial-gradient(var(--white) 3px, transparent 3.5px),
+		radial-gradient(#cdeeff 2px, transparent 2.5px);
+	background-size: 40px 40px;
+	background-position: 0 0, 20px 20px;
 }
 
-h1 {
-    font-size:24px;
-    font-weight:normal;
-    margin:0px;
-    overflow:visible;
-    padding:0px;
-    text-align:center;
+.ui-page-theme-a h1,
+.ui-page-theme-a h2,
+.ui-page-theme-a h3,
+.ui-page-theme-a h4 {
+	color: var(--ink);
+	font-weight: 700;
+	line-height: 1.2;
 }
 
-.event {
-    border-radius:4px;
-    color:#FFFFFF;
-    font-size:12px;
-    margin:0px 30px;
-    padding:2px 0px;
+.ui-page-theme-a h1 { font-size: 1.6em; color: var(--grape-dark); }
+.ui-page-theme-a h2 { font-size: 1.2em; color: var(--grape); }
+.ui-page-theme-a h3 { font-size: 1.15em; }
+
+.ui-page-theme-a p { line-height: 1.45; }
+
+.ui-content {
+	padding: 1em;
+	background: transparent;
 }
 
-.event.listening {
-    background-color:#333333;
-    display:block;
+/* ---------- Header ---------- */
+
+.ui-page-theme-a .ui-header.ui-bar-inherit {
+	background: var(--sky) !important;
+	border: 0 !important;
+	border-bottom: 5px solid var(--sky-dark) !important;
+	border-radius: 0 0 5% 5%;
+	color: var(--white);
+	text-shadow: 0 2px 0 rgba(45, 42, 85, 0.3);
 }
 
-.event.received {
-    background-color:#4B946A;
-    display:none;
+.ui-header table { border-collapse: separate; }
+
+.ui-header td {
+	vertical-align: middle;
+	padding: 8px 6px;
+	color: var(--white);
+	font-weight: 700;
 }
 
-#deviceready.ready .event.listening { display: none; }
-#deviceready.ready .event.received { display: block; }
-
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
+.ui-header td:nth-child(2) {
+	font-size: 1.35em;
+	letter-spacing: 0.5px;
 }
 
-.blink {
-    animation:fade 3000ms infinite;
-    -webkit-animation:fade 3000ms infinite;
+.ui-page-theme-a .ui-header .ui-title {
+	color: var(--white);
+	font-size: 1.3em;
+	text-align: center;
+	margin: 0.7em 1em;
 }
 
+.ui-header .ui-btn { margin: 0; }
 
-@media screen and (prefers-color-scheme: dark) {
-    body {
-        background-image:linear-gradient(to bottom, #585858 0%, #1B1B1B 51%);
-    }
+/* ---------- Footer ---------- */
+
+.ui-page-theme-a .ui-footer.ui-bar-inherit {
+	background: var(--sun) !important;
+	border: 0 !important;
+	border-top: 5px solid var(--sun-dark) !important;
+	border-radius: 5% 5% 0 0;
+	padding: 8px 8px !important;
+}
+
+.ui-footer h4 {
+	color: var(--ink);
+	font-size: 0.95em;
+	margin: 6px 0 0 !important;
+}
+
+/* ---------- Candy buttons ---------- */
+
+.ui-page-theme-a .ui-btn {
+	--btn: var(--sun);
+	--btn-dark: var(--sun-dark);
+	--btn-ink: var(--ink);
+}
+
+.ui-page-theme-a .ui-btn:not([for]) {
+	background-color: var(--btn) !important;
+	border: 3px solid var(--btn-dark) !important;
+	border-bottom-width: 3px !important;
+	box-shadow: 0 5px 0 var(--btn-dark) !important;
+	color: var(--btn-ink) !important;
+	text-shadow: none !important;
+	font-weight: 700;
+	font-size: 17px;
+	text-decoration: none;
+	padding-top: 0.7em;
+	padding-bottom: 0.7em;
+	margin-top: 0.4em;
+	margin-bottom: 0.7em;
+	transition: transform 0.08s ease, box-shadow 0.08s ease;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.ui-page-theme-a .ui-btn.ui-corner-all:not([for]) { border-radius: 10%; }
+
+.ui-page-theme-a .ui-btn.ui-mini:not([for]) { font-size: 15px; }
+
+.ui-page-theme-a .ui-btn:not([for]):active {
+	transform: translateY(4px);
+	box-shadow: 0 1px 0 var(--btn-dark) !important;
+}
+
+/* icon bubbles inside buttons (arrows, camera...) */
+.ui-page-theme-a .ui-btn-icon-left:not([for]):after,
+.ui-page-theme-a .ui-btn-icon-right:not([for]):after,
+.ui-page-theme-a .ui-btn-icon-notext:not([for]):after {
+	background-color: rgba(45, 42, 85, 0.35);
+}
+
+/* button colours by role */
+.ui-page-theme-a .ui-btn[id^="prev-"] { --btn: var(--grass); --btn-dark: var(--grass-dark); }
+.ui-page-theme-a .ui-btn[id^="next-"] { --btn: var(--sky);   --btn-dark: var(--sky-dark); }
+
+.ui-content .ui-btn-inline { --btn: var(--coral); --btn-dark: var(--coral-dark); }
+.ui-content .ui-btn[onclick^="loadSignUp"] { --btn: var(--grape); --btn-dark: var(--grape-dark); --btn-ink: var(--white); }
+.ui-content .ui-btn[id^="signup-"],
+.ui-content .check-answer { --btn: var(--grass); --btn-dark: var(--grass-dark); }
+
+.ui-content .check-answer {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 18px;
+}
+
+/* disabled (e.g. sign-up before the photo is taken) */
+.ui-page-theme-a .ui-btn.ui-state-disabled,
+.ui-page-theme-a .ui-btn.ui-disabled,
+.ui-page-theme-a .ui-btn[disabled] {
+	--btn: #dcd9ee;
+	--btn-dark: #bcb8d6;
+	--btn-ink: #8b87ad;
+	opacity: 0.85;
+	pointer-events: none;
+}
+
+/* ---------- Cards (login, sign-up, questions) ---------- */
+
+.ui-content > div {
+	background: var(--white);
+	border: 4px solid var(--sky);
+	border-radius: 28px;
+	padding: 18px !important;
+	margin-bottom: 18px;
+	box-shadow: 0 6px 0 rgba(28, 143, 203, 0.25);
+}
+
+.ui-content > div[id^="li-"],
+.ui-content > div[id^="su-"] {
+	text-align: center;
+	border-color: var(--grape);
+	box-shadow: 0 6px 0 rgba(86, 54, 191, 0.25);
+}
+
+.ui-content > div > h1,
+.ui-content > div > h2 { margin: 0.2em 0 0.5em; }
+
+[id^="su-"] small {
+	color: var(--coral-dark);
+	font-weight: 700;
+}
+
+/* ---------- Text inputs ---------- */
+
+/* enhanced by jQuery Mobile */
+.ui-page-theme-a .ui-input-text {
+	background: var(--white);
+	border: 3px solid var(--sky);
+	border-radius: 10%;
+	box-shadow: none;
+	margin: 0.6em auto;
+	max-width: 420px;
+}
+
+.ui-page-theme-a .ui-input-text.ui-focus {
+	border-color: var(--grape);
+	box-shadow: 0 0 0 4px rgba(122, 85, 232, 0.25) !important;
+}
+
+.ui-page-theme-a .ui-input-text input {
+	color: var(--ink);
+	font-size: 1.05em;
+	padding: 0.8em 1.2em;
+	min-height: 0;
+}
+
+/* not enhanced (inputs injected later by loadSignUp) */
+.ui-content > div > input {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 420px;
+	margin: 0.6em auto;
+	padding: 0.8em 1.2em;
+	font-size: 1.05em;
+	color: var(--ink);
+	background: var(--white);
+	border: 3px solid var(--sky);
+	border-radius: 10%;
+	outline: none;
+}
+
+.ui-content > div > input:focus {
+	border-color: var(--grape);
+	box-shadow: 0 0 0 4px rgba(122, 85, 232, 0.25);
+}
+
+.ui-page-theme-a input::placeholder { color: #8f8cb5; }
+
+/* ---------- Camera button + photo ---------- */
+
+.ui-page-theme-a .ui-btn.ui-icon-camera.ui-btn-icon-notext:not([for]) {
+	--btn: var(--sky);
+	--btn-dark: var(--sky-dark);
+	width: 78px;
+	height: 78px;
+	padding: 0;
+	margin: 0.6em auto 0.9em;
+	border-radius: 50% !important;
+	animation: fk-bob 2.4s ease-in-out infinite;
+}
+
+.ui-page-theme-a .ui-btn.ui-icon-camera.ui-btn-icon-notext:not([for]):after {
+	width: 42px;
+	height: 42px;
+	margin: -21px 0 0 -21px;
+	background-size: 30px 30px;
+	background-color: rgba(45, 42, 85, 0.4);
+}
+
+.ui-page-theme-a .ui-btn.ui-icon-camera.ui-btn-icon-notext:active { animation: none; }
+
+@keyframes fk-bob {
+	0%, 100% { transform: translateY(0); }
+	50%      { transform: translateY(-5px); }
+}
+
+img.responsive {
+	box-sizing: border-box;
+	margin: 0.6em auto;
+	padding: 8px;
+	background: var(--white);
+	border: 4px solid var(--sun) !important;
+	border-radius: 20px;
+	transform: rotate(-2deg);
+	box-shadow: 0 5px 0 rgba(224, 168, 0, 0.35);
+}
+
+[id^="photoError-"] {
+	display: inline-block;
+	margin: 0.5em 0;
+	padding: 0.5em 1em;
+	background: var(--coral-pale);
+	color: var(--coral-dark) !important;
+	font-weight: 700;
+	border-radius: 16px;
+}
+
+[id^="fileName-"] { font-size: 0.8em; color: var(--grape); }
+
+/* ---------- Multiple choice ---------- */
+
+.ui-controlgroup-controls .ui-radio { margin: 0; }
+
+.ui-page-theme-a .ui-controlgroup-controls .ui-radio label.ui-btn {
+	background: var(--white);
+	color: var(--ink);
+	border: 3px solid var(--sky);
+	border-radius: 22px !important;
+	margin: 8px 0;
+	padding-top: 0.8em;
+	padding-bottom: 0.8em;
+	font-size: 17px;
+	font-weight: 600;
+	white-space: normal;
+	box-shadow: 0 4px 0 rgba(28, 143, 203, 0.25);
+}
+
+.ui-page-theme-a .ui-controlgroup-controls .ui-radio label.ui-radio-on {
+	background: var(--grape-pale);
+	border-color: var(--grape);
+	box-shadow: 0 4px 0 rgba(86, 54, 191, 0.3);
+}
+
+.ui-page-theme-a .ui-radio label.ui-radio-on:after {
+	background-color: var(--grape);
+}
+
+/* after answering, keep the green / red feedback colours readable */
+.ui-radio .ui-state-disabled,
+.ui-radio.ui-state-disabled,
+.ui-radio label.ui-state-disabled { opacity: 0.95; }
+
+.answer-feedback {
+	min-height: 1.4em;
+	margin: 0.4em 0 0;
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: 700;
+	color: var(--grape);
+}
+
+.answer-feedback:empty { display: none; }
+
+/* score badges */
+.res-1,
+.res-2 {
+	display: inline-block;
+	min-width: 3.2em;
+	padding: 0.1em 0.7em;
+	margin: 0 0.15em;
+	background: var(--sun);
+	color: var(--ink);
+	font-weight: 700;
+	text-align: center;
+	border-radius: 10%;
+}
+
+.res-2 { background: var(--grass); }
+
+.ui-content > p { text-align: center; }
+
+/* ---------- Accessibility ---------- */
+
+.ui-page-theme-a .ui-btn:focus-visible,
+.ui-page-theme-a input:focus-visible {
+	outline: 4px solid var(--grape);
+	outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ui-page-theme-a .ui-btn,
+	.ui-page-theme-a .ui-btn.ui-icon-camera {
+		animation: none !important;
+		transition: none !important;
+	}
 }

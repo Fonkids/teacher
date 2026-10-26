@@ -141,9 +141,9 @@ function buildFooter(back, backLabel, next, nextLabel, nextIcon) {
     var html =
         '<div data-role="footer" data-position="fixed" data-id="app-footer">' +
         '<table style="width:100%; table-layout:fixed; text-align:center;"><tr>' +
-        '<td style="text-align:left;width:33%">' + backBtn(back, backLabel) + '</td>' +
-        '<td style="width:34%"><h4 style="margin:0">2026-2027</h4></td>' +
-        '<td style="text-align:right;width:33%">' + nextBtn(next, nextLabel, nextIcon) + '</td>' +
+        '<td style="text-align:left;width:40%">' + backBtn(back, backLabel) + '</td>' +
+        '<td style="width:20%"><h4 style="margin:0">2026-2027</h4></td>' +
+        '<td style="text-align:right;width:40%">' + nextBtn(next, nextLabel, nextIcon) + '</td>' +
         '</tr></table></div>';
     return $(html);
 }
