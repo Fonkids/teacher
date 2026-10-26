@@ -68,9 +68,9 @@ function buildFooter(back, backLabel, next, nextLabel, nextIcon) {
     var html =
         '<div data-role="footer" data-position="fixed" data-id="app-footer">' +
         '<table style="width:100%; table-layout:fixed; text-align:center;"><tr>' +
-        '<td style="text-align:left;width:33%">' + backBtn(back, backLabel) + '</td>' +
-        '<td style="width:34%"><h4 style="margin:0">2026-2027</h4></td>' +
-        '<td style="text-align:right;width:33%">' + nextBtn(next, nextLabel, nextIcon) + '</td>' +
+        '<td style="text-align:left;width:40%">' + backBtn(back, backLabel) + '</td>' +
+        '<td style="width:20%"><p style="margin:0">2026-2027</p></td>' +
+        '<td style="text-align:right;width:40%">' + nextBtn(next, nextLabel, nextIcon) + '</td>' +
         '</tr></table></div>';
     return $(html);
 }
@@ -108,8 +108,10 @@ document.addEventListener("deviceready", function() {
         );
 
         // Fitxategia sortu, hemen sartuko da irudia irudia daukagunean
+        const filename = `selfie_${Date.now()}.jpg`;
+
         const fileEntry = await new Promise((res, rej) =>
-            dirEntry.getFile("selfie.jpg", { create: true }, res, rej)
+            dirEntry.getFile(filename, { create: true, exclusive: false }, res, rej)
         );
 
         // Itxaron irudia lortu arte, lortze denean: fitxategira idatzi
@@ -128,5 +130,6 @@ document.addEventListener("deviceready", function() {
         const preview = document.getElementById("selfie-preview");
         preview.src = fileEntry.toURL();
         preview.style.display = "block";
+        document.getElementById("selfie-path").textContent = fileEntry.toURL();;
     });
 });

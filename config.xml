@@ -8,4 +8,8 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+    <platform name="android">
+	  <preference name="AndroidInsecureFileModeEnabled" value="true" />
+	</platform>
+    <plugin name="cordova-plugin-file" spec="^6.0.2" />
 </widget>

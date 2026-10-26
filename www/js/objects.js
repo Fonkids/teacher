@@ -167,31 +167,3 @@ var pageOrokorra = {
 	
 	
 };
-
-var appSession = {
-	initTimestamp: null,
-	locale: "en-EN",
-	loadSessionPages: function() {
-		if (pantailenHiztegia.length === 0) {
-			return;
-		}
-
-		for (let i = 0; i < pantailenHiztegia.length; i++) {
-		
-
-			var pageDiv = pageOrokorra.create(i);
-			$("body").append(pageDiv);
-			pageDiv.page();
-			
-		}
-
-		for (let i = 0; i < headerHiztegia.length; i++){
-			var pageDiv = pageHeader.create(i);
-			$("body").append(pageDiv);
-			pageDiv.page();
-
-		}
-
-		$.mobile.changePage("#page-t-"+pantailenHiztegia[0].mota+"-0");
-	}
-};
