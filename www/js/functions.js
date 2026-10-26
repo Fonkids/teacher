@@ -171,3 +171,48 @@ $(document).on("change", "#student-group-select", function () {
         $("#audio-section").hide();
     }
 });
+$(document).on("change", "#student-group-select", function () {
+    if ($(this).val() === "multiple-choice-b") {
+        $("#multipleB").show();
+    } else {
+        $("#multipleB").hide();
+    }
+});
+
+$(document).on("change", "#student-group-select", function () {
+    if ($(this).val() === "soup-a") {
+        $("#soupA").show();
+    } else {
+        $("#soupA").hide();
+    }
+});
+$(document).on("change", "#student-group-select", function () {
+    if ($(this).val() === "soup-b") {
+        $("#soupB").show();
+    } else {
+        $("#soupB").hide();
+    }
+});
+
+$(document).on("change", "#student-group-select", function () {
+    if ($(this).val() === "bikote") {
+        $("#pair").show();
+    } else {
+        $("#pair").hide();
+    }
+});
+
+$(document).on("change", "#student-group-select", function () {
+    if ($(this).val() === "join-a") {
+        $("#matchA").show();
+    } else {
+        $("#matchA").hide();
+    }
+});
+$(document).on("change", "#student-group-select", function () {
+    if ($(this).val() === "join-b") {
+        $("#matchB").show();
+    } else {
+        $("#matchB").hide();
+    }
+});
