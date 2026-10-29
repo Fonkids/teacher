@@ -164,6 +164,112 @@ function nextBtn(next, label, icon) {
         : '';
 }
 
+function setupDynamicAnswers(containerId, buttonId, groupName) {
+    var container = document.getElementById(containerId);
+    var addButton = document.getElementById(buttonId);
+
+    if (!container || !addButton || addButton.dataset.initialized) {
+        return;
+    }
+
+    addButton.dataset.initialized = "true";
+
+    var answerCount = 0;
+    var answerMax = 8;
+
+    addButton.addEventListener("click", function () {
+        
+        if (answerCount >= answerMax){
+            return;
+        }
+        
+        answerCount++;
+
+        var row = document.createElement("div");
+        row.className = "answer-row";
+        row.style.display = "flex";
+        row.style.alignItems = "center";
+        row.style.gap = "8px";
+
+        var radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = groupName;
+        radio.value = String(answerCount);
+        radio.id = groupName + "-correct-" + answerCount;
+
+        var label = document.createElement("label");
+        label.htmlFor = radio.id;
+        label.textContent = "Zuzena";
+        label.style.flexShrink = "0";
+
+        var input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Erantzuna " + answerCount;
+        input.id = groupName + "-answer-" + answerCount;
+        input.style.flex = "1";
+
+        var removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.textContent = "−";
+        removeButton.title = "Erantzuna ezabatu";
+        removeButton.style.width = "44px";
+        removeButton.style.flexShrink = "0";
+
+        removeButton.addEventListener("click", function () {
+            row.remove();
+            answerCount--;
+
+            // Erantzun bat ezabatzean, berriro gehitzeko aukera
+            addButton.disabled = false;
+            addButton.classList.remove("ui-state-disabled");
+            addButton.textContent = "Gehitu erantzuna (" +
+                answerCount + "/" + answerMax + ")";
+        });
+
+        row.appendChild(radio);
+        row.appendChild(label);
+        row.appendChild(input);
+        row.appendChild(removeButton);
+
+        container.appendChild(row);
+
+        if (window.jQuery && jQuery.fn.checkboxradio) {
+            jQuery(radio).checkboxradio();
+            jQuery(radio).checkboxradio("refresh");
+        }
+
+        if (window.jQuery && jQuery.fn.textinput) {
+            jQuery(input).textinput();
+        }
+
+        if (window.jQuery && jQuery.fn.button) {
+            jQuery(removeButton).button();
+        }
+
+        addButton.textContent = "Gehitu erantzuna (" +
+        answerCount + "/" + answerMax + ")";
+
+    // 8 erantzunera iristean botoia desgaitu
+    if (answerCount >= answerMax) {
+        addButton.disabled = true;
+        addButton.classList.add("ui-state-disabled");
+    }
+    });
+}
+
+$(document).on("pagecreate", "#page-t-4", function () {
+    setupDynamicAnswers(
+        "multipleA-answers",
+        "multipleA-add-answer",
+        "multipleA-correct"
+    );
+    setupDynamicAnswers(
+        "multipleB-answers",
+        "multipleB-add-answer",
+        "multipleB-correct"
+    );
+});
+
 $(document).on("change", "#student-group-select", function () {
     if ($(this).val() === "multiple-choice-a") {
         $("#audio-section").show();

@@ -358,8 +358,9 @@
 
         </div>
 
-        <!-- Audioa grabatzeko atala -->
-        <div id="audio-section" class="ui-field-contain" style="display: none;">
+        <div id="audio-section" class="ui-field-contain" style="display: none;"><!--multiple-choice-a-->
+            <h4>Hau galdera "multiple choice" motatakoa denean agertuko da.</h4>
+            <h4>Testu motatako ariketa da.</h4>
             <label>Galderaren audioa:</label>
 
             <button type="button"
@@ -382,12 +383,97 @@
                 style="display:none; width:100%;">
                 <source id="audio-source" src="" type="audio/aac">
             </audio>
+
+            <hr/>
+
+            <div class="ui-field-contain">
+                <h4>Erantzun posibleak:</h4>
+        
+                <div id="multipleA-answers"></div>
+        
+                <button type="button"
+                        id="multipleA-add-answer"
+                        class="ui-btn ui-icon-plus ui-btn-icon-left ui-mini">
+                    Gehitu erantzuna
+                </button>
+            </div>
         </div>
 
 
-        <div id="multipleB" class="ui-field-contain" style="display: none;">
+        <div id="multipleB" class="ui-field-contain" style="display: none;"> <!--multiple-choice-b-->
                 <hr/>
                 <h4>Hau galdera "multiple choice" motatakoa denean agertuko da.</h4>
+                <h4>Testu motatako ariketa da.</h4>
+
+                <div class="ui-field-contain">
+                    <label for="enuntziatua">Enuntziatua:</label>
+                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
+                </div>
+
+                <hr/>
+
+            <div class="ui-field-contain">
+                <h4>Erantzun posibleak:</h4>
+        
+                <div id="multipleB-answers"></div>
+        
+                <button type="button"
+                        id="multipleB-add-answer"
+                        class="ui-btn ui-icon-plus ui-btn-icon-left ui-mini">
+                    Gehitu erantzuna
+                </button>
+            </div>
+
+            </div>
+
+            <div id="soupA" class="ui-field-contain" style="display: none;"> <!--soup-a-->
+                <hr/>
+                <h4>Hau galdera "sopa letra" motatako ariketa da.</h4>
+                <h4>Audio moduko ariketa da.</h4>
+
+                <div class="ui-field-contain">
+                    <label for="enuntziatua">Enuntziatua:</label>
+                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
+                </div>
+
+                <div id="soupA-words">
+                    <legend>5 hitzak sartu:</legend>
+                    <input type="text" name="soupA-word1" placeholder="1. hitza" required>
+                    <input type="text" name="soupA-word2" placeholder="2. hitza" required>
+                    <input type="text" name="soupA-word3" placeholder="3. hitza" required>
+                    <input type="text" name="soupA-word4" placeholder="4. hitza" required>
+                    <input type="text" name="soupA-word5" placeholder="5. hitza" required>
+                </div>
+                
+             </div>
+
+
+            <div id="soupB" class="ui-field-contain" style="display: none;"> <!--soup-b-->
+                <hr/>
+                <h4>Hau galdera "sopa letra" motatako ariketa da.</h4>
+                <h4>Audio moduko ariketa da.</h4>
+                
+                <div class="ui-field-contain">
+                    <label for="enuntziatua">Enuntziatua:</label>
+                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
+                </div>
+
+                <div id="soupA-words">
+                    <legend>5 hitzak sartu:</legend>
+                    <input type="text" name="soupA-word1" placeholder="1. hitza" required>
+                    <input type="text" name="soupA-word2" placeholder="2. hitza" required>
+                    <input type="text" name="soupA-word3" placeholder="3. hitza" required>
+                    <input type="text" name="soupA-word4" placeholder="4. hitza" required>
+                    <input type="text" name="soupA-word5" placeholder="5. hitza" required>
+                </div>
+                
+                
+            </div>
+
+            <div id="pair" class="ui-field-contain" style="display: none;"> <!--Bikotea-->
+                <hr/>
+                <h4>Hau galdera "Bikote (klasifikazioa)" motatako ariketa da.</h4>
+                <h4>Testu moduko ariketa da.</h4>
 
                 <div class="ui-field-contain">
                     <label for="enuntziatua">Enuntziatua:</label>
@@ -397,91 +483,50 @@
                 <form>
                     <fieldset data-role="controlgroup">
                         <legend>Erantzun zuzena aukeratu:</legend>
-
-                        <table style="width:100%">
-                            <tr>
-                                <td style="width:10%">
-                                    <input type="radio"
-                                        name="erantzun-zuzena"
-                                        id="erantzuna-a"
-                                        value="A"
-                                        checked>
-                                </td>
-                                <td>
-                                    <input type="text"
-                                        id="erantzuna-a-text"
-                                        placeholder="Lehen erantzuna">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <input type="radio"
-                                        name="erantzun-zuzena"
-                                        id="erantzuna-b"
-                                        value="B">
-                                </td>
-                                <td>
-                                    <input type="text"
-                                        id="erantzuna-b-text"
-                                        placeholder="Bigarren erantzuna">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <input type="radio"
-                                        name="erantzun-zuzena"
-                                        id="erantzuna-c"
-                                        value="C">
-                                </td>
-                                <td>
-                                    <input type="text"
-                                        id="erantzuna-c-text"
-                                        placeholder="Hirugarren erantzuna">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <input type="radio"
-                                        name="erantzun-zuzena"
-                                        id="erantzuna-d"
-                                        value="D">
-                                </td>
-                                <td>
-                                    <input type="text"
-                                        id="erantzuna-d-text"
-                                        placeholder="Laugarren erantzuna">
-                                </td>
-                            </tr>
-                        </table>
+    
+                       
                     </fieldset>
                 </form>
-
-            </div>
-
-            <div id="soupA" class="ui-field-contain" style="display: none;"> <!--soup-a-->
-                    
-                    
-            </div>
-            <div id="soupB" class="ui-field-contain" style="display: none;"> <!--soup-b-->
-                    
-                
-            </div>
-
-            <div id="pair" class="ui-field-contain" style="display: none;"> <!--Bikotea-->
-                    
                 
             </div>
 
             <div id="matchA" class="ui-field-contain" style="display: none;"> <!--Lotu a-->
-                    
+                <hr/>
+                <h4>Hau galdera "Bikote (klasifikazioa)" motatako ariketa da.</h4>
+                <h4>Testu moduko ariketa da.</h4>
+
+                <div class="ui-field-contain">
+                    <label for="enuntziatua">Enuntziatua:</label>
+                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
+                </div>
+
+                <form>
+                    <fieldset data-role="controlgroup">
+                        <legend>Erantzun zuzena aukeratu:</legend>
+    
+                       
+                    </fieldset>
+                </form>
                 
             </div>
 
             <div id="matchB" class="ui-field-contain" style="display: none;"> <!--Lotu b-->
-                    
+                <hr/>
+                <h4>Hau galdera "Bikote (klasifikazioa)" motatako ariketa da.</h4>
+                <h4>Audio moduko ariketa da.</h4>
+
+                <div class="ui-field-contain">
+                    <label for="enuntziatua">Enuntziatua:</label>
+                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
+                </div>
+
+                <form>
+                    <fieldset data-role="controlgroup">
+                        <legend>Erantzun zuzena aukeratu:</legend>
+    
+                       
+                    </fieldset>
+                </form>
                 
             </div>
 
