@@ -288,6 +288,119 @@ var fileUtils = {
                 }
             }
         );
-    }
+    },
+    uploadFileToBackend_E: function(sourceFullPathURL, supaPath, bucket, onSuccess, onError) { //V4
+		console.log("uploadFileToBackend_E: "+bucket);
+		console.log(sourceFullPathURL);
+		window.resolveLocalFileSystemURL(
+			sourceFullPathURL,
+			function(fileEntry) {
+				var fileName = sourceFullPathURL.substring(sourceFullPathURL.lastIndexOf("/") + 1);
+				console.log(fileName);
+				fileEntry.file(
+					function(file) {
+						var reader = new FileReader();
+						reader.onloadend = async function() {
+							
+							try {
+								var url = await uploadFile(bucket,supaPath+'/'+fileName,this.result,file.type);
+
+								if (onSuccess != null)
+									onSuccess(url);
+							}
+							catch (error) {
+								console.error("	File upload error: " + JSON.stringify(error));
+								if (onError != null)
+									onError();
+							}
+						}
+						reader.readAsArrayBuffer(file);
+					},
+					function(error) {
+						console.error("	File error: " + JSON.stringify(error));
+						if (onError != null)
+							onError();
+					}
+				);
+			},
+			function(error) {
+				console.error("	File access error: " + JSON.stringify(error));
+				if (onError != null)
+					onError();
+			}
+		);
+	},
+	writeContentToNewFile_E: function(fileDirectoryURL, fileName, content, onSuccess, onError) { //V5
+		console.log("writeContentToFile_E");
+		window.resolveLocalFileSystemURL(
+			fileDirectoryURL,
+			function(dirEntry) {
+				dirEntry.getFile(
+					fileName,
+					{ create: true, exclusive: false },
+					function(fileEntry) {
+//						console.log("	New file created: " + fileDirectoryURL + fileName);
+						fileEntry.createWriter(
+							function(fileWriter) {
+								fileWriter.onwriteend = function() {
+//									console.log("	Content written to file: " + fileDirectoryURL + fileName);
+									if (onSuccess != false)
+										onSuccess();
+								};
+								fileWriter.write(content);
+							},
+							function(error) {
+								console.error("	File writing error: " + JSON.stringify(error));
+								if (onError != false)
+									onError();
+							}
+						);
+					},
+					function(error) {
+						console.error("	File not created error: " + JSON.stringify(error));
+						if (onError != false)
+							onError();
+					}
+				);
+			},
+			function(error) {
+				console.error("	File directory error:  " + JSON.stringify(error));
+				if (onError != false)
+					onError();
+			}
+		);
+	},
+	contentRead: null, //V5
+	readTextFromFile_E: function(fileDirectoryURL, fileName, onSuccess, onError) { //V5    
+		console.log("readTextFromFile_E");
+		window.resolveLocalFileSystemURL(
+			fileDirectoryURL + fileName,
+			function(fileEntry) {
+//				console.log("	File exists: " + fileDirectoryURL + fileName);
+				fileEntry.file(
+					function(file) {
+						var reader = new FileReader();
+						reader.onloadend = function() {
+//							console.log("	File read: " + JSON.stringify(reader.result, null, "\t"));
+							fileUtils.contentRead = reader.result;
+							if (onSuccess != false)
+								onSuccess();
+						}
+						reader.readAsText(file);
+					},
+					function(error) {
+						console.error("File error: " + JSON.stringify(error));
+						if (onError != false)
+							onError();
+					}
+				);
+			},
+			function(error) {
+				console.error("File access error: " + JSON.stringify(error));
+				if (onError != false)
+					onError();
+			}
+		);
+	}
 };
 

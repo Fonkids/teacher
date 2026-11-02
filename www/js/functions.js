@@ -164,161 +164,448 @@ function nextBtn(next, label, icon) {
         : '';
 }
 
-function setupDynamicAnswers(containerId, buttonId, groupName) {
-    var container = document.getElementById(containerId);
-    var addButton = document.getElementById(buttonId);
 
-    if (!container || !addButton || addButton.dataset.initialized) {
+/* =========================================================
+   1. MOSTRAR EL TIPO DE EJERCICIO SELECCIONADO
+   ========================================================= */
+
+   function showExerciseType(type) {
+
+    // Ocultar todos los ejercicios
+    $(".exercise-panel").hide();
+
+    // Ocultar también el panel de audio del enunciado
+    $("#question-audio-panel").hide();
+
+    if (!type) {
         return;
     }
 
-    addButton.dataset.initialized = "true";
+    // Mostrar el ejercicio seleccionado
+    switch (type) {
 
-    var answerCount = 0;
-    var answerMax = 8;
+        case "multiple-choice-a":
+            $("#exercise-multiple-choice-a").show();
+            $("#question-audio-panel").show();
+            break;
 
-    addButton.addEventListener("click", function () {
-        
-        if (answerCount >= answerMax){
-            return;
-        }
-        
-        answerCount++;
+        case "multiple-choice-b":
+            $("#exercise-multiple-choice-b").show();
+            break;
 
-        var row = document.createElement("div");
-        row.className = "answer-row";
-        row.style.display = "flex";
-        row.style.alignItems = "center";
-        row.style.gap = "8px";
+        case "soup-a":
+            $("#exercise-soup-a").show();
+            break;
 
-        var radio = document.createElement("input");
-        radio.type = "radio";
-        radio.name = groupName;
-        radio.value = String(answerCount);
-        radio.id = groupName + "-correct-" + answerCount;
+        case "soup-b":
+            $("#exercise-soup-b").show();
+            break;
 
-        var label = document.createElement("label");
-        label.htmlFor = radio.id;
-        label.textContent = "Zuzena";
-        label.style.flexShrink = "0";
+        case "bikote":
+            $("#exercise-hangman-a").show();
+            break;
 
-        var input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Erantzuna " + answerCount;
-        input.id = groupName + "-answer-" + answerCount;
-        input.style.flex = "1";
+        case "join-a":
+            $("#exercise-join-a").show();
+            break;
 
-        var removeButton = document.createElement("button");
-        removeButton.type = "button";
-        removeButton.textContent = "−";
-        removeButton.title = "Erantzuna ezabatu";
-        removeButton.style.width = "44px";
-        removeButton.style.flexShrink = "0";
-
-        removeButton.addEventListener("click", function () {
-            row.remove();
-            answerCount--;
-
-            // Erantzun bat ezabatzean, berriro gehitzeko aukera
-            addButton.disabled = false;
-            addButton.classList.remove("ui-state-disabled");
-            addButton.textContent = "Gehitu erantzuna (" +
-                answerCount + "/" + answerMax + ")";
-        });
-
-        row.appendChild(radio);
-        row.appendChild(label);
-        row.appendChild(input);
-        row.appendChild(removeButton);
-
-        container.appendChild(row);
-
-        if (window.jQuery && jQuery.fn.checkboxradio) {
-            jQuery(radio).checkboxradio();
-            jQuery(radio).checkboxradio("refresh");
-        }
-
-        if (window.jQuery && jQuery.fn.textinput) {
-            jQuery(input).textinput();
-        }
-
-        if (window.jQuery && jQuery.fn.button) {
-            jQuery(removeButton).button();
-        }
-
-        addButton.textContent = "Gehitu erantzuna (" +
-        answerCount + "/" + answerMax + ")";
-
-    // 8 erantzunera iristean botoia desgaitu
-    if (answerCount >= answerMax) {
-        addButton.disabled = true;
-        addButton.classList.add("ui-state-disabled");
+        case "join-b":
+            $("#exercise-join-b").show();
+            break;
     }
-    });
 }
 
+
+/* =========================================================
+   2. INICIALIZACIÓN DEL SELECTOR Y DE LAS RESPUESTAS
+   ========================================================= */
+
 $(document).on("pagecreate", "#page-t-4", function () {
+
+    // Ocultar todos los ejercicios inicialmente
+    $(".exercise-panel").hide();
+    $("#question-audio-panel").hide();
+
+    // Cambiar el ejercicio al seleccionar otro tipo
+    $("#student-group-select").on("change", function () {
+        showExerciseType($(this).val());
+    });
+
+    // Inicializar las respuestas dinámicas
     setupDynamicAnswers(
         "multipleA-answers",
         "multipleA-add-answer",
-        "multipleA-correct"
+        "multipleA-correct",
+        "text"
     );
+
     setupDynamicAnswers(
         "multipleB-answers",
         "multipleB-add-answer",
-        "multipleB-correct"
+        "multipleB-correct",
+        "audio"
     );
 });
 
-$(document).on("change", "#student-group-select", function () {
-    if ($(this).val() === "multiple-choice-a") {
-        $("#audio-section").show();
-    } else {
-        $("#audio-section").hide();
-    }
-});
-$(document).on("change", "#student-group-select", function () {
-    if ($(this).val() === "multiple-choice-b") {
-        $("#multipleB").show();
-    } else {
-        $("#multipleB").hide();
-    }
-});
 
-$(document).on("change", "#student-group-select", function () {
-    if ($(this).val() === "soup-a") {
-        $("#soupA").show();
-    } else {
-        $("#soupA").hide();
-    }
-});
-$(document).on("change", "#student-group-select", function () {
-    if ($(this).val() === "soup-b") {
-        $("#soupB").show();
-    } else {
-        $("#soupB").hide();
-    }
-});
+/* =========================================================
+   3. CREAR RESPUESTAS DINÁMICAMENTE
+   ========================================================= */
 
-$(document).on("change", "#student-group-select", function () {
-    if ($(this).val() === "bikote") {
-        $("#pair").show();
-    } else {
-        $("#pair").hide();
-    }
-});
+function setupDynamicAnswers(
+    containerId,
+    buttonId,
+    groupName,
+    answerKind
+) {
 
-$(document).on("change", "#student-group-select", function () {
-    if ($(this).val() === "join-a") {
-        $("#matchA").show();
-    } else {
-        $("#matchA").hide();
+    var container = $("#" + containerId);
+    var button = $("#" + buttonId);
+
+    var answerCount = 0;
+    var maxAnswers = 8;
+
+    button.on("click", function () {
+
+        if (answerCount >= maxAnswers) {
+            alert("No se pueden añadir más de 8 respuestas.");
+            return;
+        }
+
+        answerCount++;
+
+        var id = containerId + "-answer-" + answerCount;
+
+        var row = $("<div>", {
+            id: id,
+            class: "dynamic-answer"
+        });
+
+        // Número de respuesta
+        row.append(
+            $("<h4>").text("Respuesta " + answerCount)
+        );
+
+        // Crear el campo según el tipo de respuesta
+        if (answerKind === "text") {
+
+            var textInput = $("<input>", {
+                type: "text",
+                id: id + "-text",
+                name: id + "-text",
+                placeholder: "Escribe la respuesta",
+                required: true
+            });
+
+            row.append(
+                $("<label>", {
+                    for: id + "-text"
+                }).text("Texto de la respuesta:")
+            );
+
+            row.append(textInput);
+
+        } else if (answerKind === "audio") {
+
+            var audioInput = $("<input>", {
+                type: "file",
+                id: id + "-audio",
+                name: id + "-audio",
+                accept: "audio/*",
+                required: true
+            });
+
+            var audioPlayer = $("<audio>", {
+                id: id + "-player",
+                controls: true,
+                css: {
+                    display: "none",
+                    width: "100%"
+                }
+            });
+
+            row.append(
+                $("<label>", {
+                    for: id + "-audio"
+                }).text("Seleccionar audio:")
+            );
+
+            row.append(audioInput);
+            row.append(audioPlayer);
+
+            // Reproducir el audio seleccionado
+            audioInput.on("change", function () {
+
+                if (this.files && this.files.length > 0) {
+
+                    var url = URL.createObjectURL(this.files[0]);
+
+                    audioPlayer.attr("src", url);
+                    audioPlayer.show();
+
+                } else {
+
+                    audioPlayer.hide();
+                    audioPlayer.removeAttr("src");
+                }
+            });
+        }
+
+        // Radio para seleccionar la respuesta correcta
+        var correctInput = $("<input>", {
+            type: "radio",
+            name: groupName,
+            id: id + "-correct",
+            value: answerCount,
+            required: true
+        });
+
+        row.append(
+            $("<label>", {
+                for: id + "-correct"
+            }).text("Respuesta correcta")
+        );
+
+        row.append(correctInput);
+
+        // Botón para eliminar la respuesta
+        var removeButton = $("<button>", {
+            type: "button",
+            text: "Eliminar respuesta",
+            class: "ui-btn ui-mini ui-btn-icon-left ui-icon-delete"
+        });
+
+        removeButton.on("click", function () {
+
+            row.remove();
+        });
+
+        row.append(removeButton);
+
+        container.append(row);
+
+        // Actualizar los elementos de jQuery Mobile
+        container.trigger("create");
+    });
+}
+
+
+/* =========================================================
+   4. GRABACIÓN DEL ENUNCIADO DE MULTIPLE-CHOICE-A
+   ========================================================= */
+
+var questionRecording = false;
+var questionAudioPath = null;
+
+
+function startAudioRecord() {
+
+    if (typeof audio === "undefined" ||
+        typeof audio.doStartRecord !== "function") {
+
+        alert("El sistema de grabación no está disponible.");
+        return;
     }
-});
-$(document).on("change", "#student-group-select", function () {
-    if ($(this).val() === "join-b") {
-        $("#matchB").show();
-    } else {
-        $("#matchB").hide();
+
+    if (questionRecording || soupBRecordingIndex !== null) {
+        alert("Ya hay una grabación en curso.");
+        return;
     }
-});
+
+    try {
+
+        questionAudioPath =
+            appDirs.baseStorageAudio() +
+            "question_" + Date.now() + ".aac";
+
+        audio.doStartRecord();
+
+        questionRecording = true;
+
+        $("#button-audio-start").addClass("ui-disabled");
+        $("#button-audio-stop").removeClass("ui-disabled");
+
+        $("#audio-file-name").text("Grabando enunciado...");
+
+    } catch (error) {
+
+        console.error(error);
+        alert("No se ha podido iniciar la grabación.");
+    }
+}
+
+
+function stopAudioRecord() {
+
+    if (!questionRecording) {
+        return;
+    }
+
+    audio.doStopRecord_E(
+
+        questionAudioPath,
+
+        function () {
+
+            questionRecording = false;
+
+            $("#button-audio-start").removeClass("ui-disabled");
+            $("#button-audio-stop").addClass("ui-disabled");
+
+            $("#audio-file-name").text("Enunciado grabado correctamente.");
+
+            $("#audio-source").attr("src", questionAudioPath);
+
+            var player = document.getElementById("audio-player");
+
+            player.style.display = "block";
+            player.load();
+        },
+
+        function (error) {
+
+            console.error("Error al guardar el enunciado:", error);
+
+            questionRecording = false;
+
+            $("#button-audio-start").removeClass("ui-disabled");
+            $("#button-audio-stop").addClass("ui-disabled");
+
+            alert("No se ha podido guardar la grabación.");
+        }
+    );
+}
+
+
+/* =========================================================
+   5. SOPA DE LETRAS B: SUBIR O GRABAR LOS CINCO AUDIOS
+   ========================================================= */
+
+var soupBRecordingIndex = null;
+
+var soupBRecordedAudios = {};
+
+
+/*
+ * Iniciar la grabación de una palabra.
+ */
+function startWordAudioRecord(index) {
+
+    if (typeof audio === "undefined" ||
+        typeof audio.doStartRecord !== "function") {
+
+        alert("El sistema de grabación no está disponible.");
+        return;
+    }
+
+    if (questionRecording || soupBRecordingIndex !== null) {
+
+        alert("Primero debes detener la grabación actual.");
+        return;
+    }
+
+    // Eliminar el archivo seleccionado anteriormente
+    $("#soupB-audio" + index).val("");
+
+    var player = document.getElementById("soupB-player" + index);
+
+    player.pause();
+    player.removeAttribute("src");
+    player.style.display = "none";
+
+    var filePath =
+        appDirs.baseStorageAudio() +
+        "soupB_word" + index + "_" + Date.now() + ".aac";
+
+    soupBRecordedAudios[index] = filePath;
+
+    try {
+
+        audio.doStartRecord();
+
+        soupBRecordingIndex = index;
+
+        $("#soupB-stop" + index).prop("disabled", false);
+
+    } catch (error) {
+
+        console.error(error);
+
+        delete soupBRecordedAudios[index];
+
+        alert("No se ha podido iniciar la grabación.");
+    }
+}
+
+
+/*
+ * Detener y guardar la grabación de una palabra.
+ */
+function stopWordAudioRecord(index) {
+
+    if (soupBRecordingIndex !== index) {
+        return;
+    }
+
+    var filePath = soupBRecordedAudios[index];
+
+    audio.doStopRecord_E(
+
+        filePath,
+
+        function () {
+
+            var player =
+                document.getElementById("soupB-player" + index);
+
+            player.src = filePath;
+            player.style.display = "block";
+            player.load();
+
+            $("#soupB-stop" + index).prop("disabled", true);
+
+            soupBRecordingIndex = null;
+        },
+
+        function (error) {
+
+            console.error("Error al guardar el audio:", error);
+
+            delete soupBRecordedAudios[index];
+
+            $("#soupB-stop" + index).prop("disabled", true);
+
+            soupBRecordingIndex = null;
+
+            alert("No se ha podido guardar la grabación.");
+        }
+    );
+}
+
+
+/*
+ * Si se sube un archivo, se elimina la referencia
+ * a la grabación anterior y se muestra el reproductor.
+ */
+$(document).on(
+    "change",
+    "#soupB-words input[type='file']",
+    function () {
+
+        var index = Number(
+            this.id.replace("soupB-audio", "")
+        );
+
+        if (this.files && this.files.length > 0) {
+
+            delete soupBRecordedAudios[index];
+
+            var player =
+                document.getElementById("soupB-player" + index);
+
+            player.src = URL.createObjectURL(this.files[0]);
+            player.style.display = "block";
+            player.load();
+        }
+    }
+);

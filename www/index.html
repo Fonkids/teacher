@@ -358,256 +358,672 @@
 
         </div>
 
-        <div id="audio-section" class="ui-field-contain" style="display: none;"><!--multiple-choice-a-->
-            <h4>Hau galdera "multiple choice" motatakoa denean agertuko da.</h4>
-            <h4>Testu motatako ariketa da.</h4>
-            <label>Galderaren audioa:</label>
+        <section id="question-audio-panel"
+        class="exercise-audio-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Enuntziatuko audioa</h3>
+
+   <button type="button"
+           id="button-audio-start"
+           onclick="startAudioRecord()">
+       Grabazioa hasi
+   </button>
+
+   <button type="button"
+           id="button-audio-stop"
+           onclick="stopAudioRecord()"
+           class="ui-disabled">
+       Grabazioa gelditu
+   </button>
+
+   <p id="audio-file-name" aria-live="polite"></p>
+
+   <audio id="audio-player"
+          controls
+          style="display:none;width:100%;">
+
+       <source id="audio-source"
+               src=""
+               type="audio/aac">
+
+   </audio>
+
+</section>
+
+
+<!-- 1. ESCUCHA Y ELIGE EL TEXTO -->
+
+<section id="exercise-multiple-choice-a"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Entzun eta irakurri</h3>
+
+   <p>
+       Enunztiatu grabatu audio formatuan
+   </p>
+
+   <fieldset>
+
+       <legend>Erantzun zuzena aukeratu</legend>
+
+       <div id="multipleA-answers"
+            data-answer-kind="text"
+            data-group="multipleA-correct">
+       </div>
+
+   </fieldset>
+
+   <button type="button"
+           id="multipleA-add-answer"
+           data-add-answer="true"
+           class="ui-btn ui-icon-plus ui-btn-icon-left ui-mini">
+       Erantzuna gehitu
+   </button>
+
+</section>
+
+
+<!-- 2. LEE Y ELIGE EL AUDIO -->
+
+<section id="exercise-multiple-choice-b"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Irakurri eta entzun</h3>
+
+   <div class="ui-field-contain">
+
+       <label for="multipleB-prompt">Enuntziatua:</label>
+
+       <textarea id="multipleB-prompt"
+                 name="multipleB-prompt">
+       </textarea>
+
+   </div>
+
+   <fieldset>
+
+       <legend>Audioak erantzun bezala (zuzena aukeratu)</legend>
+
+       <div id="multipleB-answers"
+            data-answer-kind="audio"
+            data-group="multipleB-correct">
+       </div>
+
+   </fieldset>
+
+   <button type="button"
+           id="multipleB-add-answer"
+           data-add-answer="true"
+           class="ui-btn ui-icon-plus ui-btn-icon-left ui-mini">
+       Audioa gehitu
+   </button>
+
+</section>
+
+
+<!-- 3. SOPA DE LETRAS (TEXTO) -->
+
+<section id="exercise-soup-a"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Letra-sopa (texto)</h3>
+
+   <div class="ui-field-contain">
+
+       <label for="soupA-prompt">
+           Enuntziatua:
+       </label>
+
+       <textarea id="soupA-prompt"
+                 name="soupA-prompt">
+       </textarea>
+
+   </div>
+
+   <fieldset id="soupA-words">
+
+       <legend>
+           5 hitzak sartu:
+       </legend>
+
+       <label for="soupA-word1">1. hitza</label>
+       <input type="text"
+              id="soupA-word1"
+              name="soupA-word1"
+              required>
+
+       <label for="soupA-word2">2. hitza</label>
+       <input type="text"
+              id="soupA-word2"
+              name="soupA-word2"
+              required>
+
+       <label for="soupA-word3">3. hitza</label>
+       <input type="text"
+              id="soupA-word3"
+              name="soupA-word3"
+              required>
+
+       <label for="soupA-word4">4. hitza</label>
+       <input type="text"
+              id="soupA-word4"
+              name="soupA-word4"
+              required>
+
+       <label for="soupA-word5">5. hitza</label>
+       <input type="text"
+              id="soupA-word5"
+              name="soupA-word5"
+              required>
+
+   </fieldset>
+
+</section>
+
+
+<!-- 4. SOPA DE LETRAS (AUDIO) -->
+
+<section id="exercise-soup-b"
+         class="exercise-panel"
+         style="display:none;">
+
+    <hr/>
+
+    <h3>Letra-sopa (audio)</h3>
+
+    <div class="ui-field-contain">
+        <label for="soupB-prompt">Enunciado:</label>
+        <textarea id="soupB-prompt" name="soupB-prompt"></textarea>
+    </div>
+
+    <fieldset id="soupB-words">
+
+        <legend>A5 hitzak grabatu edo igo audio moduan:</legend>
+
+        <!-- PALABRA 1 -->
+        <div class="soupB-word">
+            <h4>1. hitza</h4>
+
+            <label for="soupB-audio1">Audio igo:</label>
+            <input type="file"
+                   id="soupB-audio1"
+                   name="soupB-audio1"
+                   accept="audio/*">
+
+            <p>Edo grabatu:</p>
 
             <button type="button"
-                    id="button-audio-start"
-                    onclick="startAudioRecord()">
+                    onclick="startWordAudioRecord(1)">
                 Grabazioa hasi
             </button>
 
             <button type="button"
-                    id="button-audio-stop"
-                    onclick="stopAudioRecord()"
-                    class="ui-disabled">
+                    onclick="stopWordAudioRecord(1)"
+                    id="soupB-stop1"
+                    disabled>
                 Grabazioa gelditu
             </button>
 
-            <p id="audio-file-name"></p>
-
-            <audio id="audio-player"
-                controls
-                style="display:none; width:100%;">
-                <source id="audio-source" src="" type="audio/aac">
+            <audio id="soupB-player1"
+                   controls
+                   style="display:none;width:100%;">
             </audio>
 
-            <hr/>
-
-            <div class="ui-field-contain">
-                <h4>Erantzun posibleak:</h4>
-        
-                <div id="multipleA-answers"></div>
-        
-                <button type="button"
-                        id="multipleA-add-answer"
-                        class="ui-btn ui-icon-plus ui-btn-icon-left ui-mini">
-                    Gehitu erantzuna
-                </button>
-            </div>
         </div>
 
+        <hr/>
 
-        <div id="multipleB" class="ui-field-contain" style="display: none;"> <!--multiple-choice-b-->
-                <hr/>
-                <h4>Hau galdera "multiple choice" motatakoa denean agertuko da.</h4>
-                <h4>Testu motatako ariketa da.</h4>
+        <!-- PALABRA 2 -->
+        <div class="soupB-word">
+            <h4>2. hitza</h4>
 
-                <div class="ui-field-contain">
-                    <label for="enuntziatua">Enuntziatua:</label>
-                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
-                </div>
+            <label for="soupB-audio2">Audio igo:</label>
+            <input type="file"
+                   id="soupB-audio2"
+                   name="soupB-audio2"
+                   accept="audio/*">
 
-                <hr/>
+            <p>Edo grabatu:</p>
 
-            <div class="ui-field-contain">
-                <h4>Erantzun posibleak:</h4>
-        
-                <div id="multipleB-answers"></div>
-        
-                <button type="button"
-                        id="multipleB-add-answer"
-                        class="ui-btn ui-icon-plus ui-btn-icon-left ui-mini">
-                    Gehitu erantzuna
-                </button>
+            <button type="button"
+                    onclick="startWordAudioRecord(2)">
+                Grabazioa hasi
+            </button>
+
+            <button type="button"
+                    onclick="stopWordAudioRecord(2)"
+                    id="soupB-stop2"
+                    disabled>
+                Grabazioa gelditu
+            </button>
+
+            <audio id="soupB-player2"
+                   controls
+                   style="display:none;width:100%;">
+            </audio>
+
+        </div>
+
+        <hr/>
+
+        <!-- PALABRA 3 -->
+        <div class="soupB-word">
+            <h4>3. hitza</h4>
+
+            <label for="soupB-audio3">Audioa igo:</label>
+            <input type="file"
+                   id="soupB-audio3"
+                   name="soupB-audio3"
+                   accept="audio/*">
+
+            <p>Edo grabatu:</p>
+
+            <button type="button"
+                    onclick="startWordAudioRecord(3)">
+                Grabazioa hasi
+            </button>
+
+            <button type="button"
+                    onclick="stopWordAudioRecord(3)"
+                    id="soupB-stop3"
+                    disabled>
+                Grabazioa gelditu
+            </button>
+
+            <audio id="soupB-player3"
+                   controls
+                   style="display:none;width:100%;">
+            </audio>
+
+        </div>
+
+        <hr/>
+
+        <!-- PALABRA 4 -->
+        <div class="soupB-word">
+            <h4>4. hitza</h4>
+
+            <label for="soupB-audio4">Audioa igo:</label>
+            <input type="file"
+                   id="soupB-audio4"
+                   name="soupB-audio4"
+                   accept="audio/*">
+
+            <p>Edo grabatu:</p>
+
+            <button type="button"
+                    onclick="startWordAudioRecord(4)">
+                Grabazioa hasi
+            </button>
+
+            <button type="button"
+                    onclick="stopWordAudioRecord(4)"
+                    id="soupB-stop4"
+                    disabled>
+                Grabazioa gelditu
+            </button>
+
+            <audio id="soupB-player4"
+                   controls
+                   style="display:none;width:100%;">
+            </audio>
+
+        </div>
+
+        <hr/>
+
+        <!-- PALABRA 5 -->
+        <div class="soupB-word">
+            <h4>5. hitza</h4>
+
+            <label for="soupB-audio5">Igo audioa:</label>
+            <input type="file"
+                   id="soupB-audio5"
+                   name="soupB-audio5"
+                   accept="audio/*">
+
+            <p>Edo grabatu:</p>
+
+            <button type="button"
+                    onclick="startWordAudioRecord(5)">
+                Grabazioa hasi
+            </button>
+
+            <button type="button"
+                    onclick="stopWordAudioRecord(5)"
+                    id="soupB-stop5"
+                    disabled>
+                Grabazioa gelditu
+            </button>
+
+            <audio id="soupB-player5"
+                   controls
+                   style="display:none;width:100%;">
+            </audio>
+
+        </div>
+
+    </fieldset>
+
+</section>
+
+
+<!-- 5. AHORCADO -->
+
+<section id="exercise-hangman-a"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Ahorcado (texto)</h3>
+
+   <div class="ui-field-contain">
+
+       <label for="hangman-prompt">
+           Pista o enunciado:
+       </label>
+
+       <textarea id="hangman-prompt"
+                 name="hangman-prompt"
+                 placeholder="Escribe una pista para que el alumno adivine la palabra.">
+       </textarea>
+
+   </div>
+
+   <div class="ui-field-contain">
+
+       <label for="hangman-word">
+           Palabra que debe adivinar:
+       </label>
+
+       <input type="text"
+              id="hangman-word"
+              name="hangman-word"
+              autocomplete="off"
+              autocapitalize="none"
+              required>
+
+   </div>
+
+</section>
+
+
+<!-- 6. RELACIONAR (IMÁGENES-TEXTO) -->
+
+<section id="exercise-join-a"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Relacionar (imágenes-texto)</h3>
+
+   <div class="ui-field-contain">
+
+       <label for="joinA-prompt">Instrucción:</label>
+
+       <textarea id="joinA-prompt"
+                 name="joinA-prompt">
+       </textarea>
+
+   </div>
+
+   <fieldset id="joinA-options">
+
+       <legend>
+           Introduce cuatro parejas de palabra e imagen:
+       </legend>
+
+       <div class="join-option">
+
+           <h4>Pareja 1</h4>
+
+           <label for="joinA-word1">Palabra</label>
+           <input type="text"
+                  id="joinA-word1"
+                  name="joinA-word1"
+                  required>
+
+           <label for="joinA-image1">Imagen</label>
+           <input type="file"
+                  id="joinA-image1"
+                  name="joinA-image1"
+                  accept="image/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>Pareja 2</h4>
+
+           <label for="joinA-word2">Palabra</label>
+           <input type="text"
+                  id="joinA-word2"
+                  name="joinA-word2"
+                  required>
+
+           <label for="joinA-image2">Imagen</label>
+           <input type="file"
+                  id="joinA-image2"
+                  name="joinA-image2"
+                  accept="image/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>Pareja 3</h4>
+
+           <label for="joinA-word3">Palabra</label>
+           <input type="text"
+                  id="joinA-word3"
+                  name="joinA-word3"
+                  required>
+
+           <label for="joinA-image3">Imagen</label>
+           <input type="file"
+                  id="joinA-image3"
+                  name="joinA-image3"
+                  accept="image/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>Pareja 4</h4>
+
+           <label for="joinA-word4">Palabra</label>
+           <input type="text"
+                  id="joinA-word4"
+                  name="joinA-word4"
+                  required>
+
+           <label for="joinA-image4">Imagen</label>
+           <input type="file"
+                  id="joinA-image4"
+                  name="joinA-image4"
+                  accept="image/*"
+                  required>
+
+       </div>
+
+   </fieldset>
+
+</section>
+
+
+<!-- 7. RELACIONAR (IMÁGENES-AUDIO) -->
+
+<section id="exercise-join-b"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Relacionar (imágenes-audio)</h3>
+
+   <div class="ui-field-contain">
+
+       <label for="joinB-prompt">Instrucción:</label>
+
+       <textarea id="joinB-prompt"
+                 name="joinB-prompt">
+       </textarea>
+
+   </div>
+
+   <fieldset id="joinB-options">
+
+       <legend>
+           Introduce cuatro elementos con su imagen y audio:
+       </legend>
+
+
+       <div class="join-option">
+
+           <h4>Elemento 1</h4>
+
+           <label for="joinB-word1">
+               Texto de referencia (opcional)
+           </label>
+
+           <input type="text"
+                  id="joinB-word1"
+                  name="joinB-word1">
+
+           <label for="joinB-image1">Imagen</label>
+
+           <input type="file"
+                  id="joinB-image1"
+                  name="joinB-image1"
+                  accept="image/*"
+                  required>
+
+           <label for="joinB-audio1">Audio</label>
+
+           <input type="file"
+                  id="joinB-audio1"
+                  name="joinB-audio1"
+                  accept="audio/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>Elemento 2</h4>
+
+           <label for="joinB-word2">
+               Texto de referencia (opcional)
+           </label>
+
+           <input type="text"
+                  id="joinB-word2"
+                  name="joinB-word2">
+
+           <label for="joinB-image2">Imagen</label>
+
+           <input type="file"
+                  id="joinB-image2"
+                  name="joinB-image2"
+                  accept="image/*"
+                  required>
+
+           <label for="joinB-audio2">Audio</label>
+
+           <input type="file"
+                  id="joinB-audio2"
+                  name="joinB-audio2"
+                  accept="audio/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>Elemento 3</h4>
+
+           <label for="joinB-word3">
+               Texto de referencia (opcional)
+           </label>
+
+           <input type="text"
+                  id="joinB-word3"
+                  name="joinB-word3">
+
+           <label for="joinB-image3">Imagen</label>
+
+           <input type="file"
+                  id="joinB-image3"
+                  name="joinB-image3"
+                  accept="image/*"
+                  required>
+
+           <label for="joinB-audio3">Audio</label>
+
+           <input type="file"
+                  id="joinB-audio3"
+                  name="joinB-audio3"
+                  accept="audio/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>Elemento 4</h4>
+
+           <label for="joinB-word4">
+               Texto de referencia (opcional)
+           </label>
+
+           <input type="text"
+                  id="joinB-word4"
+                  name="joinB-word4">
+
+           <label for="joinB-image4">Imagen</label>
+
+           <input type="file"
+                  id="joinB-image4"
+                  name="joinB-image4"
+                  accept="image/*"
+                  required>
+
+           <label for="joinB-audio4">Audio</label>
+
+           <input type="file"
+                  id="joinB-audio4"
+                  name="joinB-audio4"
+                  accept="audio/*"
+                  required>
+
             </div>
 
-            </div>
+            </fieldset>
 
-            <div id="soupA" class="ui-field-contain" style="display: none;"> <!--soup-a-->
-                <hr/>
-                <h4>Hau galdera "sopa letra" motatako ariketa da.</h4>
-                <h4>Audio moduko ariketa da.</h4>
-
-                <div class="ui-field-contain">
-                    <label for="enuntziatua">Enuntziatua:</label>
-                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
-                </div>
-
-                <div id="soupA-words">
-                    <legend>5 hitzak sartu:</legend>
-                    <input type="text" name="soupA-word1" placeholder="1. hitza" required>
-                    <input type="text" name="soupA-word2" placeholder="2. hitza" required>
-                    <input type="text" name="soupA-word3" placeholder="3. hitza" required>
-                    <input type="text" name="soupA-word4" placeholder="4. hitza" required>
-                    <input type="text" name="soupA-word5" placeholder="5. hitza" required>
-                </div>
-                
-             </div>
-
-
-            <div id="soupB" class="ui-field-contain" style="display: none;"> <!--soup-b-->
-                <hr/>
-                <h4>Hau galdera "sopa letra" motatako ariketa da.</h4>
-                <h4>Audio moduko ariketa da.</h4>
-                
-                <div class="ui-field-contain">
-                    <label for="enuntziatua">Enuntziatua:</label>
-                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
-                </div>
-
-                <div id="soupA-words">
-                    <legend>5 hitzak sartu:</legend>
-                    <input type="text" name="soupA-word1" placeholder="1. hitza" required>
-                    <input type="text" name="soupA-word2" placeholder="2. hitza" required>
-                    <input type="text" name="soupA-word3" placeholder="3. hitza" required>
-                    <input type="text" name="soupA-word4" placeholder="4. hitza" required>
-                    <input type="text" name="soupA-word5" placeholder="5. hitza" required>
-                </div>
-                
-                
-            </div>
-
-            <div id="pair" class="ui-field-contain" style="display: none;"> <!--Bikotea-->
-                <hr/>
-                <h4>Hau galdera "Bikote (klasifikazioa)" motatako ariketa da.</h4>
-                <h4>Testu moduko ariketa da.</h4>
-
-                <div class="ui-field-contain">
-                    <label for="enuntziatua">Enuntziatua:</label>
-                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
-                </div>
-
-                <form>
-                    <fieldset data-role="controlgroup">
-                        <legend>Erantzun zuzena aukeratu:</legend>
-    
-                        
-                       
-                    </fieldset>
-                </form>
-                
-            </div>
-
-            <div id="matchA" class="ui-field-contain" style="display: none;"> <!--Lotu a-->
-                <hr/>
-                <h4>Hau galdera "Bikote (klasifikazioa)" motatako ariketa da.</h4>
-                <h4>Testu moduko ariketa da.</h4>
-
-                <div class="ui-field-contain">
-                    <label for="enuntziatua">Enuntziatua:</label>
-                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
-                </div>
-
-                <form>
-                    <fieldset data-role="controlgroup">
-                        <legend>Erantzun zuzena aukeratu:</legend>
-    
-                        <div id="lotuA-options">
-
-                            <div class="lotuA-option">
-                                <label>1. aukera</label>
-                                <input type="text" name="lotuA-word1"
-                                       placeholder="Hitza" required>
-                                <label>Marrazkia:</label>
-                                <input type="file" name="lotuA-image1"
-                                       accept="image/*" required>
-                            </div>
-                    
-                            <div class="lotuA-option">
-                                <label>2. aukera</label>
-                                <input type="text" name="lotuA-word2"
-                                       placeholder="Hitza" required>
-                                <label>Marrazkia:</label>
-                                <input type="file" name="lotuA-image2"
-                                       accept="image/*" required>
-                            </div>
-                    
-                            <div class="lotuA-option">
-                                <label>3. aukera</label>
-                                <input type="text" name="lotuA-word3"
-                                       placeholder="Hitza" required>
-                                <label>Marrazkia:</label>
-                                <input type="file" name="lotuA-image3"
-                                       accept="image/*" required>
-                            </div>
-                    
-                            <div class="lotuA-option">
-                                <label>4. aukera</label>
-                                <input type="text" name="lotuA-word4"
-                                       placeholder="Hitza" required>
-                                <label>Marrazkia:</label>
-                                <input type="file" name="lotuA-image4"
-                                       accept="image/*" required>
-                            </div>
-                    
-                        </div>
-                       
-                    </fieldset>
-                </form>
-                
-            </div>
-
-            <div id="matchB" class="ui-field-contain" style="display: none;"> <!--Lotu b-->
-                <hr/>
-                <h4>Hau galdera "Bikote (klasifikazioa)" motatako ariketa da.</h4>
-                <h4>Audio moduko ariketa da.</h4>
-
-                <div class="ui-field-contain">
-                    <label for="enuntziatua">Enuntziatua:</label>
-                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
-                </div>
-
-                <form>
-                    <fieldset data-role="controlgroup">
-                        <legend>Erantzun zuzena aukeratu:</legend>
-    
-                        <div id="lotuA-options">
-
-                            <div class="lotuA-option">
-                                <label>1. aukera</label>
-                                <input type="text" name="lotuA-word1"
-                                       placeholder="Hitza" required>
-                                <label>Marrazkia:</label>
-                                <input type="file" name="lotuA-image1"
-                                       accept="image/*" required>
-                            </div>
-                    
-                            <div class="lotuA-option">
-                                <label>2. aukera</label>
-                                <input type="text" name="lotuA-word2"
-                                       placeholder="Hitza" required>
-                                <label>Marrazkia:</label>
-                                <input type="file" name="lotuA-image2"
-                                       accept="image/*" required>
-                            </div>
-                    
-                            <div class="lotuA-option">
-                                <label>3. aukera</label>
-                                <input type="text" name="lotuA-word3"
-                                       placeholder="Hitza" required>
-                                <label>Marrazkia:</label>
-                                <input type="file" name="lotuA-image3"
-                                       accept="image/*" required>
-                            </div>
-                    
-                            <div class="lotuA-option">
-                                <label>4. aukera</label>
-                                <input type="text" name="lotuA-word4"
-                                       placeholder="Hitza" required>
-                                <label>Marrazkia:</label>
-                                <input type="file" name="lotuA-image4"
-                                       accept="image/*" required>
-                            </div>
-                    
-                        </div>
-                       
-                    </fieldset>
-                </form>
-                
-            </div>
+        </section>
 
         </div>
     </div>
