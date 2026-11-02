@@ -267,7 +267,7 @@ function setupDynamicAnswers(
 
     button.on("click", function () {
 
-        if (answerCount >= maxAnswers) {
+        if (container.children(".dynamic-answer").length >= maxAnswers) {
             alert("No se pueden añadir más de 8 respuestas.");
             return;
         }
@@ -363,7 +363,7 @@ function setupDynamicAnswers(
         row.append(
             $("<label>", {
                 for: id + "-correct"
-            }).text("Respuesta correcta")
+            }).text("Zuzena")
         );
 
         row.append(correctInput);
@@ -403,12 +403,12 @@ function startAudioRecord() {
     if (typeof audio === "undefined" ||
         typeof audio.doStartRecord !== "function") {
 
-        alert("El sistema de grabación no está disponible.");
+        alert("Grabazioa ez dago eskuragarri.");
         return;
     }
 
     if (questionRecording || soupBRecordingIndex !== null) {
-        alert("Ya hay una grabación en curso.");
+        alert("Grabatzen...");
         return;
     }
 
@@ -430,7 +430,7 @@ function startAudioRecord() {
     } catch (error) {
 
         console.error(error);
-        alert("No se ha podido iniciar la grabación.");
+        alert("Ezin da grabazioa hasi.");
     }
 }
 
@@ -464,14 +464,14 @@ function stopAudioRecord() {
 
         function (error) {
 
-            console.error("Error al guardar el enunciado:", error);
+            console.error("Errorea enuntziatua gordetzerakoan...", error);
 
             questionRecording = false;
 
             $("#button-audio-start").removeClass("ui-disabled");
             $("#button-audio-stop").addClass("ui-disabled");
 
-            alert("No se ha podido guardar la grabación.");
+            alert("Grabazioa ezin izan da gorde.");
         }
     );
 }
@@ -491,16 +491,17 @@ var soupBRecordedAudios = {};
  */
 function startWordAudioRecord(index) {
 
+    
     if (typeof audio === "undefined" ||
         typeof audio.doStartRecord !== "function") {
 
-        alert("El sistema de grabación no está disponible.");
+        alert("Grabazio sistema ez dago eskuragarri.");
         return;
     }
 
     if (questionRecording || soupBRecordingIndex !== null) {
 
-        alert("Primero debes detener la grabación actual.");
+        alert("Lehenengo aurreko gabazioa gelditu.");
         return;
     }
 
@@ -533,7 +534,7 @@ function startWordAudioRecord(index) {
 
         delete soupBRecordedAudios[index];
 
-        alert("No se ha podido iniciar la grabación.");
+        alert("Grabazioa ezin izan da hasi");
     }
 }
 
@@ -569,7 +570,7 @@ function stopWordAudioRecord(index) {
 
         function (error) {
 
-            console.error("Error al guardar el audio:", error);
+            console.error("Errorea grabazioa gordetzerakoan:", error);
 
             delete soupBRecordedAudios[index];
 
@@ -577,7 +578,7 @@ function stopWordAudioRecord(index) {
 
             soupBRecordingIndex = null;
 
-            alert("No se ha podido guardar la grabación.");
+            alert("Grabazioa ezin izan da gorde");
         }
     );
 }

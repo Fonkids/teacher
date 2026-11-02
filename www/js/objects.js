@@ -220,14 +220,25 @@ var audio = {//V2
 			return;
 		}
 
-		if (this.media)
-			this.media.release();
+		try {
+            if (this.media) {
+                this.media.release();
+                this.media = null;
+            }
 
-		this.media = new Media(cordova.file.dataDirectory + "tmprecording.aac");
-		if (this.media)
-			this.media.startRecord();
-		else
-			alert("No media file to record");
+            this.media = new Media(
+                cordova.file.dataDirectory + "tmprecording.aac"
+            );
+
+            this.media.startRecord();
+            return true;
+
+        } catch (error) {
+            console.error("Grabaketa hasteko errorea:", error);
+            this.media = null;
+            alert("Ezin izan da grabaketa hasi");
+            return false;
+        }
 	},
 	doStopRecord_E: function(fileFullPath, onSuccess, onError) {
 		console.log("doStopRecord_E");

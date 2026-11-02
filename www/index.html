@@ -728,36 +728,9 @@
 
    <hr/>
 
-   <h3>Ahorcado (texto)</h3>
+   <h3>Klasifikazioa</h3>
 
-   <div class="ui-field-contain">
-
-       <label for="hangman-prompt">
-           Pista o enunciado:
-       </label>
-
-       <textarea id="hangman-prompt"
-                 name="hangman-prompt"
-                 placeholder="Escribe una pista para que el alumno adivine la palabra.">
-       </textarea>
-
-   </div>
-
-   <div class="ui-field-contain">
-
-       <label for="hangman-word">
-           Palabra que debe adivinar:
-       </label>
-
-       <input type="text"
-              id="hangman-word"
-              name="hangman-word"
-              autocomplete="off"
-              autocapitalize="none"
-              required>
-
-   </div>
-
+   
 </section>
 
 
@@ -769,11 +742,11 @@
 
    <hr/>
 
-   <h3>Relacionar (imágenes-texto)</h3>
+   <h3>Hitzak eta irudiak lotu</h3>
 
    <div class="ui-field-contain">
 
-       <label for="joinA-prompt">Instrucción:</label>
+       <label for="joinA-prompt">Enuntziatua:</label>
 
        <textarea id="joinA-prompt"
                  name="joinA-prompt">
@@ -784,20 +757,20 @@
    <fieldset id="joinA-options">
 
        <legend>
-           Introduce cuatro parejas de palabra e imagen:
+           4 bikote egin (hitz eta irudi bana):
        </legend>
 
        <div class="join-option">
 
-           <h4>Pareja 1</h4>
+           <h4>1. bikotea</h4>
 
-           <label for="joinA-word1">Palabra</label>
+           <label for="joinA-word1">Hitza</label>
            <input type="text"
                   id="joinA-word1"
                   name="joinA-word1"
                   required>
 
-           <label for="joinA-image1">Imagen</label>
+           <label for="joinA-image1">Irudia</label>
            <input type="file"
                   id="joinA-image1"
                   name="joinA-image1"
@@ -809,15 +782,15 @@
 
        <div class="join-option">
 
-           <h4>Pareja 2</h4>
+           <h4>2. bikotea</h4>
 
-           <label for="joinA-word2">Palabra</label>
+           <label for="joinA-word2">HItza</label>
            <input type="text"
                   id="joinA-word2"
                   name="joinA-word2"
                   required>
 
-           <label for="joinA-image2">Imagen</label>
+           <label for="joinA-image2">Irudia</label>
            <input type="file"
                   id="joinA-image2"
                   name="joinA-image2"
@@ -829,15 +802,15 @@
 
        <div class="join-option">
 
-           <h4>Pareja 3</h4>
+           <h4>3. bikotea</h4>
 
-           <label for="joinA-word3">Palabra</label>
+           <label for="joinA-word3">Hitza</label>
            <input type="text"
                   id="joinA-word3"
                   name="joinA-word3"
                   required>
 
-           <label for="joinA-image3">Imagen</label>
+           <label for="joinA-image3">Irudia</label>
            <input type="file"
                   id="joinA-image3"
                   name="joinA-image3"
@@ -849,15 +822,15 @@
 
        <div class="join-option">
 
-           <h4>Pareja 4</h4>
+           <h4>4. bikotea/h4>
 
-           <label for="joinA-word4">Palabra</label>
+           <label for="joinA-word4">Hitza</label>
            <input type="text"
                   id="joinA-word4"
                   name="joinA-word4"
                   required>
 
-           <label for="joinA-image4">Imagen</label>
+           <label for="joinA-image4">Irudia</label>
            <input type="file"
                   id="joinA-image4"
                   name="joinA-image4"
@@ -879,11 +852,11 @@
 
    <hr/>
 
-   <h3>Relacionar (imágenes-audio)</h3>
+   <h3>Irudiak eta audioak lotu</h3>
 
    <div class="ui-field-contain">
 
-       <label for="joinB-prompt">Instrucción:</label>
+       <label for="joinB-prompt">Enuntziatua:</label>
 
        <textarea id="joinB-prompt"
                  name="joinB-prompt">
@@ -894,23 +867,15 @@
    <fieldset id="joinB-options">
 
        <legend>
-           Introduce cuatro elementos con su imagen y audio:
+           4 bikote sartu (irudi eta audio bana):
        </legend>
 
 
        <div class="join-option">
 
-           <h4>Elemento 1</h4>
+           <h4>1. bikotea</h4>
 
-           <label for="joinB-word1">
-               Texto de referencia (opcional)
-           </label>
-
-           <input type="text"
-                  id="joinB-word1"
-                  name="joinB-word1">
-
-           <label for="joinB-image1">Imagen</label>
+           <label for="joinB-image1">Irudia</label>
 
            <input type="file"
                   id="joinB-image1"
@@ -918,7 +883,7 @@
                   accept="image/*"
                   required>
 
-           <label for="joinB-audio1">Audio</label>
+           <label for="joinB-audio1">Audioa</label>
 
            <input type="file"
                   id="joinB-audio1"
@@ -931,17 +896,9 @@
 
        <div class="join-option">
 
-           <h4>Elemento 2</h4>
+           <h4>2. bikotea</h4>
 
-           <label for="joinB-word2">
-               Texto de referencia (opcional)
-           </label>
-
-           <input type="text"
-                  id="joinB-word2"
-                  name="joinB-word2">
-
-           <label for="joinB-image2">Imagen</label>
+           <label for="joinB-image2">Irudia</label>
 
            <input type="file"
                   id="joinB-image2"
@@ -949,7 +906,7 @@
                   accept="image/*"
                   required>
 
-           <label for="joinB-audio2">Audio</label>
+           <label for="joinB-audio2">Audioa</label>
 
            <input type="file"
                   id="joinB-audio2"
@@ -962,17 +919,9 @@
 
        <div class="join-option">
 
-           <h4>Elemento 3</h4>
+           <h4>3. bikotea</h4>
 
-           <label for="joinB-word3">
-               Texto de referencia (opcional)
-           </label>
-
-           <input type="text"
-                  id="joinB-word3"
-                  name="joinB-word3">
-
-           <label for="joinB-image3">Imagen</label>
+           <label for="joinB-image3">Irudia</label>
 
            <input type="file"
                   id="joinB-image3"
@@ -980,7 +929,7 @@
                   accept="image/*"
                   required>
 
-           <label for="joinB-audio3">Audio</label>
+           <label for="joinB-audio3">Audioa</label>
 
            <input type="file"
                   id="joinB-audio3"
@@ -993,17 +942,9 @@
 
        <div class="join-option">
 
-           <h4>Elemento 4</h4>
+           <h4>4. bikotea</h4>
 
-           <label for="joinB-word4">
-               Texto de referencia (opcional)
-           </label>
-
-           <input type="text"
-                  id="joinB-word4"
-                  name="joinB-word4">
-
-           <label for="joinB-image4">Imagen</label>
+           <label for="joinB-image4">Irudia</label>
 
            <input type="file"
                   id="joinB-image4"
@@ -1011,7 +952,7 @@
                   accept="image/*"
                   required>
 
-           <label for="joinB-audio4">Audio</label>
+           <label for="joinB-audio4">Audioa</label>
 
            <input type="file"
                   id="joinB-audio4"
@@ -1250,7 +1191,9 @@
 
 	<script type="text/javascript" src="cordova.js"></script>
 	<script type="text/javascript" src="js/utils.js"></script>
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+	<script type="text/javascript" src="js/config.js"></script>
+	<script type="text/javascript" src="js/storage.js"></script>
 	<script type="text/javascript" src="js/objects.js"></script>
 	<script type="text/javascript" src="js/functions.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
