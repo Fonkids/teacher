@@ -141,9 +141,9 @@ function buildFooter(back, backLabel, next, nextLabel, nextIcon) {
     var html =
         '<div data-role="footer" data-position="fixed" data-id="app-footer">' +
         '<table style="width:100%; table-layout:fixed; text-align:center;"><tr>' +
-        '<td style="text-align:left;width:33%">' + backBtn(back, backLabel) + '</td>' +
-        '<td style="width:34%"><h4 style="margin:0">2026-2027</h4></td>' +
-        '<td style="text-align:right;width:33%">' + nextBtn(next, nextLabel, nextIcon) + '</td>' +
+        '<td style="text-align:left;width:45%">' + backBtn(back, backLabel) + '</td>' +
+        '<td style="width:10%"><p style="margin:0">2026</br>2027</p></td>' +
+        '<td style="text-align:right;width:45%">' + nextBtn(next, nextLabel, nextIcon) + '</td>' +
         '</tr></table></div>';
     return $(html);
 }
@@ -610,3 +610,67 @@ $(document).on(
         }
     }
 );
+// cordova-ren plugin-aren dokumentazioan dioenez, WebView bidezko metodoa gomendatzen dute orain
+// https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-camera/
+
+//Kameraren ebentua entzuten
+document.addEventListener("deviceready", function() {
+    document.getElementById("selfie").addEventListener("change", async function(e) {
+        const blob = e.target.files[0];
+        if (!blob) return;
+
+        console.log("updateAvatar:", typeof updateAvatar);
+        console.log("blob:", blob);
+
+        var avatar_result = null;
+
+        try {
+
+            avatar_result = await updateAvatar(
+                user.uid,
+                "avatar.jpg",
+                blob,
+                blob.type
+            );
+    
+            alert("Upload successful");
+    
+        } catch(err) {
+    
+            console.error(err);
+            alert("Upload failed:" + err);
+        }
+
+        // Fitxategiak gordetzeko karpeta
+        const dirEntry = await new Promise((res, rej) =>
+            window.resolveLocalFileSystemURL(
+                cordova.file.externalDataDirectory, res, rej
+            )
+        );
+
+        // Fitxategia sortu, hemen sartuko da irudia irudia daukagunean
+        const filename = `selfie_${Date.now()}.jpg`;
+
+        const fileEntry = await new Promise((res, rej) =>
+            dirEntry.getFile(filename, { create: true, exclusive: false }, res, rej)
+        );
+
+        // Itxaron irudia lortu arte, lortze denean: fitxategira idatzi
+        const writer = await new Promise((res, rej) =>
+            fileEntry.createWriter(res, rej)
+        );
+        await new Promise((res, rej) => {
+            writer.onwriteend = res;
+            writer.onerror = rej;
+            writer.write(blob);
+        });
+
+        console.log("Saved to:", fileEntry.toURL());
+
+        //Irudi berria erakusten
+        const preview = document.getElementById("selfie-preview");
+        preview.src = fileEntry.toURL();
+        preview.style.display = "block";
+        document.getElementById("selfie-path").textContent = avatar_result.fullPath;
+    });
+});
