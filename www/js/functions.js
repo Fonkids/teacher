@@ -100,6 +100,29 @@ document.addEventListener("deviceready", function() {
         const blob = e.target.files[0];
         if (!blob) return;
 
+        console.log("updateAvatar:", typeof updateAvatar);
+        console.log("blob:", blob);
+
+        try {
+
+            //TEMPORARY
+            const uid = "tty4ThQOkCZs4iQhn6VW910n7VB3";
+
+            await updateAvatar(
+                uid,
+                "pfp-test-erlantz.jpg",
+                blob,
+                blob.type
+            );
+    
+            alert("Upload successful");
+    
+        } catch(err) {
+    
+            console.error(err);
+            alert("Upload failed:" + err);
+        }
+
         // Fitxategiak gordetzeko karpeta
         const dirEntry = await new Promise((res, rej) =>
             window.resolveLocalFileSystemURL(
