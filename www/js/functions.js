@@ -68,9 +68,9 @@ function buildFooter(back, backLabel, next, nextLabel, nextIcon) {
     var html =
         '<div data-role="footer" data-position="fixed" data-id="app-footer">' +
         '<table style="width:100%; table-layout:fixed; text-align:center;"><tr>' +
-        '<td style="text-align:left;width:40%">' + backBtn(back, backLabel) + '</td>' +
-        '<td style="width:20%"><p style="margin:0">2026-2027</p></td>' +
-        '<td style="text-align:right;width:40%">' + nextBtn(next, nextLabel, nextIcon) + '</td>' +
+        '<td style="text-align:left;width:45%">' + backBtn(back, backLabel) + '</td>' +
+        '<td style="width:10%"><p style="margin:0">2026</br>2027</p></td>' +
+        '<td style="text-align:right;width:45%">' + nextBtn(next, nextLabel, nextIcon) + '</td>' +
         '</tr></table></div>';
     return $(html);
 }
@@ -103,14 +103,13 @@ document.addEventListener("deviceready", function() {
         console.log("updateAvatar:", typeof updateAvatar);
         console.log("blob:", blob);
 
+        var avatar_result = null;
+
         try {
 
-            //TEMPORARY
-            const uid = "tty4ThQOkCZs4iQhn6VW910n7VB3";
-
-            await updateAvatar(
-                uid,
-                "pfp-test-erlantz.jpg",
+            avatar_result = await updateAvatar(
+                user.uid,
+                "avatar.jpg",
                 blob,
                 blob.type
             );
@@ -153,6 +152,6 @@ document.addEventListener("deviceready", function() {
         const preview = document.getElementById("selfie-preview");
         preview.src = fileEntry.toURL();
         preview.style.display = "block";
-        document.getElementById("selfie-path").textContent = fileEntry.toURL();;
+        document.getElementById("selfie-path").textContent = avatar_result.fullPath;
     });
 });

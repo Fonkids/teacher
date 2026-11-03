@@ -58,7 +58,7 @@
 
 
     <!-- P2 -->
-	<div data-role="page" id="page-t-1" data-back="#page-t-0" data-back-label="Saioa itxi (P1)">
+	<div data-role="page" id="page-t-1" data-back="#page-t-0" data-back-label="Saioa itxi">
 		<div data-role="content">
 			<h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P2</h1>
 			<p> Irakaslearentzako aukerak emango dira: Ariketak kudeatzeko eta ikasleak kudeatzeko botoi nagusi birekin.</p>
@@ -68,7 +68,7 @@
 	</div>
 
     <!-- P3 -->
-	<div data-role="page" id="page-t-2" data-back="#page-t-1" data-back-label="Atzera" data-next="#page-t-3" data-next-label="Ariketa berria (P4)" data-next-icon="plus">
+	<div data-role="page" id="page-t-2" data-back="#page-t-1" data-back-label="Atzera" data-next="#page-t-3" data-next-label="Ariketa berria" data-next-icon="plus">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P3</h1>
             <p> Ariketen zerrenda erakutsiko da, asoziatutako ikasle talde, galdera kopuru eta sesio-datarekin batera.</p>
@@ -155,7 +155,7 @@
 	</div>
 
     <!-- P4 -->
-    <div data-role="page" id="page-t-3" data-back="#page-t-2" data-back-label="Atzera" data-next="#page-t-4" data-next-label="Galdera berria (P5)" data-next-icon="plus">
+    <div data-role="page" id="page-t-3" data-back="#page-t-2" data-back-label="Atzera" data-next="#page-t-4" data-next-label="Galdera berria" data-next-icon="plus">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P4</h1>
             <p>Ariketa bat editatu edo sortzeko pantaila.</p>
@@ -347,7 +347,7 @@
     </div>
 
     <!-- P5 -->
-    <div data-role="page" id="page-t-4" data-back="#page-t-3" data-back-label="Atzera" data-next="#page-t-3" data-next-label="Gorde (P4)" data-next-icon="check">
+    <div data-role="page" id="page-t-4" data-back="#page-t-3" data-back-label="Atzera" data-next="#page-t-3" data-next-label="Gorde" data-next-icon="check">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P5</h1>
             <p>Galdera baten enuntziatua, mota eta erantzunak kudeatzeko pantaila.</p>
@@ -355,8 +355,8 @@
         <a href="#page-t-3" id="remove-question" class="ui-btn ui-icon-minus ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Galdera ezabatu (P4)</a>
 
         <div class="ui-field-contain" style="text-align: left;">
-            <label for="student-group-select">Galdera mota:</label>
-            <select name="student-group" id="student-group-select">
+            <label for="question-type-select">Galdera mota:</label>
+            <select name="student-group" id="question-type-select">
                 <option value="">Aukeratu Mota</option>
                 <option value="multiple-choice-a">Entzun eta aukeratu testua</option>
                 <option value="multiple-choice-b">Irakurri eta aukeratu soinua</option>
@@ -366,7 +366,6 @@
                 <option value="join-a">Lotu (irudiak-testua)</option>
                 <option value="join-b">Lotu (irudiak-audioa)</option>
             </select>
-
         </div>
 
 
@@ -450,7 +449,7 @@
     </div>
 
     <!-- P6 -->
-    <div data-role="page" id="page-t-5" data-back="#page-t-1" data-back-label="Atzera" data-next="#page-t-6" data-next-label="Talde berria (P7)" data-next-icon="plus">
+    <div data-role="page" id="page-t-5" data-back="#page-t-1" data-back-label="Atzera" data-next="#page-t-6" data-next-label="Talde berria" data-next-icon="plus">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P6</h1>
             <p>Ikasle taldeen zerrenda erakutsiko da.</p>
@@ -494,7 +493,7 @@
     </div>
 
     <!-- P7 -->
-    <div data-role="page" id="page-t-6" data-back="#page-t-5" data-back-label="Atzera", data-next="#page-t-5", data-next-label="Gorde (P6)", data-next-icon="check">
+    <div data-role="page" id="page-t-6" data-back="#page-t-5" data-back-label="Atzera", data-next="#page-t-5", data-next-label="Gorde", data-next-icon="check">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P7</h1>
             <p>Talde barruko ikasle-zerrenda erakutsiko da, edo, erregistratutako ikasle guztien artean iragazteko menua.</p>
@@ -606,7 +605,18 @@
                 </tbody>
             </table>
 
-            <a href="#page-t-6" id="remove-student-from-class" class="ui-btn ui-icon-minus ui-btn-icon-left ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Taldetik ezabatu (P7)</a>
+            <div class="ui-field-contain" style="text-align: left;">
+                <label for="student-group-select">Taldea aukeratu:</label>
+                <select name="student-group" id="student-group-select">
+                    <option value="">Talderik gabe</option>
+                    <option value="2026-2027-LHA">LH1-A</option>
+                    <option value="2026-2027-LHB">LH1-B</option>
+                    <option value="2026-2027-LHD">LH1-D</option>
+                    <option value="2025-2026-LHA">LH2-A</option>
+                    <option value="2025-2026-LHB">LH2-B</option>
+                    <option value="2025-2026-LHD">LH2-D</option>
+                </select>
+            </div>
 
         </div>
     </div>
