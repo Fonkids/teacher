@@ -362,88 +362,619 @@
                 <option value="multiple-choice-b">Irakurri eta aukeratu soinua</option>
                 <option value="soup-a">Letra zopa (testua)</option>
                 <option value="soup-b">Letra zopa (audioa)</option>
-                <option value="hangman-a">Hangman (testua)</option>
+                <option value="bikote">Bikote (testua)</option>
                 <option value="join-a">Lotu (irudiak-testua)</option>
                 <option value="join-b">Lotu (irudiak-audioa)</option>
             </select>
         </div>
 
+        <section id="question-audio-panel"
+        class="exercise-audio-panel"
+        style="display:none;">
 
-            <div class="multiple-choice-a">
-                <hr/>
-                <h4>Hau galdera "multiple choice" motatakoa denean agertuko da.</h4>
+   <hr/>
 
-                <div class="ui-field-contain">
-                    <label for="enuntziatua">Enuntziatua:</label>
-                    <textarea name="enuntziatua" id="enuntziatua"></textarea>
-                </div>
+   <h3>Enuntziatuko audioa</h3>
 
-                <form>
-                    <fieldset data-role="controlgroup">
-                        <legend>Erantzun zuzena aukeratu:</legend>
+   <button type="button"
+           id="button-audio-start"
+           onclick="startAudioRecord()">
+       Grabazioa hasi
+   </button>
 
-                        <table style="width:100%">
-                            <tr>
-                                <td style="width:10%">
-                                    <input type="radio"
-                                        name="erantzun-zuzena"
-                                        id="erantzuna-a"
-                                        value="A"
-                                        checked>
-                                </td>
-                                <td>
-                                    <input type="text"
-                                        id="erantzuna-a-text"
-                                        placeholder="Lehen erantzuna">
-                                </td>
-                            </tr>
+   <button type="button"
+           id="button-audio-stop"
+           onclick="stopAudioRecord()"
+           class="ui-disabled">
+       Grabazioa gelditu
+   </button>
 
-                            <tr>
-                                <td>
-                                    <input type="radio"
-                                        name="erantzun-zuzena"
-                                        id="erantzuna-b"
-                                        value="B">
-                                </td>
-                                <td>
-                                    <input type="text"
-                                        id="erantzuna-b-text"
-                                        placeholder="Bigarren erantzuna">
-                                </td>
-                            </tr>
+   <p id="audio-file-name" aria-live="polite"></p>
 
-                            <tr>
-                                <td>
-                                    <input type="radio"
-                                        name="erantzun-zuzena"
-                                        id="erantzuna-c"
-                                        value="C">
-                                </td>
-                                <td>
-                                    <input type="text"
-                                        id="erantzuna-c-text"
-                                        placeholder="Hirugarren erantzuna">
-                                </td>
-                            </tr>
+   <audio id="audio-player"
+          controls
+          style="display:none;width:100%;">
 
-                            <tr>
-                                <td>
-                                    <input type="radio"
-                                        name="erantzun-zuzena"
-                                        id="erantzuna-d"
-                                        value="D">
-                                </td>
-                                <td>
-                                    <input type="text"
-                                        id="erantzuna-d-text"
-                                        placeholder="Laugarren erantzuna">
-                                </td>
-                            </tr>
-                        </table>
-                    </fieldset>
-                </form>
+       <source id="audio-source"
+               src=""
+               type="audio/aac">
+
+   </audio>
+
+</section>
+
+
+<!-- 1. ESCUCHA Y ELIGE EL TEXTO -->
+
+<section id="exercise-multiple-choice-a"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Entzun eta irakurri</h3>
+
+   <p>
+       Enunztiatu grabatu audio formatuan
+   </p>
+
+   <fieldset>
+
+       <legend>Erantzun zuzena aukeratu</legend>
+
+       <div id="multipleA-answers"
+            data-answer-kind="text"
+            data-group="multipleA-correct">
+       </div>
+
+   </fieldset>
+
+   <button type="button"
+           id="multipleA-add-answer"
+           data-add-answer="true"
+           class="ui-btn ui-icon-plus ui-btn-icon-left ui-mini">
+       Erantzuna gehitu
+   </button>
+
+</section>
+
+
+<!-- 2. LEE Y ELIGE EL AUDIO -->
+
+<section id="exercise-multiple-choice-b"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Irakurri eta entzun</h3>
+
+   <div class="ui-field-contain">
+
+       <label for="multipleB-prompt">Enuntziatua:</label>
+
+       <textarea id="multipleB-prompt"
+                 name="multipleB-prompt">
+       </textarea>
+
+   </div>
+
+   <fieldset>
+
+       <legend>Audioak erantzun bezala (zuzena aukeratu)</legend>
+
+       <div id="multipleB-answers"
+            data-answer-kind="audio"
+            data-group="multipleB-correct">
+       </div>
+
+   </fieldset>
+
+   <button type="button"
+           id="multipleB-add-answer"
+           data-add-answer="true"
+           class="ui-btn ui-icon-plus ui-btn-icon-left ui-mini">
+       Audioa gehitu
+   </button>
+
+</section>
+
+
+<!-- 3. SOPA DE LETRAS (TEXTO) -->
+
+<section id="exercise-soup-a"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Letra-sopa (texto)</h3>
+
+   <div class="ui-field-contain">
+
+       <label for="soupA-prompt">
+           Enuntziatua:
+       </label>
+
+       <textarea id="soupA-prompt"
+                 name="soupA-prompt">
+       </textarea>
+
+   </div>
+
+   <fieldset id="soupA-words">
+
+       <legend>
+           5 hitzak sartu:
+       </legend>
+
+       <label for="soupA-word1">1. hitza</label>
+       <input type="text"
+              id="soupA-word1"
+              name="soupA-word1"
+              required>
+
+       <label for="soupA-word2">2. hitza</label>
+       <input type="text"
+              id="soupA-word2"
+              name="soupA-word2"
+              required>
+
+       <label for="soupA-word3">3. hitza</label>
+       <input type="text"
+              id="soupA-word3"
+              name="soupA-word3"
+              required>
+
+       <label for="soupA-word4">4. hitza</label>
+       <input type="text"
+              id="soupA-word4"
+              name="soupA-word4"
+              required>
+
+       <label for="soupA-word5">5. hitza</label>
+       <input type="text"
+              id="soupA-word5"
+              name="soupA-word5"
+              required>
+
+   </fieldset>
+
+</section>
+
+
+<!-- 4. SOPA DE LETRAS (AUDIO) -->
+
+<section id="exercise-soup-b"
+         class="exercise-panel"
+         style="display:none;">
+
+    <hr/>
+
+    <h3>Letra-sopa (audio)</h3>
+
+    <div class="ui-field-contain">
+        <label for="soupB-prompt">Enunciado:</label>
+        <textarea id="soupB-prompt" name="soupB-prompt"></textarea>
+    </div>
+
+    <fieldset id="soupB-words">
+
+        <legend>A5 hitzak grabatu edo igo audio moduan:</legend>
+
+        <!-- PALABRA 1 -->
+        <div class="soupB-word">
+            <h4>1. hitza</h4>
+
+            <label for="soupB-audio1">Audio igo:</label>
+            <input type="file"
+                   id="soupB-audio1"
+                   name="soupB-audio1"
+                   accept="audio/*">
+
+            <p>Edo grabatu:</p>
+
+            <button type="button"
+                    onclick="startWordAudioRecord(1)">
+                Grabazioa hasi
+            </button>
+
+            <button type="button"
+                    onclick="stopWordAudioRecord(1)"
+                    id="soupB-stop1"
+                    disabled>
+                Grabazioa gelditu
+            </button>
+
+            <audio id="soupB-player1"
+                   controls
+                   style="display:none;width:100%;">
+            </audio>
+
+        </div>
+
+        <hr/>
+
+        <!-- PALABRA 2 -->
+        <div class="soupB-word">
+            <h4>2. hitza</h4>
+
+            <label for="soupB-audio2">Audio igo:</label>
+            <input type="file"
+                   id="soupB-audio2"
+                   name="soupB-audio2"
+                   accept="audio/*">
+
+            <p>Edo grabatu:</p>
+
+            <button type="button"
+                    onclick="startWordAudioRecord(2)">
+                Grabazioa hasi
+            </button>
+
+            <button type="button"
+                    onclick="stopWordAudioRecord(2)"
+                    id="soupB-stop2"
+                    disabled>
+                Grabazioa gelditu
+            </button>
+
+            <audio id="soupB-player2"
+                   controls
+                   style="display:none;width:100%;">
+            </audio>
+
+        </div>
+
+        <hr/>
+
+        <!-- PALABRA 3 -->
+        <div class="soupB-word">
+            <h4>3. hitza</h4>
+
+            <label for="soupB-audio3">Audioa igo:</label>
+            <input type="file"
+                   id="soupB-audio3"
+                   name="soupB-audio3"
+                   accept="audio/*">
+
+            <p>Edo grabatu:</p>
+
+            <button type="button"
+                    onclick="startWordAudioRecord(3)">
+                Grabazioa hasi
+            </button>
+
+            <button type="button"
+                    onclick="stopWordAudioRecord(3)"
+                    id="soupB-stop3"
+                    disabled>
+                Grabazioa gelditu
+            </button>
+
+            <audio id="soupB-player3"
+                   controls
+                   style="display:none;width:100%;">
+            </audio>
+
+        </div>
+
+        <hr/>
+
+        <!-- PALABRA 4 -->
+        <div class="soupB-word">
+            <h4>4. hitza</h4>
+
+            <label for="soupB-audio4">Audioa igo:</label>
+            <input type="file"
+                   id="soupB-audio4"
+                   name="soupB-audio4"
+                   accept="audio/*">
+
+            <p>Edo grabatu:</p>
+
+            <button type="button"
+                    onclick="startWordAudioRecord(4)">
+                Grabazioa hasi
+            </button>
+
+            <button type="button"
+                    onclick="stopWordAudioRecord(4)"
+                    id="soupB-stop4"
+                    disabled>
+                Grabazioa gelditu
+            </button>
+
+            <audio id="soupB-player4"
+                   controls
+                   style="display:none;width:100%;">
+            </audio>
+
+        </div>
+
+        <hr/>
+
+        <!-- PALABRA 5 -->
+        <div class="soupB-word">
+            <h4>5. hitza</h4>
+
+            <label for="soupB-audio5">Igo audioa:</label>
+            <input type="file"
+                   id="soupB-audio5"
+                   name="soupB-audio5"
+                   accept="audio/*">
+
+            <p>Edo grabatu:</p>
+
+            <button type="button"
+                    onclick="startWordAudioRecord(5)">
+                Grabazioa hasi
+            </button>
+
+            <button type="button"
+                    onclick="stopWordAudioRecord(5)"
+                    id="soupB-stop5"
+                    disabled>
+                Grabazioa gelditu
+            </button>
+
+            <audio id="soupB-player5"
+                   controls
+                   style="display:none;width:100%;">
+            </audio>
+
+        </div>
+
+    </fieldset>
+
+</section>
+
+
+<!-- 5. AHORCADO -->
+
+<section id="exercise-hangman-a"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Klasifikazioa</h3>
+
+   
+</section>
+
+
+<!-- 6. RELACIONAR (IMÁGENES-TEXTO) -->
+
+<section id="exercise-join-a"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Hitzak eta irudiak lotu</h3>
+
+   <div class="ui-field-contain">
+
+       <label for="joinA-prompt">Enuntziatua:</label>
+
+       <textarea id="joinA-prompt"
+                 name="joinA-prompt">
+       </textarea>
+
+   </div>
+
+   <fieldset id="joinA-options">
+
+       <legend>
+           4 bikote egin (hitz eta irudi bana):
+       </legend>
+
+       <div class="join-option">
+
+           <h4>1. bikotea</h4>
+
+           <label for="joinA-word1">Hitza</label>
+           <input type="text"
+                  id="joinA-word1"
+                  name="joinA-word1"
+                  required>
+
+           <label for="joinA-image1">Irudia</label>
+           <input type="file"
+                  id="joinA-image1"
+                  name="joinA-image1"
+                  accept="image/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>2. bikotea</h4>
+
+           <label for="joinA-word2">HItza</label>
+           <input type="text"
+                  id="joinA-word2"
+                  name="joinA-word2"
+                  required>
+
+           <label for="joinA-image2">Irudia</label>
+           <input type="file"
+                  id="joinA-image2"
+                  name="joinA-image2"
+                  accept="image/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>3. bikotea</h4>
+
+           <label for="joinA-word3">Hitza</label>
+           <input type="text"
+                  id="joinA-word3"
+                  name="joinA-word3"
+                  required>
+
+           <label for="joinA-image3">Irudia</label>
+           <input type="file"
+                  id="joinA-image3"
+                  name="joinA-image3"
+                  accept="image/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>4. bikotea/h4>
+
+           <label for="joinA-word4">Hitza</label>
+           <input type="text"
+                  id="joinA-word4"
+                  name="joinA-word4"
+                  required>
+
+           <label for="joinA-image4">Irudia</label>
+           <input type="file"
+                  id="joinA-image4"
+                  name="joinA-image4"
+                  accept="image/*"
+                  required>
+
+       </div>
+
+   </fieldset>
+
+</section>
+
+
+<!-- 7. RELACIONAR (IMÁGENES-AUDIO) -->
+
+<section id="exercise-join-b"
+        class="exercise-panel"
+        style="display:none;">
+
+   <hr/>
+
+   <h3>Irudiak eta audioak lotu</h3>
+
+   <div class="ui-field-contain">
+
+       <label for="joinB-prompt">Enuntziatua:</label>
+
+       <textarea id="joinB-prompt"
+                 name="joinB-prompt">
+       </textarea>
+
+   </div>
+
+   <fieldset id="joinB-options">
+
+       <legend>
+           4 bikote sartu (irudi eta audio bana):
+       </legend>
+
+
+       <div class="join-option">
+
+           <h4>1. bikotea</h4>
+
+           <label for="joinB-image1">Irudia</label>
+
+           <input type="file"
+                  id="joinB-image1"
+                  name="joinB-image1"
+                  accept="image/*"
+                  required>
+
+           <label for="joinB-audio1">Audioa</label>
+
+           <input type="file"
+                  id="joinB-audio1"
+                  name="joinB-audio1"
+                  accept="audio/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>2. bikotea</h4>
+
+           <label for="joinB-image2">Irudia</label>
+
+           <input type="file"
+                  id="joinB-image2"
+                  name="joinB-image2"
+                  accept="image/*"
+                  required>
+
+           <label for="joinB-audio2">Audioa</label>
+
+           <input type="file"
+                  id="joinB-audio2"
+                  name="joinB-audio2"
+                  accept="audio/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>3. bikotea</h4>
+
+           <label for="joinB-image3">Irudia</label>
+
+           <input type="file"
+                  id="joinB-image3"
+                  name="joinB-image3"
+                  accept="image/*"
+                  required>
+
+           <label for="joinB-audio3">Audioa</label>
+
+           <input type="file"
+                  id="joinB-audio3"
+                  name="joinB-audio3"
+                  accept="audio/*"
+                  required>
+
+       </div>
+
+
+       <div class="join-option">
+
+           <h4>4. bikotea</h4>
+
+           <label for="joinB-image4">Irudia</label>
+
+           <input type="file"
+                  id="joinB-image4"
+                  name="joinB-image4"
+                  accept="image/*"
+                  required>
+
+           <label for="joinB-audio4">Audioa</label>
+
+           <input type="file"
+                  id="joinB-audio4"
+                  name="joinB-audio4"
+                  accept="audio/*"
+                  required>
 
             </div>
+
+            </fieldset>
+
+        </section>
 
         </div>
     </div>
@@ -680,6 +1211,10 @@
     </div>
 
 	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+	<script type="text/javascript" src="js/config.js"></script>
+	<script type="text/javascript" src="js/storage.js"></script>
 	<script type="text/javascript" src="js/objects.js"></script>
 	<script type="text/javascript" src="js/functions.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
