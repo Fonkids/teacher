@@ -311,7 +311,7 @@ var fileUtils = {
 							catch (error) {
 								console.error("	File upload error: " + JSON.stringify(error));
 								if (onError != null)
-									onError();
+									onError(error);
 							}
 						}
 						reader.readAsArrayBuffer(file);
@@ -319,14 +319,14 @@ var fileUtils = {
 					function(error) {
 						console.error("	File error: " + JSON.stringify(error));
 						if (onError != null)
-							onError();
+							onError(error);
 					}
 				);
 			},
 			function(error) {
 				console.error("	File access error: " + JSON.stringify(error));
 				if (onError != null)
-					onError();
+					onError(error);
 			}
 		);
 	},
@@ -351,116 +351,65 @@ var fileUtils = {
 							},
 							function(error) {
 								console.error("	File writing error: " + JSON.stringify(error));
-								if (onError != false)
-									onError();
-var fileUtils = {
-	createStorageDirs_E: function(baseDirectory, directoriesToCreateArray, mode, onSuccess, onError) {
-		console.log("createStorageDirs_E");
-		if (directoriesToCreateArray.length > 0) {
-			var directoryName = directoriesToCreateArray[0];
-			window.resolveLocalFileSystemURL(
-				baseDirectory,
-				function(dirEntry) {
-					dirEntry.getDirectory(
-						directoryName,
-						{ create: true },
-						function() {
-							console.log("	Directory created: " + directoryName);
-							directoriesToCreateArray.splice(0, 1);
-							if (mode == "path")
-								baseDirectory = baseDirectory + directoryName + "/";
-							fileUtils.createStorageDirs_E(baseDirectory, directoriesToCreateArray, mode, onSuccess, onError);
-						},
-						function(error) {
-							console.error("	Error dir not created " + directoryName + ": " + JSON.stringify(error));
-							if (onError != null)
-								onError(error);
-						}
-					);
-				},
-				function(error) {
-					console.error("	Error baseDir not accessed: " + JSON.stringify(error));
-					if (onError != null)
-						onError(error);
-				}
-			);
-		}
-		else {
-			if (onSuccess != null)
-				onSuccess();
-		}
-	},
-	move_E: function(sourceFullPathURL, destFullPathURL, onMoveSuccess, onError) {
-		console.log("move_E");
-		window.resolveLocalFileSystemURL(
-			sourceFullPathURL,
-			function(fileEntry) {
-				var destDirectoryPathURL = destFullPathURL.substring(0, destFullPathURL.lastIndexOf("/") + 1);
-				var filename = destFullPathURL.substring(destFullPathURL.lastIndexOf("/") + 1);
-
-				window.resolveLocalFileSystemURL(
-					destDirectoryPathURL,
-					function(dirEntry) {
-						fileEntry.moveTo(
-							dirEntry,
-							filename,
-							function() {
-								console.log("	Successfully moved: " + destDirectoryPathURL);
-								if (onMoveSuccess != null)
-									onMoveSuccess();
-							},
-							function(error) {
-								console.error("	Moving unsuccessful error: " + JSON.stringify(error));
-								if (onError != null)
-									onError(error);
 							}
 						);
 					},
 					function(error) {
-						console.error("	File not created error: " + JSON.stringify(error));
-						if (onError != false)
-							onError();
+						console.error("File creation error: " + JSON.stringify(error));
+						if (onError != null)
+							onError(error);
 					}
 				);
 			},
 			function(error) {
-				console.error("	File directory error:  " + JSON.stringify(error));
-				if (onError != false)
-					onError();
+				console.error("Directory access error: " + JSON.stringify(error));
+				if (onError != null)
+					onError(error);
 			}
-		);
-	},
-	contentRead: null, //V5
-	readTextFromFile_E: function(fileDirectoryURL, fileName, onSuccess, onError) { //V5    
-		console.log("readTextFromFile_E");
-		window.resolveLocalFileSystemURL(
-			fileDirectoryURL + fileName,
-			function(fileEntry) {
-//				console.log("	File exists: " + fileDirectoryURL + fileName);
-				fileEntry.file(
-					function(file) {
-						var reader = new FileReader();
-						reader.onloadend = function() {
-//							console.log("	File read: " + JSON.stringify(reader.result, null, "\t"));
-							fileUtils.contentRead = reader.result;
-							if (onSuccess != false)
-								onSuccess();
-						}
-						reader.readAsText(file);
-					},
-					function(error) {
-						console.error("File error: " + JSON.stringify(error));
-						if (onError != false)
-							onError();
-					}
-				);
-			},
-			function(error) {
-				console.error("File access error: " + JSON.stringify(error));
-				if (onError != false)
-					onError();
-			}
-		);
-	}
-};
+	);
+},
 
+contentRead: null,
+
+readTextFromFile_E: function(fileDirectoryURL, fileName, onSuccess, onError) {
+	console.log("readTextFromFile_E");
+
+	window.resolveLocalFileSystemURL(
+		fileDirectoryURL + fileName,
+		function(fileEntry) {
+			fileEntry.file(
+				function(file) {
+					var reader = new FileReader();
+
+					reader.onloadend = function() {
+						fileUtils.contentRead = reader.result;
+
+						if (onSuccess)
+							onSuccess();
+					};
+
+					reader.readAsText(file);
+				},
+				function(error) {
+					console.error(
+						"File error: " +
+						JSON.stringify(error)
+					);
+
+					if (onError)
+						onError(error);
+				}
+			);
+		},
+		function(error) {
+			console.error(
+				"File access error: " +
+				JSON.stringify(error)
+			);
+
+			if (onError)
+				onError(error);
+		}
+	);
+}
+};

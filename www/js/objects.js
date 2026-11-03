@@ -19,6 +19,10 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+var appDirs = {
+	baseStorage: function() { return cordova.file.externalDataDirectory; },
+	baseStorageAudio: function() { return this.baseStorage() + "audio/"; }	
+};
 
 var pageT = {//V3
 	load: function(i) {

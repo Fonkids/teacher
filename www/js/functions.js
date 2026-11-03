@@ -77,54 +77,6 @@ function startAudioRecord() {
     }
 }
 
-function stopAudioRecord() {
-    console.log("Grabazioa gelditzeko botoia sakatu da");
-
-    if (typeof audio === "undefined" || typeof audio.doStopRecord_E !== "function") {
-        console.error("Audio objektua edo doStopRecord_E() funtzioa ez dago erabilgarri");
-        alert("Ezin da grabazioa gelditu: audio sistema ez dago erabilgarri.");
-        return;
-    }
-
-    console.log("1. Stop botoia sakatu da");
-
-    if (!audio || !audio.doStopRecord_E) {
-        console.error("2. Audio objektua edo stop funtzioa falta da");
-        return;
-    }
-
-    console.log("3. Grabazioa gelditzeko deia egingo da");
-
-
-    var fileFullPath = appDirs.baseStorageAudio() +
-        "recording_" + Date.now() + ".aac";
-
-    audio.doStopRecord_E(
-        fileFullPath,
-        function() {
-            $("#audio-file-name").text("Grabazioa gordeta");
-
-            $("#audio-source").attr("src", fileFullPath);
-            $("#audio-player").show();
-
-            var player = document.getElementById("audio-player");
-            player.load();
-
-            $("#button-audio-stop").addClass("ui-disabled");
-            $("#button-audio-start").removeClass("ui-disabled");
-
-            alert("Audioa behar bezala gorde da");
-        },
-        function(error) {
-            console.error("Audio error:", JSON.stringify(error));
-            alert("Errorea audioa gordetzean.");
-
-            $("#button-audio-start").removeClass("ui-disabled");
-            $("#button-audio-stop").addClass("ui-disabled");
-        }
-    );
-}
-
 function buildHeader() {
     return $(
         '<div data-role="header" data-position="fixed" data-id="app-header">' +
@@ -227,7 +179,7 @@ $(document).on("pagecreate", "#page-t-4", function () {
     $("#question-audio-panel").hide();
 
     // Cambiar el ejercicio al seleccionar otro tipo
-    $("#student-group-select").on("change", function () {
+    $("#question-type-select").on("change", function () {
         showExerciseType($(this).val());
     });
 
@@ -673,4 +625,36 @@ document.addEventListener("deviceready", function() {
         preview.style.display = "block";
         document.getElementById("selfie-path").textContent = avatar_result.fullPath;
     });
+});
+
+$(document).on("change", "#question-type-select", function () {
+    $(".exercise-panel").hide();
+
+    var type = $(this).val();
+
+    switch (type) {
+        case "multiple-choice-a":
+            $("#exercise-multiple-choice-a").show();
+            break;
+
+        case "multiple-choice-b":
+            $("#exercise-multiple-choice-b").show();
+            break;
+
+        case "soup-a":
+            $("#exercise-soup-a").show();
+            break;
+
+        case "soup-b":
+            $("#exercise-soup-b").show();
+            break;
+
+        case "join-a":
+            $("#exercise-join-a").show();
+            break;
+
+        case "join-b":
+            $("#exercise-join-b").show();
+            break;
+    }
 });
