@@ -117,544 +117,171 @@ function nextBtn(next, label, icon) {
 }
 
 
-/* =========================================================
-   1. MOSTRAR EL TIPO DE EJERCICIO SELECCIONADO
-   ========================================================= */
+// ---------- Audio grabaketa (berrerabilgarria) ----------
+// Une berean grabazio bakarra egon daiteke martxan.
+var activeRecorder = null;
 
-   function showExerciseType(type) {
-
-    // Ocultar todos los ejercicios
-    $(".exercise-panel").hide();
-
-    // Ocultar también el panel de audio del enunciado
-    $("#question-audio-panel").hide();
-
-    if (!type) {
+function startAudioRecord($rec) {
+    if (activeRecorder) {
+        alert("Beste grabazio bat martxan dago.");
+        return;
+    }
+    if (typeof audio === "undefined" || typeof audio.doStartRecord !== "function") {
+        alert("Ezin da grabazioa hasi: audio sistema ez dago erabilgarri.");
         return;
     }
 
-    // Mostrar el ejercicio seleccionado
-    switch (type) {
-
-        case "multiple-choice-a":
-            $("#exercise-multiple-choice-a").show();
-            $("#question-audio-panel").show();
-            break;
-
-        case "multiple-choice-b":
-            $("#exercise-multiple-choice-b").show();
-            break;
-
-        case "soup-a":
-            $("#exercise-soup-a").show();
-            break;
-
-        case "soup-b":
-            $("#exercise-soup-b").show();
-            break;
-
-        case "bikote":
-            $("#exercise-hangman-a").show();
-            break;
-
-        case "join-a":
-            $("#exercise-join-a").show();
-            break;
-
-        case "join-b":
-            $("#exercise-join-b").show();
-            break;
-    }
-}
-
-
-/* =========================================================
-   2. INICIALIZACIÓN DEL SELECTOR Y DE LAS RESPUESTAS
-   ========================================================= */
-
-$(document).on("pagecreate", "#page-t-4", function () {
-
-    // Ocultar todos los ejercicios inicialmente
-    $(".exercise-panel").hide();
-    $("#question-audio-panel").hide();
-
-    // Cambiar el ejercicio al seleccionar otro tipo
-    $("#question-type-select").on("change", function () {
-        showExerciseType($(this).val());
-    });
-
-    // Inicializar las respuestas dinámicas
-    setupDynamicAnswers(
-        "multipleA-answers",
-        "multipleA-add-answer",
-        "multipleA-correct",
-        "text"
-    );
-
-    setupDynamicAnswers(
-        "multipleB-answers",
-        "multipleB-add-answer",
-        "multipleB-correct",
-        "audio"
-    );
-});
-
-
-/* =========================================================
-   3. CREAR RESPUESTAS DINÁMICAMENTE
-   ========================================================= */
-
-function setupDynamicAnswers(
-    containerId,
-    buttonId,
-    groupName,
-    answerKind
-) {
-
-    var container = $("#" + containerId);
-    var button = $("#" + buttonId);
-
-    var answerCount = 0;
-    var maxAnswers = 8;
-
-    button.on("click", function () {
-
-        if (container.children(".dynamic-answer").length >= maxAnswers) {
-            alert("No se pueden añadir más de 8 respuestas.");
-            return;
-        }
-
-        answerCount++;
-
-        var id = containerId + "-answer-" + answerCount;
-
-        var row = $("<div>", {
-            id: id,
-            class: "dynamic-answer"
-        });
-
-        // Número de respuesta
-        row.append(
-            $("<h4>").text("Respuesta " + answerCount)
-        );
-
-        // Crear el campo según el tipo de respuesta
-        if (answerKind === "text") {
-
-            var textInput = $("<input>", {
-                type: "text",
-                id: id + "-text",
-                name: id + "-text",
-                placeholder: "Escribe la respuesta",
-                required: true
-            });
-
-            row.append(
-                $("<label>", {
-                    for: id + "-text"
-                }).text("Texto de la respuesta:")
-            );
-
-            row.append(textInput);
-
-        } else if (answerKind === "audio") {
-
-            var audioInput = $("<input>", {
-                type: "file",
-                id: id + "-audio",
-                name: id + "-audio",
-                accept: "audio/*",
-                required: true
-            });
-
-            var audioPlayer = $("<audio>", {
-                id: id + "-player",
-                controls: true,
-                css: {
-                    display: "none",
-                    width: "100%"
-                }
-            });
-
-            row.append(
-                $("<label>", {
-                    for: id + "-audio"
-                }).text("Seleccionar audio:")
-            );
-
-            row.append(audioInput);
-            row.append(audioPlayer);
-
-            // Reproducir el audio seleccionado
-            audioInput.on("change", function () {
-
-                if (this.files && this.files.length > 0) {
-
-                    var url = URL.createObjectURL(this.files[0]);
-
-                    audioPlayer.attr("src", url);
-                    audioPlayer.show();
-
-                } else {
-
-                    audioPlayer.hide();
-                    audioPlayer.removeAttr("src");
-                }
-            });
-        }
-
-        // Radio para seleccionar la respuesta correcta
-        var correctInput = $("<input>", {
-            type: "radio",
-            name: groupName,
-            id: id + "-correct",
-            value: answerCount,
-            required: true
-        });
-
-        row.append(
-            $("<label>", {
-                for: id + "-correct"
-            }).text("Zuzena")
-        );
-
-        row.append(correctInput);
-
-        // Botón para eliminar la respuesta
-        var removeButton = $("<button>", {
-            type: "button",
-            text: "Eliminar respuesta",
-            class: "ui-btn ui-mini ui-btn-icon-left ui-icon-delete"
-        });
-
-        removeButton.on("click", function () {
-
-            row.remove();
-        });
-
-        row.append(removeButton);
-
-        container.append(row);
-
-        // Actualizar los elementos de jQuery Mobile
-        container.trigger("create");
-    });
-}
-
-
-/* =========================================================
-   4. GRABACIÓN DEL ENUNCIADO DE MULTIPLE-CHOICE-A
-   ========================================================= */
-
-var questionRecording = false;
-var questionAudioPath = null;
-
-
-function startAudioRecord() {
-
-    if (typeof audio === "undefined" ||
-        typeof audio.doStartRecord !== "function") {
-
-        alert("Grabazioa ez dago eskuragarri.");
-        return;
-    }
-
-    if (questionRecording || soupBRecordingIndex !== null) {
-        alert("Grabatzen...");
-        return;
-    }
-
+    var started = false;
     try {
-
-        questionAudioPath =
-            appDirs.baseStorageAudio() +
-            "question_" + Date.now() + ".aac";
-
-        audio.doStartRecord();
-
-        questionRecording = true;
-
-        $("#button-audio-start").addClass("ui-disabled");
-        $("#button-audio-stop").removeClass("ui-disabled");
-
-        $("#audio-file-name").text("Grabando enunciado...");
-
+        started = audio.doStartRecord() !== false;
     } catch (error) {
-
-        console.error(error);
-        alert("Ezin da grabazioa hasi.");
+        console.error("Grabazioa hasteko errorea:", error);
     }
+    if (!started) return;
+
+    activeRecorder = $rec;
+    $rec.find(".rec-file-name").text("");
+    $rec.find(".rec-player").hide();
+    $rec.find(".btn-rec-start").button("disable");
+    $rec.find(".btn-rec-stop").button("enable");
 }
 
+function stopAudioRecord($rec) {
+    if (!activeRecorder || activeRecorder[0] !== $rec[0]) return;
 
-function stopAudioRecord() {
-
-    if (!questionRecording) {
-        return;
-    }
+    var fileFullPath = appDirs.baseStorageAudio() + "recording_" + Date.now() + ".aac";
 
     audio.doStopRecord_E(
-
-        questionAudioPath,
-
-        function () {
-
-            questionRecording = false;
-
-            $("#button-audio-start").removeClass("ui-disabled");
-            $("#button-audio-stop").addClass("ui-disabled");
-
-            $("#audio-file-name").text("Enunciado grabado correctamente.");
-
-            $("#audio-source").attr("src", questionAudioPath);
-
-            var player = document.getElementById("audio-player");
-
-            player.style.display = "block";
+        fileFullPath,
+        function() {
+            activeRecorder = null;
+            $rec.data("audioPath", fileFullPath); // ruta gordetzeko (galdera gordetzean erabili)
+            $rec.find(".rec-file-name").text("Grabazioa gordeta");
+            $rec.find(".rec-source").attr("src", fileFullPath);
+            var player = $rec.find(".rec-player").show()[0];
             player.load();
+            $rec.find(".btn-rec-stop").button("disable");
+            $rec.find(".btn-rec-start").button("enable");
         },
-
-        function (error) {
-
-            console.error("Errorea enuntziatua gordetzerakoan...", error);
-
-            questionRecording = false;
-
-            $("#button-audio-start").removeClass("ui-disabled");
-            $("#button-audio-stop").addClass("ui-disabled");
-
-            alert("Grabazioa ezin izan da gorde.");
+        function(error) {
+            activeRecorder = null;
+            console.error("Audio error:", JSON.stringify(error));
+            alert("Errorea audioa gordetzean.");
+            $rec.find(".btn-rec-stop").button("disable");
+            $rec.find(".btn-rec-start").button("enable");
         }
     );
 }
 
+$(document).on("click", ".btn-rec-start", function () {
+    startAudioRecord($(this).closest(".audio-recorder"));
+});
+$(document).on("click", ".btn-rec-stop", function () {
+    stopAudioRecord($(this).closest(".audio-recorder"));
+});
 
-/* =========================================================
-   5. SOPA DE LETRAS B: SUBIR O GRABAR LOS CINCO AUDIOS
-   ========================================================= */
+// ---------- Ariketa formularioa (P5) ----------
+function updateExerciseForm() {
+    var type = $("#exercise-type-select").val();
+    var statement = $("#statement-type-select").val();
+    var answer = $("#answer-type-select").val();
 
-var soupBRecordingIndex = null;
+    $("#exercise-options").toggle(type !== "");
 
-var soupBRecordedAudios = {};
+    $("#statement-text").toggle(statement === "text");
+    $("#statement-audio").toggle(statement === "audio");
 
-
-/*
- * Iniciar la grabación de una palabra.
- */
-function startWordAudioRecord(index) {
-
-    
-    if (typeof audio === "undefined" ||
-        typeof audio.doStartRecord !== "function") {
-
-        alert("Grabazio sistema ez dago eskuragarri.");
-        return;
-    }
-
-    if (questionRecording || soupBRecordingIndex !== null) {
-
-        alert("Lehenengo aurreko gabazioa gelditu.");
-        return;
-    }
-
-    // Eliminar el archivo seleccionado anteriormente
-    $("#soupB-audio" + index).val("");
-
-    var player = document.getElementById("soupB-player" + index);
-
-    player.pause();
-    player.removeAttribute("src");
-    player.style.display = "none";
-
-    var filePath =
-        appDirs.baseStorageAudio() +
-        "soupB_word" + index + "_" + Date.now() + ".aac";
-
-    soupBRecordedAudios[index] = filePath;
-
-    try {
-
-        audio.doStartRecord();
-
-        soupBRecordingIndex = index;
-
-        $("#soupB-stop" + index).prop("disabled", false);
-
-    } catch (error) {
-
-        console.error(error);
-
-        delete soupBRecordedAudios[index];
-
-        alert("Grabazioa ezin izan da hasi");
-    }
+    $("#answers-block").toggle(type === "multiple-choice");
+    $("#answers-block .answer-text").toggle(answer === "text");
+    $("#answers-block .answer-audio").toggle(answer === "audio");
+    $("#answers-block .answer-image").toggle(answer === "image");
 }
 
+$(document).on("change", "#exercise-type-select, #statement-type-select, #answer-type-select", updateExerciseForm);
 
-/*
- * Detener y guardar la grabación de una palabra.
- */
-function stopWordAudioRecord(index) {
-
-    if (soupBRecordingIndex !== index) {
-        return;
-    }
-
-    var filePath = soupBRecordedAudios[index];
-
-    audio.doStopRecord_E(
-
-        filePath,
-
-        function () {
-
-            var player =
-                document.getElementById("soupB-player" + index);
-
-            player.src = filePath;
-            player.style.display = "block";
-            player.load();
-
-            $("#soupB-stop" + index).prop("disabled", true);
-
-            soupBRecordingIndex = null;
-        },
-
-        function (error) {
-
-            console.error("Errorea grabazioa gordetzerakoan:", error);
-
-            delete soupBRecordedAudios[index];
-
-            $("#soupB-stop" + index).prop("disabled", true);
-
-            soupBRecordingIndex = null;
-
-            alert("Grabazioa ezin izan da gorde");
-        }
+function buildHeader() {
+    return $(
+        '<div data-role="header" data-position="fixed" data-id="app-header">' +
+        '  <table style="width:100%; table-layout:fixed;"><tbody><tr>' +
+        '    <td style="text-align:left;width:33%"><a href="#page-t-9" class="btn-info ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-corner-all">Info</a></td>' +
+        '    <td style="text-align:center;width:34%">Logo</td>' +
+        '    <td style="text-align:right;width:33%"><a href="#page-t-10" class="btn-settings ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-corner-all">Ezarpenak</a></td>' +
+        '  </tr></tbody></table>' +
+        '</div>'
     );
 }
 
+function buildFooter(back, backLabel, next, nextLabel, nextIcon) {
+    var html =
+        '<div data-role="footer" data-position="fixed" data-id="app-footer">' +
+        '<table style="width:100%; table-layout:fixed; text-align:center;"><tr>' +
+        '<td style="text-align:left;width:33%">' + backBtn(back, backLabel) + '</td>' +
+        '<td style="width:34%"><h4 style="margin:0">2026-2027</h4></td>' +
+        '<td style="text-align:right;width:33%">' + nextBtn(next, nextLabel, nextIcon) + '</td>' +
+        '</tr></table></div>';
+    return $(html);
+}
 
-/*
- * Si se sube un archivo, se elimina la referencia
- * a la grabación anterior y se muestra el reproductor.
- */
-$(document).on(
-    "change",
-    "#soupB-words input[type='file']",
-    function () {
-
-        var index = Number(
-            this.id.replace("soupB-audio", "")
-        );
-
-        if (this.files && this.files.length > 0) {
-
-            delete soupBRecordedAudios[index];
-
-            var player =
-                document.getElementById("soupB-player" + index);
-
-            player.src = URL.createObjectURL(this.files[0]);
-            player.style.display = "block";
-            player.load();
-        }
+function backBtn(target, label) {
+    if (target === "exit") {
+        return '<a href="#" class="btn-exit ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-corner-all">Irten</a>';
     }
-);
-// cordova-ren plugin-aren dokumentazioan dioenez, WebView bidezko metodoa gomendatzen dute orain
-// https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-camera/
+    if (target === "back") { // history back
+        return '<a href="#" data-rel="back" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-corner-all">' + label + '</a>';
+    }
+    return '<a href="' + target + '" class="btn-back ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-corner-all" data-transition="slidefade" data-direction="reverse">' + label + '</a>';
+}
 
-//Kameraren ebentua entzuten
-document.addEventListener("deviceready", function() {
-    document.getElementById("selfie").addEventListener("change", async function(e) {
-        const blob = e.target.files[0];
-        if (!blob) return;
+function nextBtn(next, label, icon) {
+    return next
+        ? '<a href="' + next + '" class="btn-next ui-btn ui-icon-' + (icon || "plus") + ' ui-btn-icon-right ui-mini ui-corner-all" data-transition="slidefade">' + label + '</a>'
+        : '';
+}
 
-        console.log("updateAvatar:", typeof updateAvatar);
-        console.log("blob:", blob);
+// ---------- Multiple choice: erantzunak gehitu / kendu (2tik 5era) ----------
+var MIN_ANSWERS = 4;
+var MAX_ANSWERS = 8;
 
-        var avatar_result = null;
+function updateAnswerButtons() {
+    var n = $("#answers-block .answer-row.is-active").length;
+    $("#btn-add-answer").button(n >= MAX_ANSWERS ? "disable" : "enable");
+    $("#btn-remove-answer").button(n <= MIN_ANSWERS ? "disable" : "enable");
+}
 
-        try {
-
-            avatar_result = await updateAvatar(
-                user.uid,
-                "avatar.jpg",
-                blob,
-                blob.type
-            );
-    
-            alert("Upload successful");
-    
-        } catch(err) {
-    
-            console.error(err);
-            alert("Upload failed:" + err);
-        }
-
-        // Fitxategiak gordetzeko karpeta
-        const dirEntry = await new Promise((res, rej) =>
-            window.resolveLocalFileSystemURL(
-                cordova.file.externalDataDirectory, res, rej
-            )
-        );
-
-        // Fitxategia sortu, hemen sartuko da irudia irudia daukagunean
-        const filename = `selfie_${Date.now()}.jpg`;
-
-        const fileEntry = await new Promise((res, rej) =>
-            dirEntry.getFile(filename, { create: true, exclusive: false }, res, rej)
-        );
-
-        // Itxaron irudia lortu arte, lortze denean: fitxategira idatzi
-        const writer = await new Promise((res, rej) =>
-            fileEntry.createWriter(res, rej)
-        );
-        await new Promise((res, rej) => {
-            writer.onwriteend = res;
-            writer.onerror = rej;
-            writer.write(blob);
-        });
-
-        console.log("Saved to:", fileEntry.toURL());
-
-        //Irudi berria erakusten
-        const preview = document.getElementById("selfie-preview");
-        preview.src = fileEntry.toURL();
-        preview.style.display = "block";
-        document.getElementById("selfie-path").textContent = avatar_result.fullPath;
-    });
+$(document).on("click", "#btn-add-answer", function () {
+    var $next = $("#answers-block .answer-row").not(".is-active").first();
+    if ($next.length === 0) return;
+    $next.addClass("is-active").show();
+    updateAnswerButtons();
 });
 
-$(document).on("change", "#question-type-select", function () {
-    $(".exercise-panel").hide();
+$(document).on("click", "#btn-remove-answer", function () {
+    var $rows = $("#answers-block .answer-row.is-active");
+    if ($rows.length <= MIN_ANSWERS) return;
 
-    var type = $(this).val();
+    var $last = $rows.last();
+    var $rec = $last.find(".audio-recorder");
 
-    switch (type) {
-        case "multiple-choice-a":
-            $("#exercise-multiple-choice-a").show();
-            break;
-
-        case "multiple-choice-b":
-            $("#exercise-multiple-choice-b").show();
-            break;
-
-        case "soup-a":
-            $("#exercise-soup-a").show();
-            break;
-
-        case "soup-b":
-            $("#exercise-soup-b").show();
-            break;
-
-        case "join-a":
-            $("#exercise-join-a").show();
-            break;
-
-        case "join-b":
-            $("#exercise-join-b").show();
-            break;
+    if (activeRecorder && $rec.length && activeRecorder[0] === $rec[0]) {
+        alert("Grabazioa martxan dago erantzun honetan. Gelditu lehenengo.");
+        return;
     }
+
+    // garbitu erantzun hori
+    $last.find("input[type=text]").val("");
+    $last.find("input[type=file]").val("");
+    $rec.removeData("audioPath");
+    $rec.find(".rec-file-name").text("");
+    $rec.find(".rec-player").hide();
+
+    // zuzena kendutako erantzuna bazen, itzuli lehenengora (A)
+    var $radio = $last.find("input[type=radio]");
+    if ($radio.prop("checked")) {
+        $("#erantzuna-a").prop("checked", true);
+    }
+    $("input[name='erantzun-zuzena']").checkboxradio("refresh");
+
+    $last.removeClass("is-active").hide();
+    updateAnswerButtons();
 });
+ 
