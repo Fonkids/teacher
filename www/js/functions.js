@@ -52,70 +52,18 @@ function check(i) {//V1
 	//	console.log("check 2");
 }
 
-function startAudioRecord() {
-    console.log("Grabazioa hasteko botoia sakatu da");
-
-    if (typeof audio === "undefined" || typeof audio.doStartRecord !== "function") {
-        console.error("Audio objektua edo doStartRecord() funtzioa ez dago erabilgarri");
-        alert("Ezin da grabazioa hasi: audio sistema ez dago erabilgarri.");
-        return;
-    }
-
-    $("#audio-file-name").text("");
-    $("#audio-player").hide();
-
-    $("#button-audio-start").addClass("ui-disabled");
-    $("#button-audio-stop").removeClass("ui-disabled");
-
-    try {
-        audio.doStartRecord();
-    } catch (error) {
-        console.error("Grabazioa hasteko errorea:", error);
-        alert("Errorea grabazioa hastean.");
-        $("#button-audio-start").removeClass("ui-disabled");
-        $("#button-audio-stop").addClass("ui-disabled");
-    }
+// ---------- Laguntzailea: botoiak gaitu / desgaitu ----------
+// <button> elementuak ez dira beti jQuery Mobile "button widget" gisa hasieratzen,
+// beraz .button("disable") ez da fidagarria. Honek kasu guztietan funtzionatzen du.
+function setEnabled($el, enabled) {
+    $el.each(function () {
+        var $b = $(this);
+        $b.prop("disabled", !enabled)
+          .attr("aria-disabled", !enabled)
+          .toggleClass("ui-state-disabled ui-disabled", !enabled);
+        $b.closest("div.ui-btn").toggleClass("ui-state-disabled ui-disabled", !enabled);
+    });
 }
-
-function buildHeader() {
-    return $(
-        '<div data-role="header" data-position="fixed" data-id="app-header">' +
-        '  <table style="width:100%; table-layout:fixed;"><tbody><tr>' +
-        '    <td style="text-align:left;width:33%"><a href="#page-t-9" class="btn-info ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-corner-all">Info</a></td>' +
-        '    <td style="text-align:center;width:34%">Logo</td>' +
-        '    <td style="text-align:right;width:33%"><a href="#page-t-10" class="btn-settings ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-corner-all">Ezarpenak</a></td>' +
-        '  </tr></tbody></table>' +
-        '</div>'
-    );
-}
-
-function buildFooter(back, backLabel, next, nextLabel, nextIcon) {
-    var html =
-        '<div data-role="footer" data-position="fixed" data-id="app-footer">' +
-        '<table style="width:100%; table-layout:fixed; text-align:center;"><tr>' +
-        '<td style="text-align:left;width:45%">' + backBtn(back, backLabel) + '</td>' +
-        '<td style="width:10%"><p style="margin:0">2026</br>2027</p></td>' +
-        '<td style="text-align:right;width:45%">' + nextBtn(next, nextLabel, nextIcon) + '</td>' +
-        '</tr></table></div>';
-    return $(html);
-}
-
-function backBtn(target, label) {
-    if (target === "exit") {
-        return '<a href="#" class="btn-exit ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-corner-all">Irten</a>';
-    }
-    if (target === "back") { // history back
-        return '<a href="#" data-rel="back" class="ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-corner-all">' + label + '</a>';
-    }
-    return '<a href="' + target + '" class="btn-back ui-btn ui-icon-arrow-l ui-btn-icon-left ui-mini ui-corner-all" data-transition="slidefade" data-direction="reverse">' + label + '</a>';
-}
-
-function nextBtn(next, label, icon) {
-    return next
-        ? '<a href="' + next + '" class="btn-next ui-btn ui-icon-' + (icon || "plus") + ' ui-btn-icon-right ui-mini ui-corner-all" data-transition="slidefade">' + label + '</a>'
-        : '';
-}
-
 
 // ---------- Audio grabaketa (berrerabilgarria) ----------
 // Une berean grabazio bakarra egon daiteke martxan.
@@ -133,17 +81,18 @@ function startAudioRecord($rec) {
 
     var started = false;
     try {
-        started = audio.doStartRecord() !== false;
+        // doStartRecord() true itzultzen du bakarrik grabaketa hasi bada
+        started = audio.doStartRecord() === true;
     } catch (error) {
         console.error("Grabazioa hasteko errorea:", error);
     }
     if (!started) return;
 
     activeRecorder = $rec;
-    $rec.find(".rec-file-name").text("");
+    $rec.find(".rec-file-name").text("Grabatzen...");
     $rec.find(".rec-player").hide();
-    $rec.find(".btn-rec-start").button("disable");
-    $rec.find(".btn-rec-stop").button("enable");
+    setEnabled($rec.find(".btn-rec-start"), false);
+    setEnabled($rec.find(".btn-rec-stop"), true);
 }
 
 function stopAudioRecord($rec) {
@@ -160,23 +109,26 @@ function stopAudioRecord($rec) {
             $rec.find(".rec-source").attr("src", fileFullPath);
             var player = $rec.find(".rec-player").show()[0];
             player.load();
-            $rec.find(".btn-rec-stop").button("disable");
-            $rec.find(".btn-rec-start").button("enable");
+            setEnabled($rec.find(".btn-rec-stop"), false);
+            setEnabled($rec.find(".btn-rec-start"), true);
         },
         function(error) {
             activeRecorder = null;
             console.error("Audio error:", JSON.stringify(error));
             alert("Errorea audioa gordetzean.");
-            $rec.find(".btn-rec-stop").button("disable");
-            $rec.find(".btn-rec-start").button("enable");
+            $rec.find(".rec-file-name").text("");
+            setEnabled($rec.find(".btn-rec-stop"), false);
+            setEnabled($rec.find(".btn-rec-start"), true);
         }
     );
 }
 
 $(document).on("click", ".btn-rec-start", function () {
+    if ($(this).prop("disabled")) return;
     startAudioRecord($(this).closest(".audio-recorder"));
 });
 $(document).on("click", ".btn-rec-stop", function () {
+    if ($(this).prop("disabled")) return;
     stopAudioRecord($(this).closest(".audio-recorder"));
 });
 
@@ -191,13 +143,27 @@ function updateExerciseForm() {
     $("#statement-text").toggle(statement === "text");
     $("#statement-audio").toggle(statement === "audio");
 
+    // Multiple choice
+    $("#answer-type-container").toggle(type === "multiple-choice");
     $("#answers-block").toggle(type === "multiple-choice");
     $("#answers-block .answer-text").toggle(answer === "text");
     $("#answers-block .answer-audio").toggle(answer === "audio");
     $("#answers-block .answer-image").toggle(answer === "image");
+
+    // Beste motak
+    $("#soup-block").toggle(type === "soup");
+    $("#join-block").toggle(type === "join");
+    $("#classify-block").toggle(type === "classify");
+
+    if (type === "multiple-choice") updateAnswerButtons();
 }
 
 $(document).on("change", "#exercise-type-select, #statement-type-select, #answer-type-select", updateExerciseForm);
+
+$(document).on("pagecreate", "#page-t-4", function () {
+    updateExerciseForm();
+    updateAnswerButtons();
+});
 
 function buildHeader() {
     return $(
@@ -238,26 +204,30 @@ function nextBtn(next, label, icon) {
         : '';
 }
 
-// ---------- Multiple choice: erantzunak gehitu / kendu (2tik 5era) ----------
+// ---------- Multiple choice: erantzunak gehitu / kendu (4tik 8ra) ----------
 var MIN_ANSWERS = 4;
 var MAX_ANSWERS = 8;
 
 function updateAnswerButtons() {
     var n = $("#answers-block .answer-row.is-active").length;
-    $("#btn-add-answer").button(n >= MAX_ANSWERS ? "disable" : "enable");
-    $("#btn-remove-answer").button(n <= MIN_ANSWERS ? "disable" : "enable");
+    setEnabled($("#btn-add-answer"), n < MAX_ANSWERS);
+    setEnabled($("#btn-remove-answer"), n > MIN_ANSWERS);
 }
 
 $(document).on("click", "#btn-add-answer", function () {
     var $next = $("#answers-block .answer-row").not(".is-active").first();
-    if ($next.length === 0) return;
-    $next.addClass("is-active").show();
-    updateAnswerButtons();
+    if ($next.length > 0) {
+        $next.addClass("is-active").show();
+    }
+    updateAnswerButtons(); // beti eguneratu, bukaeran ere
 });
 
 $(document).on("click", "#btn-remove-answer", function () {
     var $rows = $("#answers-block .answer-row.is-active");
-    if ($rows.length <= MIN_ANSWERS) return;
+    if ($rows.length <= MIN_ANSWERS) {
+        updateAnswerButtons();
+        return;
+    }
 
     var $last = $rows.last();
     var $rec = $last.find(".audio-recorder");
@@ -273,6 +243,8 @@ $(document).on("click", "#btn-remove-answer", function () {
     $rec.removeData("audioPath");
     $rec.find(".rec-file-name").text("");
     $rec.find(".rec-player").hide();
+    setEnabled($rec.find(".btn-rec-start"), true);
+    setEnabled($rec.find(".btn-rec-stop"), false);
 
     // zuzena kendutako erantzuna bazen, itzuli lehenengora (A)
     var $radio = $last.find("input[type=radio]");
@@ -284,4 +256,3 @@ $(document).on("click", "#btn-remove-answer", function () {
     $last.removeClass("is-active").hide();
     updateAnswerButtons();
 });
- 

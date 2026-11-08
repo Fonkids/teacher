@@ -92,6 +92,7 @@ var audio = {//V2
 
 		if (!this.media) {
 			console.error("Ez dago gelditzeko grabaziorik");
+			if (onError) onError({ message: "No recording in progress" });
 			return;
 		}
 

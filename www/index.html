@@ -35,6 +35,10 @@
 <meta name="msapplication-tap-highlight" content="no" />
 <meta name="viewport"	content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 <title>Fonkids Teacher</title>
+<style>
+.pair-table { width: 100%; table-layout: fixed; }
+.pair-table td { vertical-align: top; padding: 2px 6px; }
+</style>
 </head>
 <body>
     <!-- P1 -->
@@ -361,8 +365,8 @@
                 <option value="">Aukeratu mota</option>
                 <option value="multiple-choice">Multiple choice</option>
                 <option value="soup">Letra zopa</option>
-                <option value="hangman">Hangman</option>
                 <option value="join">Lotu</option>
+                <option value="classify">Klasifikazioa</option>
             </select>
         </div>
 
@@ -396,7 +400,7 @@
                 </div>
             </div>
 
-            <div class="ui-field-contain">
+            <div class="ui-field-contain" id="answer-type-container">
                 <label for="answer-type-select">Erantzunak:</label>
                 <select name="answer-type" id="answer-type-select">
                     <option value="text">Testua</option>
@@ -454,7 +458,7 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr class="answer-row" style="display:none;">
+                            <tr class="answer-row is-active">
                                 <td style="width:10%">
                                     <input type="radio" name="erantzun-zuzena" id="erantzuna-c" value="C">
                                 </td>
@@ -475,7 +479,7 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr class="answer-row" style="display:none;">
+                            <tr class="answer-row is-active">
                                 <td style="width:10%">
                                     <input type="radio" name="erantzun-zuzena" id="erantzuna-d" value="D">
                                 </td>
@@ -517,6 +521,69 @@
                                     </div>
                                 </td>
                             </tr>
+                            <tr class="answer-row" style="display:none;">
+                                <td style="width:10%">
+                                    <input type="radio" name="erantzun-zuzena" id="erantzuna-f" value="F">
+                                </td>
+                                <td>
+                                    <div class="answer-text">
+                                        <input type="text" id="erantzuna-f-text" placeholder="Seigarren erantzuna">
+                                    </div>
+                                    <div class="audio-recorder answer-audio" style="display:none;">
+                                        <button type="button" class="btn-rec-start" data-mini="true">Grabazioa hasi</button>
+                                        <button type="button" class="btn-rec-stop" data-mini="true" disabled>Grabazioa gelditu</button>
+                                        <p class="rec-file-name"></p>
+                                        <audio class="rec-player" controls style="display:none; width:100%;">
+                                            <source class="rec-source" src="" type="audio/aac">
+                                        </audio>
+                                    </div>
+                                    <div class="answer-image" style="display:none;">
+                                        <input type="file" id="erantzuna-f-image" accept="image/*">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="answer-row" style="display:none;">
+                                <td style="width:10%">
+                                    <input type="radio" name="erantzun-zuzena" id="erantzuna-g" value="G">
+                                </td>
+                                <td>
+                                    <div class="answer-text">
+                                        <input type="text" id="erantzuna-g-text" placeholder="Zazpigarren erantzuna">
+                                    </div>
+                                    <div class="audio-recorder answer-audio" style="display:none;">
+                                        <button type="button" class="btn-rec-start" data-mini="true">Grabazioa hasi</button>
+                                        <button type="button" class="btn-rec-stop" data-mini="true" disabled>Grabazioa gelditu</button>
+                                        <p class="rec-file-name"></p>
+                                        <audio class="rec-player" controls style="display:none; width:100%;">
+                                            <source class="rec-source" src="" type="audio/aac">
+                                        </audio>
+                                    </div>
+                                    <div class="answer-image" style="display:none;">
+                                        <input type="file" id="erantzuna-g-image" accept="image/*">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="answer-row" style="display:none;">
+                                <td style="width:10%">
+                                    <input type="radio" name="erantzun-zuzena" id="erantzuna-h" value="H">
+                                </td>
+                                <td>
+                                    <div class="answer-text">
+                                        <input type="text" id="erantzuna-h-text" placeholder="Zortzigarren erantzuna">
+                                    </div>
+                                    <div class="audio-recorder answer-audio" style="display:none;">
+                                        <button type="button" class="btn-rec-start" data-mini="true">Grabazioa hasi</button>
+                                        <button type="button" class="btn-rec-stop" data-mini="true" disabled>Grabazioa gelditu</button>
+                                        <p class="rec-file-name"></p>
+                                        <audio class="rec-player" controls style="display:none; width:100%;">
+                                            <source class="rec-source" src="" type="audio/aac">
+                                        </audio>
+                                    </div>
+                                    <div class="answer-image" style="display:none;">
+                                        <input type="file" id="erantzuna-h-image" accept="image/*">
+                                    </div>
+                                </td>
+                            </tr>
                         </table>
                     </fieldset>
                 </form>
@@ -525,6 +592,125 @@
                     <button type="button" id="btn-add-answer" data-mini="true" data-inline="true" data-icon="plus">Erantzuna gehitu</button>
                     <button type="button" id="btn-remove-answer" data-mini="true" data-inline="true" data-icon="minus" disabled>Azkena kendu</button>
                 </div>
+            </div>
+
+            <!-- Letra zopa: hitzak bakarrik -->
+            <div id="soup-block" style="display:none;">
+                <hr/>
+                <p>Idatzi bilatu behar diren 5 hitzak:</p>
+                <input type="text" class="soup-word" placeholder="1. hitza">
+                <input type="text" class="soup-word" placeholder="2. hitza">
+                <input type="text" class="soup-word" placeholder="3. hitza">
+                <input type="text" class="soup-word" placeholder="4. hitza">
+                <input type="text" class="soup-word" placeholder="5. hitza">
+            </div>
+
+            <!-- Lotu: 4 bikote -->
+            <div id="join-block" style="display:none;">
+                <hr/>
+                <p>4 bikote: ezkerreko zutabeko hitz bakoitzak eskuineko zutabean bere bikotea du (testua eta/edo irudia).</p>
+                <fieldset class="join-row">
+                    <legend>1. bikotea</legend>
+                    <table class="pair-table">
+                        <tr>
+                            <td>
+                                <input type="text" class="join-left-text" placeholder="Ezkerreko hitza">
+                                <input type="file" class="join-left-image" accept="image/*">
+                            </td>
+                            <td>
+                                <input type="text" class="join-right-text" placeholder="Eskuineko hitza">
+                                <input type="file" class="join-right-image" accept="image/*">
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset class="join-row">
+                    <legend>2. bikotea</legend>
+                    <table class="pair-table">
+                        <tr>
+                            <td>
+                                <input type="text" class="join-left-text" placeholder="Ezkerreko hitza">
+                                <input type="file" class="join-left-image" accept="image/*">
+                            </td>
+                            <td>
+                                <input type="text" class="join-right-text" placeholder="Eskuineko hitza">
+                                <input type="file" class="join-right-image" accept="image/*">
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset class="join-row">
+                    <legend>3. bikotea</legend>
+                    <table class="pair-table">
+                        <tr>
+                            <td>
+                                <input type="text" class="join-left-text" placeholder="Ezkerreko hitza">
+                                <input type="file" class="join-left-image" accept="image/*">
+                            </td>
+                            <td>
+                                <input type="text" class="join-right-text" placeholder="Eskuineko hitza">
+                                <input type="file" class="join-right-image" accept="image/*">
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset class="join-row">
+                    <legend>4. bikotea</legend>
+                    <table class="pair-table">
+                        <tr>
+                            <td>
+                                <input type="text" class="join-left-text" placeholder="Ezkerreko hitza">
+                                <input type="file" class="join-left-image" accept="image/*">
+                            </td>
+                            <td>
+                                <input type="text" class="join-right-text" placeholder="Eskuineko hitza">
+                                <input type="file" class="join-right-image" accept="image/*">
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+
+            <!-- Klasifikazioa: 4 talde, 2 hitz bakoitzean -->
+            <div id="classify-block" style="display:none;">
+                <hr/>
+                <p>4 talde, bakoitzean elkarrekin joan behar duten 2 hitz (adibidez, soinu berarekin hasten direnak):</p>
+                <fieldset class="classify-row">
+                    <legend>1. taldea</legend>
+                    <table class="pair-table">
+                        <tr>
+                            <td><input type="text" class="classify-word" placeholder="1. hitza"></td>
+                            <td><input type="text" class="classify-word" placeholder="2. hitza"></td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset class="classify-row">
+                    <legend>2. taldea</legend>
+                    <table class="pair-table">
+                        <tr>
+                            <td><input type="text" class="classify-word" placeholder="1. hitza"></td>
+                            <td><input type="text" class="classify-word" placeholder="2. hitza"></td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset class="classify-row">
+                    <legend>3. taldea</legend>
+                    <table class="pair-table">
+                        <tr>
+                            <td><input type="text" class="classify-word" placeholder="1. hitza"></td>
+                            <td><input type="text" class="classify-word" placeholder="2. hitza"></td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset class="classify-row">
+                    <legend>4. taldea</legend>
+                    <table class="pair-table">
+                        <tr>
+                            <td><input type="text" class="classify-word" placeholder="1. hitza"></td>
+                            <td><input type="text" class="classify-word" placeholder="2. hitza"></td>
+                        </tr>
+                    </table>
+                </fieldset>
             </div>
 
         </div>
@@ -576,7 +762,7 @@
     </div>
 
     <!-- P7 -->
-    <div data-role="page" id="page-t-6" data-back="#page-t-5" data-back-label="Atzera", data-next="#page-t-5", data-next-label="Gorde", data-next-icon="check">
+    <div data-role="page" id="page-t-6" data-back="#page-t-5" data-back-label="Atzera" data-next="#page-t-5" data-next-label="Gorde" data-next-icon="check">
         <div data-role="content">
             <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P7</h1>
             <p>Talde barruko ikasle-zerrenda erakutsiko da, edo, erregistratutako ikasle guztien artean iragazteko menua.</p>
