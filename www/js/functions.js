@@ -256,3 +256,68 @@ $(document).on("click", "#btn-remove-answer", function () {
     $last.removeClass("is-active").hide();
     updateAnswerButtons();
 });
+
+// cordova-ren plugin-aren dokumentazioan dioenez, WebView bidezko metodoa gomendatzen dute orain
+// https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-camera/
+
+//Kameraren ebentua entzuten
+document.addEventListener("deviceready", function() {
+    document.getElementById("selfie").addEventListener("change", async function(e) {
+        const blob = e.target.files[0];
+        if (!blob) return;
+
+        console.log("updateAvatar:", typeof updateAvatar);
+        console.log("blob:", blob);
+
+        var avatar_result = null;
+
+        try {
+
+            avatar_result = await updateAvatar(
+                user.uid,
+                "avatar.jpg",
+                blob,
+                blob.type
+            );
+    
+            alert("Upload successful");
+    
+        } catch(err) {
+    
+            console.error(err);
+            alert("Upload failed:" + err);
+        }
+
+        // Fitxategiak gordetzeko karpeta
+        const dirEntry = await new Promise((res, rej) =>
+            window.resolveLocalFileSystemURL(
+                cordova.file.externalDataDirectory, res, rej
+            )
+        );
+
+        // Fitxategia sortu, hemen sartuko da irudia irudia daukagunean
+        const filename = `selfie_${Date.now()}.jpg`;
+
+        const fileEntry = await new Promise((res, rej) =>
+            dirEntry.getFile(filename, { create: true, exclusive: false }, res, rej)
+        );
+
+        // Itxaron irudia lortu arte, lortze denean: fitxategira idatzi
+        const writer = await new Promise((res, rej) =>
+            fileEntry.createWriter(res, rej)
+        );
+        await new Promise((res, rej) => {
+            writer.onwriteend = res;
+            writer.onerror = rej;
+            writer.write(blob);
+        });
+
+        console.log("Saved to:", fileEntry.toURL());
+
+        //Irudi berria erakusten
+        const preview = document.getElementById("selfie-preview");
+        preview.src = fileEntry.toURL();
+        preview.style.display = "block";
+        document.getElementById("selfie-path").textContent = avatar_result.fullPath;
+    });
+});
