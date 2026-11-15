@@ -22,8 +22,7 @@
 var appDirs = {
 	baseStorage: function() { return cordova.file.externalDataDirectory; },
 	baseStorageAudio: function() { return this.baseStorage() + "audio/"; },
-	baseStorageAvatars: function() { return this.baseStorage() + "images/userAvatar"; },
-	baseStorageQuestionImages: function() { return this.baseStorage() + "images/questions"; }
+	baseStorageImages: function() { return this.baseStorage() + "images/"; },
 };
 
 var pageT = {//V3

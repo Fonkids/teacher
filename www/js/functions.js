@@ -260,64 +260,140 @@ $(document).on("click", "#btn-remove-answer", function () {
 // cordova-ren plugin-aren dokumentazioan dioenez, WebView bidezko metodoa gomendatzen dute orain
 // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-camera/
 
-//Kameraren ebentua entzuten
-document.addEventListener("deviceready", function() {
-    document.getElementById("selfie").addEventListener("change", async function(e) {
-        const blob = e.target.files[0];
-        if (!blob) return;
+// Kameraren ebentua entzuten
+document.addEventListener("deviceready", function () {
 
-        console.log("updateAvatar:", typeof updateAvatar);
-        console.log("blob:", blob);
+    document.getElementById("selfie").addEventListener(
+        "change",
+        async function (e) {
 
-        var avatar_result = null;
+            const blob = e.target.files[0];
+            if (!blob) return;
 
-        try {
+            const filename = `selfie_${Date.now()}.jpg`;
 
-            avatar_result = await updateAvatar(
-                user.uid,
-                "avatar.jpg",
-                blob,
-                blob.type
-            );
-    
-            alert("Upload successful");
-    
-        } catch(err) {
-    
-            console.error(err);
-            alert("Upload failed:" + err);
+            try {
+
+                /* -------------------------
+                 * 1. ROOT DIRECTORY
+                 * ------------------------- */
+
+                const rootDir = await new Promise((res, rej) =>
+                    window.resolveLocalFileSystemURL(
+                        appDirs.baseStorage(),
+                        res,
+                        rej
+                    )
+                );
+
+                /* -------------------------
+                 * 2. CREATE images/ IF NEEDED
+                 * ------------------------- */
+
+                const imagesDir = await new Promise((res, rej) =>
+                    rootDir.getDirectory(
+                        "images",
+                        { create: true },
+                        res,
+                        rej
+                    )
+                );
+
+                console.log(
+                    "Images directory:",
+                    imagesDir.toURL()
+                );
+
+                /* -------------------------
+                 * 3. CREATE FILE
+                 * ------------------------- */
+
+                const fileEntry = await new Promise((res, rej) =>
+                    imagesDir.getFile(
+                        filename,
+                        {
+                            create: true,
+                            exclusive: false
+                        },
+                        res,
+                        rej
+                    )
+                );
+
+                /* -------------------------
+                 * 4. WRITE IMAGE
+                 * ------------------------- */
+
+                const writer = await new Promise((res, rej) =>
+                    fileEntry.createWriter(res, rej)
+                );
+
+                await new Promise((res, rej) => {
+                    writer.onwriteend = res;
+                    writer.onerror = rej;
+                    writer.write(blob);
+                });
+
+                console.log(
+                    "Local image saved:",
+                    fileEntry.toURL()
+                );
+
+                /* -------------------------
+                 * 5. PREVIEW
+                 * ------------------------- */
+
+                const preview =
+                    document.getElementById("selfie-preview");
+
+                preview.src =
+                    fileEntry.toURL() +
+                    "?t=" +
+                    Date.now();
+
+                preview.style.display = "block";
+
+                document.getElementById("selfie-path")
+                    .textContent =
+                    fileEntry.toURL();
+
+                /* -------------------------
+                 * 6. UPLOAD TO SUPABASE
+                 * ------------------------- */
+
+                const uploadResult =
+                    await updateAvatar(
+                        user.uid,
+                        filename,
+                        blob,
+                        blob.type
+                    );
+
+                console.log(
+                    "Supabase upload result:",
+                    uploadResult
+                );
+
+                alert("Upload successful");
+
+                /* -------------------------
+                 * 7. RESET INPUT
+                 * ------------------------- */
+
+                document.getElementById("selfie").value = "";
+
+            } catch (err) {
+
+                console.error(
+                    "Avatar processing error:",
+                    err
+                );
+
+                alert(
+                    "Avatar processing failed:\n" +
+                    JSON.stringify(err, null, 2)
+                );
+            }
         }
-
-        // Fitxategiak gordetzeko karpeta
-        const dirEntry = await new Promise((res, rej) =>
-            window.resolveLocalFileSystemURL(
-                cordova.file.externalDataDirectory, res, rej
-            )
-        );
-
-        // Fitxategia sortu, hemen sartuko da irudia irudia daukagunean
-        const filename = `selfie_${Date.now()}.jpg`;
-
-        const fileEntry = await new Promise((res, rej) =>
-            dirEntry.getFile(filename, { create: true, exclusive: false }, res, rej)
-        );
-
-        // Itxaron irudia lortu arte, lortze denean: fitxategira idatzi
-        const writer = await new Promise((res, rej) =>
-            fileEntry.createWriter(res, rej)
-        );
-        await new Promise((res, rej) => {
-            writer.onwriteend = res;
-            writer.onerror = rej;
-            writer.write(blob);
-        });
-
-        console.log("Saved to:", fileEntry.toURL());
-
-        //Irudi berria erakusten
-        const preview = document.getElementById("selfie-preview");
-        preview.src = fileEntry.toURL();
-        preview.style.display = "block";
-        document.getElementById("selfie-path").textContent = avatar_result.fullPath;
-    });
+    );
 });
