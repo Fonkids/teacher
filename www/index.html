@@ -46,8 +46,7 @@
         <div data-role="content">
 			<h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P1</h1>
 			<p> Hemen logeatzeko/erregistratzeko edukia egongo da. Saioa hasterakoan hurrengo pantailara (P2) joko da</p>
-			<a href="#page-t-1" id="next-0" class="ui-btn ui-icon-arrow-r ui-btn-icon-right ui-mini ui-btn-block ui-corner-all" data-transition="slidefade">Saioa hasi</a>
-		
+			<a href="#" id="login" class="ui-btn ui-icon-arrow-r ui-btn-icon-right ui-mini ui-btn-block ui-corner-all"> Saioa hasi </a>
             <label for="selfie">Take a picture of your face:</label>
             <input type="file" id="selfie" name="selfie" accept="image/*" capture="user"/>
 
@@ -906,46 +905,218 @@
 
     <!-- P10 -->
     <div data-role="page" id="page-t-9" data-back="back" data-back-label="Atzera">
+
         <div data-role="content">
-            <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P10</h1>
-            <p>P10 aplikazioari eta erabiltzaileari buruzko informazio-pantaila.</p>
-            <h2>Erabiltzale izena</h2>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>email:</td>
-                        <td>[email@domain.tld]</td>
-                    </tr>
-                    <tr>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
-                </tbody>
-            </table>
+
+            <h1>Profila</h1>
+
+            <!-- User profile -->
+            <div style="text-align:center; margin-bottom:20px;">
+
+                <img id="user-avatar"
+                    src="img/default-avatar.png"
+                    alt="Profila"
+                    style="
+                        width:120px;
+                        height:120px;
+                        border-radius:50%;
+                        border:2px solid #ccc;
+                        object-fit:cover;
+                    ">
+
+                <h2 id="user-name">Erabiltzaile Izena</h2>
+
+                <p id="user-email"
+                style="margin-top:0; color:gray;">
+                    email@domain.tld
+                </p>
+
+            </div>
+
             <hr/>
-            <h2>Fonkids Teacher</h2>
-            <table>
+
+            <!-- User information -->
+            <h3>Kontuaren informazioa</h3>
+
+            <table style="width:100%;">
                 <tbody>
                     <tr>
-                        <td>Bertsioa:</td>
-                        <td>2026.10b</td>
+                        <td><strong>UID:</strong></td>
+                        <td id="user-uid">XXXXXXXX</td>
                     </tr>
+
                     <tr>
-                        <td>Egileak</td>
-                        <td>Erlantz Alonso, Irati Zuazo</td>
+                        <td><strong>Errola:</strong></td>
+                        <td>Irakaslea</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Azken saioa:</strong></td>
+                        <td id="user-last-login">2026-11-20</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Hizkuntza:</strong></td>
+                        <td>Euskara</td>
                     </tr>
                 </tbody>
             </table>
+
+            <hr/>
+
+            <!-- App information -->
+            <h3>Fonkids Teacher</h3>
+
+            <table style="width:100%;">
+                <tbody>
+
+                    <tr>
+                        <td><strong>Bertsioa:</strong></td>
+                        <td>2026.11a</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Egileak:</strong></td>
+                        <td>
+                            Erlantz Alonso<br>
+                            Irati Zuazo
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Plataforma:</strong></td>
+                        <td>Cordova + jQuery Mobile</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
         </div>
+
     </div>
 
     <!-- P11 -->
     <div data-role="page" id="page-t-10" data-back="back" data-back-label="Atzera">
+
         <div data-role="content">
-            <h1 style="margin-left: 0; margin-right: 0; white-space: nowrap; overflow: visible;">FonkidsTeacher: P11</h1>
-            <p>Ezarpenen menua.</p>
-            <p>Idealki, hemendik itzultzean, geunden pantaila berera bueltatuko gara. B plana P2 pantailara itzultzea liteke, logeatuta egonda, edo P1 pantailara, konturik gabe egonda.</p>
+
+            <h1>Ezarpenak</h1>
+
+            <!-- Current profile -->
+            <div style="text-align:center; margin-bottom:20px;">
+
+                <img id="settings-avatar"
+                    src="img/default-avatar.png"
+                    alt="Avatar"
+                    style="
+                        width:120px;
+                        height:120px;
+                        border-radius:50%;
+                        border:2px solid #ccc;
+                        object-fit:cover;
+                    ">
+
+                <h2 id="settings-username">
+                    Erabiltzaile Izena
+                </h2>
+
+                <p id="settings-email"
+                style="margin-top:0;color:gray;">
+                    email@domain.tld
+                </p>
+
+            </div>
+
+            <hr/>
+
+            <!-- Profile editing -->
+            <h3>Profila editatu</h3>
+
+            <div class="ui-field-contain">
+                <label for="new-username">
+                    Erabiltzaile izena:
+                </label>
+
+                <input type="text"
+                    id="new-username"
+                    placeholder="Erabiltzaile izen berria">
+            </div>
+
+            <label for="new-avatar">
+                Profil-irudia:
+            </label>
+
+            <input type="file"
+                id="new-avatar"
+                accept="image/*"
+                capture="user">
+
+            <img id="new-avatar-preview"
+                style="
+                    display:none;
+                    margin-top:10px;
+                    max-width:100%;
+                    border:1px solid #ccc;
+                "
+                alt="Aurrebista">
+
+            <a href="#"
+            id="save-profile-changes"
+            class="ui-btn ui-icon-check ui-btn-icon-right ui-mini ui-corner-all">
+                Profilaren aldaketak gorde
+            </a>
+
+            <hr/>
+
+            <!-- Language -->
+            <h3>Hizkuntza</h3>
+
+            <form>
+                <fieldset data-role="controlgroup">
+
+                    <legend>Aukeratu hizkuntza:</legend>
+
+                    <input type="radio"
+                        name="language"
+                        id="lang-eu"
+                        value="eu"
+                        checked>
+
+                    <label for="lang-eu">
+                        Euskara
+                    </label>
+
+                    <input type="radio"
+                        name="language"
+                        id="lang-es"
+                        value="es">
+
+                    <label for="lang-es">
+                        Castellano
+                    </label>
+
+                </fieldset>
+            </form>
+
+            <a href="#"
+            id="save-language"
+            class="ui-btn ui-icon-check ui-btn-icon-right ui-mini ui-corner-all">
+                Hizkuntza gorde
+            </a>
+
+            <hr/>
+
+            <!-- Miscellaneous -->
+            <h3>Beste aukerak</h3>
+
+            <a href="#"
+            id="logout"
+            class="ui-btn ui-icon-power ui-btn-icon-left ui-mini ui-corner-all">
+                Saioa itxi
+            </a>
+
         </div>
+
     </div>
 
 	<script type="text/javascript" src="cordova.js"></script>

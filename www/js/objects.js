@@ -41,10 +41,14 @@ var pageT = {//V3
 	}
 }
 
-var user = {
-	id: null,
-	alias: null,
-	uid: 'tty4ThQOkCZs4iQhn6VW910n7VB3'
+var userSettings = {
+	//TEMPORARILY HARD-CODED!
+    uid: 'tty4ThQOkCZs4iQhn6VW910n7VB3',
+    alias: "",
+    email: "",
+    language: "eu",
+	//This just references what file to get from supabase's bucket where it'll be named like so: /uid/pfp
+    pfp: "pfp.jpeg"
 };
 
 var audio = {//V2

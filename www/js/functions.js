@@ -270,7 +270,7 @@ document.addEventListener("deviceready", function () {
             const blob = e.target.files[0];
             if (!blob) return;
 
-            const filename = `selfie_${Date.now()}.jpg`;
+            const filename = `pfp.jpeg`;
 
             try {
 
@@ -363,7 +363,7 @@ document.addEventListener("deviceready", function () {
 
                 const uploadResult =
                     await updateAvatar(
-                        user.uid,
+                        userSettings.uid,
                         filename,
                         blob,
                         blob.type
@@ -375,6 +375,8 @@ document.addEventListener("deviceready", function () {
                 );
 
                 alert("Upload successful");
+
+                await refreshProfilePages();
 
                 /* -------------------------
                  * 7. RESET INPUT
@@ -397,3 +399,189 @@ document.addEventListener("deviceready", function () {
         }
     );
 });
+
+// Login eta Login-a mantentzeko
+
+function saveSession() {
+
+    localStorage.setItem(
+        "fonkidsTeacherSettings",
+        JSON.stringify(userSettings)
+    );
+}
+
+function loadSession() {
+
+    const saved =
+        localStorage.getItem(
+            "fonkidsTeacherSettings"
+        );
+
+    if (!saved) {
+        return false;
+    }
+
+    try {
+
+        const settings =
+            JSON.parse(saved);
+
+        userSettings =
+            settings;
+
+        return true;
+
+    } catch(error) {
+
+        console.error(
+            "Session load error:",
+            error
+        );
+
+        return false;
+    }
+}
+
+document.addEventListener("deviceready", function() {
+
+        if (loadSession()) {
+
+            console.log(
+                "Previous session found:",
+                userSettings.uid
+            );
+
+            $.mobile.changePage(
+                "#page-t-1"
+            );
+
+        } else {
+
+            console.log(
+                "No previous session"
+            );
+
+            $.mobile.changePage(
+                "#page-t-0"
+            );
+        }
+
+    }
+);
+
+$(document).on(
+    "click",
+    "#logout",
+    function() {
+
+        localStorage.removeItem(
+            "fonkidsTeacherSettings"
+        );
+
+        $.mobile.changePage(
+            "#page-t-0"
+        );
+    }
+);
+
+$(document).on(
+    "click",
+    "#login",
+    function() {
+
+        //FAKING THE LOGIN ALL EPIC STYLE LOL #LMAO
+
+        userSettings.uid = "tty4ThQOkCZs4iQhn6VW910n7VB3";
+    
+        userSettings.alias = "Erlantz";
+        
+        userSettings.email = "test@domain.tld";
+        
+        userSettings.lastLogin = new Date().toISOString();
+        
+        saveSession();
+
+        $.mobile.changePage(
+            "#page-t-1"
+        );
+    }
+);
+
+// PROFILAREN INFORMAZIOA ERAKUSTEN P10 eta P11-n!!
+
+async function refreshProfilePages() {
+
+    // ---------- TEXT ----------
+    $("#user-name").text(userSettings.alias);
+    $("#settings-username").text(userSettings.alias);
+
+    $("#user-email").text(userSettings.email);
+    $("#settings-email").text(userSettings.email);
+
+    $("#user-uid").text(userSettings.uid);
+
+    $("#user-last-login").text(
+        userSettings.lastLogin || "-"
+    );
+
+    $("#new-username").val(
+        userSettings.alias
+    );
+
+    // ---------- AVATAR ----------
+    try {
+
+        const avatarUrl =
+            await getAvatarUrl(
+                userSettings.uid,
+                userSettings.pfp
+            );
+
+        console.log(
+            "Avatar URL:",
+            avatarUrl
+        );
+
+        $("#user-avatar").attr(
+            "src",
+            avatarUrl + "?t=" + Date.now()
+        );
+
+        $("#settings-avatar").attr(
+            "src",
+            avatarUrl + "?t=" + Date.now()
+        );
+
+    }
+    catch(error) {
+
+        console.error(
+            "Avatar load failed:",
+            error
+        );
+    }
+}
+
+$(document).on(
+    "pageshow",
+    "#page-t-9,#page-t-10",
+    refreshProfilePages
+);
+
+
+//ERABILTZAILE IZENA ALDATZEN
+$(document).on(
+    "click",
+    "#save-profile-changes",
+    function() {
+
+        userSettings.alias =
+            $("#new-username").val();
+
+        saveSession();
+
+        refreshProfilePages();
+
+        alert("Profile saved");
+    }
+);
