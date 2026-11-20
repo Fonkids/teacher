@@ -19,6 +19,81 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+var appDirs = { //V1
+	baseStorage: function() { return cordova.file.externalDataDirectory; },
+	baseStorageAudio: function() { return this.baseStorage() + "audio/"; }//v2		
+};
+
+var tests = [//V3
+	{
+		question: "This is the first question...?",
+		resp: [
+			{
+				text: "A: Wrong 0-0",
+				isCorrect: false
+			},
+			{
+				text: "B: This is the right one",
+				isCorrect: true
+			},
+			{
+				text: "C: Wrong 0-2",
+				isCorrect: false
+			},
+			{
+				text: "D: Wrong 0-3",
+				isCorrect: false
+			}
+		]
+	},
+	{
+		question: "This is the second question...?",
+		resp: [
+			{
+				text: "A: Wrong 1-0",
+				isCorrect: false
+			},
+			{
+				text: "B: Wrong 1-1",
+				isCorrect: false
+			},
+			{
+				text: "C: Wrong 1-2",
+				isCorrect: false
+			},
+			{
+				text: "D: This is the right one",
+				isCorrect: true
+			}
+		]
+	},
+	{
+		question: "This is the third question...?",
+		resp: [
+			{
+				text: "A: This is the right one",
+				isCorrect: true
+			},
+			{
+				text: "B: Wrong 2-1",
+				isCorrect: false
+			},
+			{
+				text: "C: Wrong 2-2", 
+				isCorrect: false
+			},
+			{
+				text: "D: Wrong 2-3",
+				isCorrect: false
+			}			
+		]
+	}
+];
+
+var results = {//V1
+	corrects: 0,
+	answered: 0
+};
 
 var pageT = {//V3
 	load: function(i) {
@@ -40,4 +115,107 @@ var user = {
 	id: null,
 	alias: null,
 	uid: 'tty4ThQOkCZs4iQhn6VW910n7VB3'
+};
+
+var appSession = {
+	initTimestamp: null,
+	locale: "en-EN",
+	loadSessionPages: function() {
+		if (pantailenHiztegia.length === 0) {
+			return;
+		}
+
+		for (let i = 0; i < pantailenHiztegia.length; i++) {
+		
+
+			var pageDiv = pageOrokorra.create(i);
+			$("body").append(pageDiv);
+			pageDiv.page();
+			
+		}
+
+		for (let i = 0; i < headerHiztegia.length; i++){
+			var pageDiv = pageHeader.create(i);
+			$("body").append(pageDiv);
+			pageDiv.page();
+
+		}
+
+		$.mobile.changePage("#page-t-"+pantailenHiztegia[0].mota+"-0");
+	}
+};
+
+var audio = {//V2
+	media: null,
+	doStartRecord: function() {
+		console.log("doStartRecord");
+
+		console.log("cordova:", typeof cordova);
+		console.log("Media:", typeof Media);
+		console.log("cordova.file:", typeof cordova.file);
+	
+		if (typeof Media === "undefined") {
+			alert("Media plugina ez dago erabilgarri");
+			return;
+		}
+	
+		if (!cordova.file) {
+			alert("Cordova File plugina ez dago erabilgarri");
+			return;
+		}
+
+		try {
+            if (this.media) {
+                this.media.release();
+                this.media = null;
+            }
+
+            this.media = new Media(
+                cordova.file.dataDirectory + "tmprecording.aac"
+            );
+
+            this.media.startRecord();
+            return true;
+
+        } catch (error) {
+            console.error("Grabaketa hasteko errorea:", error);
+            this.media = null;
+            alert("Ezin izan da grabaketa hasi");
+            return false;
+        }
+	},
+	doStopRecord_E: function(fileFullPath, onSuccess, onError) {
+		console.log("doStopRecord_E");
+
+		console.log("Media objektua:", this.media);
+
+		if (!this.media) {
+			console.error("Ez dago gelditzeko grabaziorik");
+			return;
+		}
+
+		this.media.stopRecord();
+		
+		var tempFullPath = cordova.file.dataDirectory + "tmprecording.aac";
+
+		if (!tempFullPath.startsWith("file://"))
+			tempFullPath = "file://" + tempFullPath;
+		if (!fileFullPath.startsWith("file://"))
+			fileFullPath = "file://" + fileFullPath;
+
+		fileUtils.move_E(
+			tempFullPath,
+			fileFullPath,
+			function() {
+				audio.media.release();
+				if (onSuccess != false)
+					onSuccess();
+			},
+			function() {
+				console.error("Audio file move error");
+				if (onError != false)
+					onError();
+			}
+		);
+	}
 };

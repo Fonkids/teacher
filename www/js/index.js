@@ -38,6 +38,19 @@ function onDeviceReady() {
 	// Lehen orriarekin honek arazoak eman ditzake, HTML injektatzen hasten bagara hemen.
 	// Estilorik gabe kargatzen badira gauza batzuk, "enhancement" (dekorazio prozesuaren izena) egitera behartu daiteke lerro honekin:
 	// $("#page-t-0").trigger("create");
+
+    fileUtils.createStorageDirs_E(
+		appDirs.baseStorage(),
+		["image", "audio"],
+		"siblings",
+		function() {
+			console.log("All dirs created");
+		},
+		function() {
+			console.error("FileSystem error: some features may not work");
+			alert("FileSystem error: some features may not work");
+		}
+	);
 }
 
 $(document).on("pagebeforecreate", "[data-role=page]", function () {
