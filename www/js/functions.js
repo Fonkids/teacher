@@ -52,78 +52,118 @@ function check(i) {//V1
 	//	console.log("check 2");
 }
 
-function startAudioRecord() {
-    console.log("Grabazioa hasteko botoia sakatu da");
+// ---------- Laguntzailea: botoiak gaitu / desgaitu ----------
+// <button> elementuak ez dira beti jQuery Mobile "button widget" gisa hasieratzen,
+// beraz .button("disable") ez da fidagarria. Honek kasu guztietan funtzionatzen du.
+function setEnabled($el, enabled) {
+    $el.each(function () {
+        var $b = $(this);
+        $b.prop("disabled", !enabled)
+          .attr("aria-disabled", !enabled)
+          .toggleClass("ui-state-disabled ui-disabled", !enabled);
+        $b.closest("div.ui-btn").toggleClass("ui-state-disabled ui-disabled", !enabled);
+    });
+}
 
+// ---------- Audio grabaketa (berrerabilgarria) ----------
+// Une berean grabazio bakarra egon daiteke martxan.
+var activeRecorder = null;
+
+function startAudioRecord($rec) {
+    if (activeRecorder) {
+        alert("Beste grabazio bat martxan dago.");
+        return;
+    }
     if (typeof audio === "undefined" || typeof audio.doStartRecord !== "function") {
-        console.error("Audio objektua edo doStartRecord() funtzioa ez dago erabilgarri");
         alert("Ezin da grabazioa hasi: audio sistema ez dago erabilgarri.");
         return;
     }
 
-    $("#audio-file-name").text("");
-    $("#audio-player").hide();
-
-    $("#button-audio-start").addClass("ui-disabled");
-    $("#button-audio-stop").removeClass("ui-disabled");
-
+    var started = false;
     try {
-        audio.doStartRecord();
+        // doStartRecord() true itzultzen du bakarrik grabaketa hasi bada
+        started = audio.doStartRecord() === true;
     } catch (error) {
         console.error("Grabazioa hasteko errorea:", error);
-        alert("Errorea grabazioa hastean.");
-        $("#button-audio-start").removeClass("ui-disabled");
-        $("#button-audio-stop").addClass("ui-disabled");
     }
+    if (!started) return;
+
+    activeRecorder = $rec;
+    $rec.find(".rec-file-name").text("Grabatzen...");
+    $rec.find(".rec-player").hide();
+    setEnabled($rec.find(".btn-rec-start"), false);
+    setEnabled($rec.find(".btn-rec-stop"), true);
 }
 
-function stopAudioRecord() {
-    console.log("Grabazioa gelditzeko botoia sakatu da");
+function stopAudioRecord($rec) {
+    if (!activeRecorder || activeRecorder[0] !== $rec[0]) return;
 
-    if (typeof audio === "undefined" || typeof audio.doStopRecord_E !== "function") {
-        console.error("Audio objektua edo doStopRecord_E() funtzioa ez dago erabilgarri");
-        alert("Ezin da grabazioa gelditu: audio sistema ez dago erabilgarri.");
-        return;
-    }
-
-    console.log("1. Stop botoia sakatu da");
-
-    if (!audio || !audio.doStopRecord_E) {
-        console.error("2. Audio objektua edo stop funtzioa falta da");
-        return;
-    }
-
-    console.log("3. Grabazioa gelditzeko deia egingo da");
-
-
-    var fileFullPath = appDirs.baseStorageAudio() +
-        "recording_" + Date.now() + ".aac";
+    var fileFullPath = appDirs.baseStorageAudio() + "recording_" + Date.now() + ".aac";
 
     audio.doStopRecord_E(
         fileFullPath,
         function() {
-            $("#audio-file-name").text("Grabazioa gordeta");
-
-            $("#audio-source").attr("src", fileFullPath);
-            $("#audio-player").show();
-
-            var player = document.getElementById("audio-player");
+            activeRecorder = null;
+            $rec.data("audioPath", fileFullPath); // ruta gordetzeko (galdera gordetzean erabili)
+            $rec.find(".rec-file-name").text("Grabazioa gordeta");
+            $rec.find(".rec-source").attr("src", fileFullPath);
+            var player = $rec.find(".rec-player").show()[0];
             player.load();
-
-            $("#button-audio-stop").addClass("ui-disabled");
-            $("#button-audio-start").removeClass("ui-disabled");
-
-            alert("Audioa behar bezala gorde da");
+            setEnabled($rec.find(".btn-rec-stop"), false);
+            setEnabled($rec.find(".btn-rec-start"), true);
         },
         function(error) {
+            activeRecorder = null;
             console.error("Audio error:", JSON.stringify(error));
             alert("Errorea audioa gordetzean.");
-
-            $("#button-audio-start").removeClass("ui-disabled");
-            $("#button-audio-stop").addClass("ui-disabled");
+            $rec.find(".rec-file-name").text("");
+            setEnabled($rec.find(".btn-rec-stop"), false);
+            setEnabled($rec.find(".btn-rec-start"), true);
         }
     );
 }
+
+$(document).on("click", ".btn-rec-start", function () {
+    if ($(this).prop("disabled")) return;
+    startAudioRecord($(this).closest(".audio-recorder"));
+});
+$(document).on("click", ".btn-rec-stop", function () {
+    if ($(this).prop("disabled")) return;
+    stopAudioRecord($(this).closest(".audio-recorder"));
+});
+
+// ---------- Ariketa formularioa (P5) ----------
+function updateExerciseForm() {
+    var type = $("#exercise-type-select").val();
+    var statement = $("#statement-type-select").val();
+    var answer = $("#answer-type-select").val();
+
+    $("#exercise-options").toggle(type !== "");
+
+    $("#statement-text").toggle(statement === "text");
+    $("#statement-audio").toggle(statement === "audio");
+
+    // Multiple choice
+    $("#answer-type-container").toggle(type === "multiple-choice");
+    $("#answers-block").toggle(type === "multiple-choice");
+    $("#answers-block .answer-text").toggle(answer === "text");
+    $("#answers-block .answer-audio").toggle(answer === "audio");
+    $("#answers-block .answer-image").toggle(answer === "image");
+
+    // Beste motak
+    $("#soup-block").toggle(type === "soup");
+    $("#join-block").toggle(type === "join");
+    $("#classify-block").toggle(type === "classify");
+
+    if (type === "multiple-choice") updateAnswerButtons();
+}
+
+$(document).on("change", "#exercise-type-select, #statement-type-select, #answer-type-select", updateExerciseForm);
+
+$(document).on("pagecreate", "#page-t-4", function () {
+    updateExerciseForm();
+    updateAnswerButtons();
+});
 
 function buildHeader() {
     return $(
@@ -164,449 +204,196 @@ function nextBtn(next, label, icon) {
         : '';
 }
 
+// ---------- Multiple choice: erantzunak gehitu / kendu (4tik 8ra) ----------
+var MIN_ANSWERS = 4;
+var MAX_ANSWERS = 8;
 
-/* =========================================================
-   1. MOSTRAR EL TIPO DE EJERCICIO SELECCIONADO
-   ========================================================= */
-
-   function showExerciseType(type) {
-
-    // Ocultar todos los ejercicios
-    $(".exercise-panel").hide();
-
-    // Ocultar también el panel de audio del enunciado
-    $("#question-audio-panel").hide();
-
-    if (!type) {
-        return;
-    }
-
-    // Mostrar el ejercicio seleccionado
-    switch (type) {
-
-        case "multiple-choice-a":
-            $("#exercise-multiple-choice-a").show();
-            $("#question-audio-panel").show();
-            break;
-
-        case "multiple-choice-b":
-            $("#exercise-multiple-choice-b").show();
-            break;
-
-        case "soup-a":
-            $("#exercise-soup-a").show();
-            break;
-
-        case "soup-b":
-            $("#exercise-soup-b").show();
-            break;
-
-        case "bikote":
-            $("#exercise-hangman-a").show();
-            break;
-
-        case "join-a":
-            $("#exercise-join-a").show();
-            break;
-
-        case "join-b":
-            $("#exercise-join-b").show();
-            break;
-    }
+function updateAnswerButtons() {
+    var n = $("#answers-block .answer-row.is-active").length;
+    setEnabled($("#btn-add-answer"), n < MAX_ANSWERS);
+    setEnabled($("#btn-remove-answer"), n > MIN_ANSWERS);
 }
 
-
-/* =========================================================
-   2. INICIALIZACIÓN DEL SELECTOR Y DE LAS RESPUESTAS
-   ========================================================= */
-
-$(document).on("pagecreate", "#page-t-4", function () {
-
-    // Ocultar todos los ejercicios inicialmente
-    $(".exercise-panel").hide();
-    $("#question-audio-panel").hide();
-
-    // Cambiar el ejercicio al seleccionar otro tipo
-    $("#student-group-select").on("change", function () {
-        showExerciseType($(this).val());
-    });
-
-    // Inicializar las respuestas dinámicas
-    setupDynamicAnswers(
-        "multipleA-answers",
-        "multipleA-add-answer",
-        "multipleA-correct",
-        "text"
-    );
-
-    setupDynamicAnswers(
-        "multipleB-answers",
-        "multipleB-add-answer",
-        "multipleB-correct",
-        "audio"
-    );
+$(document).on("click", "#btn-add-answer", function () {
+    var $next = $("#answers-block .answer-row").not(".is-active").first();
+    if ($next.length > 0) {
+        $next.addClass("is-active").show();
+    }
+    updateAnswerButtons(); // beti eguneratu, bukaeran ere
 });
 
-
-/* =========================================================
-   3. CREAR RESPUESTAS DINÁMICAMENTE
-   ========================================================= */
-
-function setupDynamicAnswers(
-    containerId,
-    buttonId,
-    groupName,
-    answerKind
-) {
-
-    var container = $("#" + containerId);
-    var button = $("#" + buttonId);
-
-    var answerCount = 0;
-    var maxAnswers = 8;
-
-    button.on("click", function () {
-
-        if (container.children(".dynamic-answer").length >= maxAnswers) {
-            alert("No se pueden añadir más de 8 respuestas.");
-            return;
-        }
-
-        answerCount++;
-
-        var id = containerId + "-answer-" + answerCount;
-
-        var row = $("<div>", {
-            id: id,
-            class: "dynamic-answer"
-        });
-
-        // Número de respuesta
-        row.append(
-            $("<h4>").text("Respuesta " + answerCount)
-        );
-
-        // Crear el campo según el tipo de respuesta
-        if (answerKind === "text") {
-
-            var textInput = $("<input>", {
-                type: "text",
-                id: id + "-text",
-                name: id + "-text",
-                placeholder: "Escribe la respuesta",
-                required: true
-            });
-
-            row.append(
-                $("<label>", {
-                    for: id + "-text"
-                }).text("Texto de la respuesta:")
-            );
-
-            row.append(textInput);
-
-        } else if (answerKind === "audio") {
-
-            var audioInput = $("<input>", {
-                type: "file",
-                id: id + "-audio",
-                name: id + "-audio",
-                accept: "audio/*",
-                required: true
-            });
-
-            var audioPlayer = $("<audio>", {
-                id: id + "-player",
-                controls: true,
-                css: {
-                    display: "none",
-                    width: "100%"
-                }
-            });
-
-            row.append(
-                $("<label>", {
-                    for: id + "-audio"
-                }).text("Seleccionar audio:")
-            );
-
-            row.append(audioInput);
-            row.append(audioPlayer);
-
-            // Reproducir el audio seleccionado
-            audioInput.on("change", function () {
-
-                if (this.files && this.files.length > 0) {
-
-                    var url = URL.createObjectURL(this.files[0]);
-
-                    audioPlayer.attr("src", url);
-                    audioPlayer.show();
-
-                } else {
-
-                    audioPlayer.hide();
-                    audioPlayer.removeAttr("src");
-                }
-            });
-        }
-
-        // Radio para seleccionar la respuesta correcta
-        var correctInput = $("<input>", {
-            type: "radio",
-            name: groupName,
-            id: id + "-correct",
-            value: answerCount,
-            required: true
-        });
-
-        row.append(
-            $("<label>", {
-                for: id + "-correct"
-            }).text("Zuzena")
-        );
-
-        row.append(correctInput);
-
-        // Botón para eliminar la respuesta
-        var removeButton = $("<button>", {
-            type: "button",
-            text: "Eliminar respuesta",
-            class: "ui-btn ui-mini ui-btn-icon-left ui-icon-delete"
-        });
-
-        removeButton.on("click", function () {
-
-            row.remove();
-        });
-
-        row.append(removeButton);
-
-        container.append(row);
-
-        // Actualizar los elementos de jQuery Mobile
-        container.trigger("create");
-    });
-}
-
-
-/* =========================================================
-   4. GRABACIÓN DEL ENUNCIADO DE MULTIPLE-CHOICE-A
-   ========================================================= */
-
-var questionRecording = false;
-var questionAudioPath = null;
-
-
-function startAudioRecord() {
-
-    if (typeof audio === "undefined" ||
-        typeof audio.doStartRecord !== "function") {
-
-        alert("Grabazioa ez dago eskuragarri.");
+$(document).on("click", "#btn-remove-answer", function () {
+    var $rows = $("#answers-block .answer-row.is-active");
+    if ($rows.length <= MIN_ANSWERS) {
+        updateAnswerButtons();
         return;
     }
 
-    if (questionRecording || soupBRecordingIndex !== null) {
-        alert("Grabatzen...");
+    var $last = $rows.last();
+    var $rec = $last.find(".audio-recorder");
+
+    if (activeRecorder && $rec.length && activeRecorder[0] === $rec[0]) {
+        alert("Grabazioa martxan dago erantzun honetan. Gelditu lehenengo.");
         return;
     }
 
-    try {
+    // garbitu erantzun hori
+    $last.find("input[type=text]").val("");
+    $last.find("input[type=file]").val("");
+    $rec.removeData("audioPath");
+    $rec.find(".rec-file-name").text("");
+    $rec.find(".rec-player").hide();
+    setEnabled($rec.find(".btn-rec-start"), true);
+    setEnabled($rec.find(".btn-rec-stop"), false);
 
-        questionAudioPath =
-            appDirs.baseStorageAudio() +
-            "question_" + Date.now() + ".aac";
-
-        audio.doStartRecord();
-
-        questionRecording = true;
-
-        $("#button-audio-start").addClass("ui-disabled");
-        $("#button-audio-stop").removeClass("ui-disabled");
-
-        $("#audio-file-name").text("Grabando enunciado...");
-
-    } catch (error) {
-
-        console.error(error);
-        alert("Ezin da grabazioa hasi.");
+    // zuzena kendutako erantzuna bazen, itzuli lehenengora (A)
+    var $radio = $last.find("input[type=radio]");
+    if ($radio.prop("checked")) {
+        $("#erantzuna-a").prop("checked", true);
     }
-}
+    $("input[name='erantzun-zuzena']").checkboxradio("refresh");
 
+    $last.removeClass("is-active").hide();
+    updateAnswerButtons();
+});
 
-function stopAudioRecord() {
+// cordova-ren plugin-aren dokumentazioan dioenez, WebView bidezko metodoa gomendatzen dute orain
+// https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-camera/
 
-    if (!questionRecording) {
-        return;
-    }
+// Kameraren ebentua entzuten
+document.addEventListener("deviceready", function () {
 
-    audio.doStopRecord_E(
+    document.getElementById("selfie").addEventListener(
+        "change",
+        async function (e) {
 
-        questionAudioPath,
+            const blob = e.target.files[0];
+            if (!blob) return;
 
-        function () {
+            const filename = `selfie_${Date.now()}.jpg`;
 
-            questionRecording = false;
+            try {
 
-            $("#button-audio-start").removeClass("ui-disabled");
-            $("#button-audio-stop").addClass("ui-disabled");
+                /* -------------------------
+                 * 1. ROOT DIRECTORY
+                 * ------------------------- */
 
-            $("#audio-file-name").text("Enunciado grabado correctamente.");
+                const rootDir = await new Promise((res, rej) =>
+                    window.resolveLocalFileSystemURL(
+                        appDirs.baseStorage(),
+                        res,
+                        rej
+                    )
+                );
 
-            $("#audio-source").attr("src", questionAudioPath);
+                /* -------------------------
+                 * 2. CREATE images/ IF NEEDED
+                 * ------------------------- */
 
-            var player = document.getElementById("audio-player");
+                const imagesDir = await new Promise((res, rej) =>
+                    rootDir.getDirectory(
+                        "images",
+                        { create: true },
+                        res,
+                        rej
+                    )
+                );
 
-            player.style.display = "block";
-            player.load();
-        },
+                console.log(
+                    "Images directory:",
+                    imagesDir.toURL()
+                );
 
-        function (error) {
+                /* -------------------------
+                 * 3. CREATE FILE
+                 * ------------------------- */
 
-            console.error("Errorea enuntziatua gordetzerakoan...", error);
+                const fileEntry = await new Promise((res, rej) =>
+                    imagesDir.getFile(
+                        filename,
+                        {
+                            create: true,
+                            exclusive: false
+                        },
+                        res,
+                        rej
+                    )
+                );
 
-            questionRecording = false;
+                /* -------------------------
+                 * 4. WRITE IMAGE
+                 * ------------------------- */
 
-            $("#button-audio-start").removeClass("ui-disabled");
-            $("#button-audio-stop").addClass("ui-disabled");
+                const writer = await new Promise((res, rej) =>
+                    fileEntry.createWriter(res, rej)
+                );
 
-            alert("Grabazioa ezin izan da gorde.");
+                await new Promise((res, rej) => {
+                    writer.onwriteend = res;
+                    writer.onerror = rej;
+                    writer.write(blob);
+                });
+
+                console.log(
+                    "Local image saved:",
+                    fileEntry.toURL()
+                );
+
+                /* -------------------------
+                 * 5. PREVIEW
+                 * ------------------------- */
+
+                const preview =
+                    document.getElementById("selfie-preview");
+
+                preview.src =
+                    fileEntry.toURL() +
+                    "?t=" +
+                    Date.now();
+
+                preview.style.display = "block";
+
+                document.getElementById("selfie-path")
+                    .textContent =
+                    fileEntry.toURL();
+
+                /* -------------------------
+                 * 6. UPLOAD TO SUPABASE
+                 * ------------------------- */
+
+                const uploadResult =
+                    await updateAvatar(
+                        user.uid,
+                        filename,
+                        blob,
+                        blob.type
+                    );
+
+                console.log(
+                    "Supabase upload result:",
+                    uploadResult
+                );
+
+                alert("Upload successful");
+
+                /* -------------------------
+                 * 7. RESET INPUT
+                 * ------------------------- */
+
+                document.getElementById("selfie").value = "";
+
+            } catch (err) {
+
+                console.error(
+                    "Avatar processing error:",
+                    err
+                );
+
+                alert(
+                    "Avatar processing failed:\n" +
+                    JSON.stringify(err, null, 2)
+                );
+            }
         }
     );
-}
-
-
-/* =========================================================
-   5. SOPA DE LETRAS B: SUBIR O GRABAR LOS CINCO AUDIOS
-   ========================================================= */
-
-var soupBRecordingIndex = null;
-
-var soupBRecordedAudios = {};
-
-
-/*
- * Iniciar la grabación de una palabra.
- */
-function startWordAudioRecord(index) {
-
-    
-    if (typeof audio === "undefined" ||
-        typeof audio.doStartRecord !== "function") {
-
-        alert("Grabazio sistema ez dago eskuragarri.");
-        return;
-    }
-
-    if (questionRecording || soupBRecordingIndex !== null) {
-
-        alert("Lehenengo aurreko gabazioa gelditu.");
-        return;
-    }
-
-    // Eliminar el archivo seleccionado anteriormente
-    $("#soupB-audio" + index).val("");
-
-    var player = document.getElementById("soupB-player" + index);
-
-    player.pause();
-    player.removeAttribute("src");
-    player.style.display = "none";
-
-    var filePath =
-        appDirs.baseStorageAudio() +
-        "soupB_word" + index + "_" + Date.now() + ".aac";
-
-    soupBRecordedAudios[index] = filePath;
-
-    try {
-
-        audio.doStartRecord();
-
-        soupBRecordingIndex = index;
-
-        $("#soupB-stop" + index).prop("disabled", false);
-
-    } catch (error) {
-
-        console.error(error);
-
-        delete soupBRecordedAudios[index];
-
-        alert("Grabazioa ezin izan da hasi");
-    }
-}
-
-
-/*
- * Detener y guardar la grabación de una palabra.
- */
-function stopWordAudioRecord(index) {
-
-    if (soupBRecordingIndex !== index) {
-        return;
-    }
-
-    var filePath = soupBRecordedAudios[index];
-
-    audio.doStopRecord_E(
-
-        filePath,
-
-        function () {
-
-            var player =
-                document.getElementById("soupB-player" + index);
-
-            player.src = filePath;
-            player.style.display = "block";
-            player.load();
-
-            $("#soupB-stop" + index).prop("disabled", true);
-
-            soupBRecordingIndex = null;
-        },
-
-        function (error) {
-
-            console.error("Errorea grabazioa gordetzerakoan:", error);
-
-            delete soupBRecordedAudios[index];
-
-            $("#soupB-stop" + index).prop("disabled", true);
-
-            soupBRecordingIndex = null;
-
-            alert("Grabazioa ezin izan da gorde");
-        }
-    );
-}
-
-
-/*
- * Si se sube un archivo, se elimina la referencia
- * a la grabación anterior y se muestra el reproductor.
- */
-$(document).on(
-    "change",
-    "#soupB-words input[type='file']",
-    function () {
-
-        var index = Number(
-            this.id.replace("soupB-audio", "")
-        );
-
-        if (this.files && this.files.length > 0) {
-
-            delete soupBRecordedAudios[index];
-
-            var player =
-                document.getElementById("soupB-player" + index);
-
-            player.src = URL.createObjectURL(this.files[0]);
-            player.style.display = "block";
-            player.load();
-        }
-    }
-);
+});

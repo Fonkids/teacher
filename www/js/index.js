@@ -41,7 +41,7 @@ function onDeviceReady() {
 
     fileUtils.createStorageDirs_E(
 		appDirs.baseStorage(),
-		["image", "audio"],
+		["images", "audio"],
 		"siblings",
 		function() {
 			console.log("All dirs created");

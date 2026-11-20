@@ -19,80 +19,10 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-var appDirs = { //V1
+var appDirs = {
 	baseStorage: function() { return cordova.file.externalDataDirectory; },
-	baseStorageAudio: function() { return this.baseStorage() + "audio/"; }//v2		
-};
-
-var tests = [//V3
-	{
-		question: "This is the first question...?",
-		resp: [
-			{
-				text: "A: Wrong 0-0",
-				isCorrect: false
-			},
-			{
-				text: "B: This is the right one",
-				isCorrect: true
-			},
-			{
-				text: "C: Wrong 0-2",
-				isCorrect: false
-			},
-			{
-				text: "D: Wrong 0-3",
-				isCorrect: false
-			}
-		]
-	},
-	{
-		question: "This is the second question...?",
-		resp: [
-			{
-				text: "A: Wrong 1-0",
-				isCorrect: false
-			},
-			{
-				text: "B: Wrong 1-1",
-				isCorrect: false
-			},
-			{
-				text: "C: Wrong 1-2",
-				isCorrect: false
-			},
-			{
-				text: "D: This is the right one",
-				isCorrect: true
-			}
-		]
-	},
-	{
-		question: "This is the third question...?",
-		resp: [
-			{
-				text: "A: This is the right one",
-				isCorrect: true
-			},
-			{
-				text: "B: Wrong 2-1",
-				isCorrect: false
-			},
-			{
-				text: "C: Wrong 2-2", 
-				isCorrect: false
-			},
-			{
-				text: "D: Wrong 2-3",
-				isCorrect: false
-			}			
-		]
-	}
-];
-
-var results = {//V1
-	corrects: 0,
-	answered: 0
+	baseStorageAudio: function() { return this.baseStorage() + "audio/"; },
+	baseStorageImages: function() { return this.baseStorage() + "images/"; },
 };
 
 var pageT = {//V3
@@ -115,34 +45,6 @@ var user = {
 	id: null,
 	alias: null,
 	uid: 'tty4ThQOkCZs4iQhn6VW910n7VB3'
-};
-
-var appSession = {
-	initTimestamp: null,
-	locale: "en-EN",
-	loadSessionPages: function() {
-		if (pantailenHiztegia.length === 0) {
-			return;
-		}
-
-		for (let i = 0; i < pantailenHiztegia.length; i++) {
-		
-
-			var pageDiv = pageOrokorra.create(i);
-			$("body").append(pageDiv);
-			pageDiv.page();
-			
-		}
-
-		for (let i = 0; i < headerHiztegia.length; i++){
-			var pageDiv = pageHeader.create(i);
-			$("body").append(pageDiv);
-			pageDiv.page();
-
-		}
-
-		$.mobile.changePage("#page-t-"+pantailenHiztegia[0].mota+"-0");
-	}
 };
 
 var audio = {//V2
@@ -191,6 +93,7 @@ var audio = {//V2
 
 		if (!this.media) {
 			console.error("Ez dago gelditzeko grabaziorik");
+			if (onError) onError({ message: "No recording in progress" });
 			return;
 		}
 

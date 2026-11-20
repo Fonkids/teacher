@@ -18,7 +18,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-var dateUtils = { //V1
+var dateUtils = {
 	dbFormat: function(timestamp) {
 		var d = new Date(parseInt(timestamp));
 		return d.toISOString();
@@ -311,7 +311,7 @@ var fileUtils = {
 							catch (error) {
 								console.error("	File upload error: " + JSON.stringify(error));
 								if (onError != null)
-									onError();
+									onError(error);
 							}
 						}
 						reader.readAsArrayBuffer(file);
@@ -319,14 +319,14 @@ var fileUtils = {
 					function(error) {
 						console.error("	File error: " + JSON.stringify(error));
 						if (onError != null)
-							onError();
+							onError(error);
 					}
 				);
 			},
 			function(error) {
 				console.error("	File access error: " + JSON.stringify(error));
 				if (onError != null)
-					onError();
+					onError(error);
 			}
 		);
 	},
@@ -351,56 +351,65 @@ var fileUtils = {
 							},
 							function(error) {
 								console.error("	File writing error: " + JSON.stringify(error));
-								if (onError != false)
-									onError();
 							}
 						);
 					},
 					function(error) {
-						console.error("	File not created error: " + JSON.stringify(error));
-						if (onError != false)
-							onError();
+						console.error("File creation error: " + JSON.stringify(error));
+						if (onError != null)
+							onError(error);
 					}
 				);
 			},
 			function(error) {
-				console.error("	File directory error:  " + JSON.stringify(error));
-				if (onError != false)
-					onError();
+				console.error("Directory access error: " + JSON.stringify(error));
+				if (onError != null)
+					onError(error);
 			}
-		);
-	},
-	contentRead: null, //V5
-	readTextFromFile_E: function(fileDirectoryURL, fileName, onSuccess, onError) { //V5    
-		console.log("readTextFromFile_E");
-		window.resolveLocalFileSystemURL(
-			fileDirectoryURL + fileName,
-			function(fileEntry) {
-//				console.log("	File exists: " + fileDirectoryURL + fileName);
-				fileEntry.file(
-					function(file) {
-						var reader = new FileReader();
-						reader.onloadend = function() {
-//							console.log("	File read: " + JSON.stringify(reader.result, null, "\t"));
-							fileUtils.contentRead = reader.result;
-							if (onSuccess != false)
-								onSuccess();
-						}
-						reader.readAsText(file);
-					},
-					function(error) {
-						console.error("File error: " + JSON.stringify(error));
-						if (onError != false)
-							onError();
-					}
-				);
-			},
-			function(error) {
-				console.error("File access error: " + JSON.stringify(error));
-				if (onError != false)
-					onError();
-			}
-		);
-	}
-};
+	);
+},
 
+contentRead: null,
+
+readTextFromFile_E: function(fileDirectoryURL, fileName, onSuccess, onError) {
+	console.log("readTextFromFile_E");
+
+	window.resolveLocalFileSystemURL(
+		fileDirectoryURL + fileName,
+		function(fileEntry) {
+			fileEntry.file(
+				function(file) {
+					var reader = new FileReader();
+
+					reader.onloadend = function() {
+						fileUtils.contentRead = reader.result;
+
+						if (onSuccess)
+							onSuccess();
+					};
+
+					reader.readAsText(file);
+				},
+				function(error) {
+					console.error(
+						"File error: " +
+						JSON.stringify(error)
+					);
+
+					if (onError)
+						onError(error);
+				}
+			);
+		},
+		function(error) {
+			console.error(
+				"File access error: " +
+				JSON.stringify(error)
+			);
+
+			if (onError)
+				onError(error);
+		}
+	);
+}
+};
