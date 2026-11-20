@@ -111,66 +111,10 @@ var pageT = {//V3
 	}
 }
 
-
-function createHeader() {
-
-    var header = $(
-        '<div data-role="header" data-position="fixed">' +
-            '<table style="width:100%; table-layout:fixed;">' +
-                '<tbody>' +
-                    '<tr>' +
-                        '<td style="text-align:left; width:33%;"></td>' +
-                        '<td style="text-align:center; width:34%;"></td>' +
-                        '<td style="text-align:right; width:33%;"></td>' +
-                    '</tr>' +
-                '</tbody>' +
-            '</table>' +
-        '</div>'
-    );
-
-    header.find("td").eq(0).append(
-        $('<a>', {
-            href: headerConfig.infoPage,
-            class: 'ui-btn ui-icon-info ui-btn-icon-left ui-mini ui-btn-block ui-corner-all',
-            'data-transition': 'slidefade',
-            text: 'Info (P10)'
-        })
-    );
-
-    header.find("td").eq(1).text(headerConfig.logo);
-
-    header.find("td").eq(2).append(
-        $('<a>', {
-            href: headerConfig.settingsPage,
-            class: 'ui-btn ui-icon-gear ui-btn-icon-left ui-mini ui-btn-block ui-corner-all',
-            'data-transition': 'slidefade',
-            text: 'Ezarpenak (P11)'
-        })
-    );
-
-    return header;
-}
-
-var headerConfig = {
-    infoPage: "#page-t-9",
-    settingsPage: "#page-t-10",
-    logo: "Logo"
-};
-
-var pageOrokorra = {
-	create: function(i) {
-		
-		var pageDiv = $('<div data-role="page" id="page-t-'+pantailenHiztegia[i].mota+'-' + i + '"></div>');
-		var headerDiv = createHeader(i);
-		var contentDiv = createContent(i);
-		var footerDiv = createFooter(i)
-
-		pageDiv.append(headerDiv, contentDiv, footerDiv);
-		return pageDiv;
-
-	},
-	
-	
+var user = {
+	id: null,
+	alias: null,
+	uid: 'tty4ThQOkCZs4iQhn6VW910n7VB3'
 };
 
 var appSession = {
